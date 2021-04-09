@@ -1,0 +1,40 @@
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'idea'
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots"
+    }
+}
+
+configurations {
+    // configuration that holds jars to include in the jar
+    // https://discuss.gradle.org/t/how-to-include-dependencies-in-jar/19571/8
+    bundledLibs
+    implementation.extendsFrom bundledLibs
+}
+
+dependencies {
+    implementation 'org.odpi.egeria:open-connector-framework:2.+'
+    implementation 'org.odpi.egeria:repository-services-connectors:2.+'
+    implementation 'org.odpi.egeria:server-chassis-spring:2.+'
+
+    bundledLibs 'org.slf4j:slf4j-api'
+    bundledLibs 'org.apache.httpcomponents:httpclient:4.5.12'
+    bundledLibs 'com.google.code.gson:gson:2.8.6'
+    bundledLibs 'com.rabbitmq:amqp-client:5.9.0'
+
+    testImplementation 'org.codehaus.groovy:groovy:2.5.14'
+    testImplementation 'org.codehaus.groovy:groovy-dateutil:2.5.14'
+    testImplementation 'org.spockframework:spock-core:1.3-groovy-2.5'
+}
+
+jar {
+    from {
+        configurations.bundledLibs.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
