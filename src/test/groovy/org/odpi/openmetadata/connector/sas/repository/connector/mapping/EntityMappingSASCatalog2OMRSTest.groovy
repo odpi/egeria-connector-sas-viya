@@ -1,6 +1,6 @@
 package org.odpi.openmetadata.connector.sas.repository.connector.mapping
 
-
+import groovy.transform.VisibilityOptions
 import org.odpi.openmetadata.connector.sas.client.SASCatalogClient
 import org.odpi.openmetadata.connector.sas.repository.connector.RepositoryConnector
 import org.odpi.openmetadata.connector.sas.repository.connector.stores.TypeDefStore
@@ -20,6 +20,10 @@ import org.odpi.openmetadata.repositoryservices.localrepository.repositoryconten
 import org.odpi.openmetadata.repositoryservices.localrepository.repositorycontentmanager.OMRSRepositoryContentManager
 import spock.lang.Shared
 import spock.lang.Specification
+
+import java.time.Instant
+import java.time.format.DateTimeFormatter
+import java.time.temporal.TemporalAccessor
 
 class EntityMappingSASCatalog2OMRSTest extends Specification {
 
@@ -174,8 +178,8 @@ class EntityMappingSASCatalog2OMRSTest extends Specification {
         detail.getType().getTypeDefName() == relTableTypeDef.getName()
         detail.createdBy == instance.getInstanceProperty("createdBy")
         detail.updatedBy == instance.getInstanceProperty("modifiedBy")
-        detail.createTime.dateTimeString.contains("7/14/20")
-        detail.updateTime.dateTimeString.contains("7/15/20")
+        detail.createTime == isoToDate("2020-07-14T18:40:02.788574Z")
+        detail.updateTime == isoToDate("2020-07-15T18:40:02.788574Z")
         getDetailPropAsString(detail, "qualifiedName") == instance.getInstanceProperty("name")
         getDetailPropAsString(detail, "displayName") == instance.getInstanceProperty("label")
         getDetailPropAsString(detail, "description") == instance.getInstanceProperty("description")
@@ -192,8 +196,8 @@ class EntityMappingSASCatalog2OMRSTest extends Specification {
         detail.getType().getTypeDefName() == relTableTypeTypeDef.getName()
         detail.createdBy == instance.getInstanceProperty("createdBy")
         detail.updatedBy == instance.getInstanceProperty("modifiedBy")
-        detail.createTime.dateTimeString.contains("7/14/20")
-        detail.updateTime.dateTimeString.contains("7/15/20")
+        detail.createTime == isoToDate("2020-07-14T18:40:02.788574Z")
+        detail.updateTime == isoToDate("2020-07-15T18:40:02.788574Z")
         getDetailPropAsString(detail, "qualifiedName") == instance.getInstanceProperty("name")
         getDetailPropAsString(detail, "displayName") == instance.getInstanceProperty("label")
         getDetailPropAsString(detail, "author") == instance.getInstanceProperty("createdBy")
@@ -227,8 +231,8 @@ class EntityMappingSASCatalog2OMRSTest extends Specification {
         detail.getType().getTypeDefName() == relTableTypeDef.getName()
         detail.createdBy == instance.getInstanceProperty("createdBy")
         detail.updatedBy == instance.getInstanceProperty("modifiedBy")
-        detail.createTime.dateTimeString.contains("7/14/20")
-        detail.updateTime.dateTimeString.contains("7/15/20")
+        detail.createTime == isoToDate("2020-07-14T18:40:02.788574Z")
+        detail.updateTime == isoToDate("2020-07-15T18:40:02.788574Z")
         getDetailPropAsString(detail, "qualifiedName") == instance.getInstanceProperty("name")
         getDetailPropAsString(detail, "displayName") == instance.getInstanceProperty("label")
         getDetailPropAsString(detail, "description") == instance.getInstanceProperty("description")
@@ -244,8 +248,8 @@ class EntityMappingSASCatalog2OMRSTest extends Specification {
         detail.getType().getTypeDefName() == relTableTypeTypeDef.getName()
         detail.createdBy == instance.getInstanceProperty("createdBy")
         detail.updatedBy == instance.getInstanceProperty("modifiedBy")
-        detail.createTime.dateTimeString.contains("7/14/20")
-        detail.updateTime.dateTimeString.contains("7/15/20")
+        detail.createTime == isoToDate("2020-07-14T18:40:02.788574Z")
+        detail.updateTime == isoToDate("2020-07-15T18:40:02.788574Z")
         getDetailPropAsString(detail, "qualifiedName") == instance.getInstanceProperty("name")
         getDetailPropAsString(detail, "displayName") == instance.getInstanceProperty("label")
         getDetailPropAsString(detail, "author") == instance.getInstanceProperty("createdBy")
@@ -287,8 +291,8 @@ class EntityMappingSASCatalog2OMRSTest extends Specification {
         detail.getType().getTypeDefName() == relColumnTypeDef.getName()
         detail.createdBy == instance.getInstanceProperty("createdBy")
         detail.updatedBy == instance.getInstanceProperty("modifiedBy")
-        detail.createTime.dateTimeString.contains("9/14/20")
-        detail.updateTime.dateTimeString.contains("9/15/20")
+        detail.createTime == isoToDate("2020-09-14T18:40:02.788574Z")
+        detail.updateTime == isoToDate("2020-09-15T18:40:02.788574Z")
         getDetailPropAsString(detail, "qualifiedName") == instance.getInstanceProperty("name")
         getDetailPropAsString(detail, "displayName") == instance.getInstanceProperty("label")
         getDetailPropAsString(detail, "description") == instance.getInstanceProperty("description")
@@ -306,8 +310,8 @@ class EntityMappingSASCatalog2OMRSTest extends Specification {
         detail.getType().getTypeDefName() == relColumnTypeTypeDef.getName()
         detail.createdBy == instance.getInstanceProperty("createdBy")
         detail.updatedBy == instance.getInstanceProperty("modifiedBy")
-        detail.createTime.dateTimeString.contains("9/14/20")
-        detail.updateTime.dateTimeString.contains("9/15/20")
+        detail.createTime == isoToDate("2020-09-14T18:40:02.788574Z")
+        detail.updateTime == isoToDate("2020-09-15T18:40:02.788574Z")
         getDetailPropAsString(detail, "qualifiedName") == instance.getInstanceProperty("name")
         getDetailPropAsString(detail, "displayName") == instance.getInstanceProperty("label")
         getDetailPropAsString(detail, "author") == instance.getInstanceProperty("createdBy")
@@ -315,6 +319,12 @@ class EntityMappingSASCatalog2OMRSTest extends Specification {
         getDetailPropAsString(detail, "encodingStandard") == instance.getAttribute("sasInFormat")
         getDetailPropAsString(detail, "usage") == instance.getAttribute("sasFormat")
         detail.instanceURL.contains("/catalog/instances/" + instance.guid)
+    }
+
+    Date isoToDate(String isoDate){
+        TemporalAccessor ta = DateTimeFormatter.ISO_INSTANT.parse(isoDate);
+        Instant i = Instant.from(ta);
+        return Date.from(i);
     }
 
     def "GetEntityDetail - SAS Column" () {
@@ -349,8 +359,8 @@ class EntityMappingSASCatalog2OMRSTest extends Specification {
         detail.getType().getTypeDefName() == relColumnTypeDef.getName()
         detail.createdBy == instance.getInstanceProperty("createdBy")
         detail.updatedBy == instance.getInstanceProperty("modifiedBy")
-        detail.createTime.dateTimeString.contains("9/14/20")
-        detail.updateTime.dateTimeString.contains("9/15/20")
+        detail.createTime == isoToDate("2020-09-14T18:40:02.788574Z")
+        detail.updateTime == isoToDate("2020-09-15T18:40:02.788574Z")
         getDetailPropAsString(detail, "qualifiedName") == instance.getInstanceProperty("name")
         getDetailPropAsString(detail, "displayName") == instance.getInstanceProperty("label")
         getDetailPropAsString(detail, "description") == instance.getInstanceProperty("description")
@@ -368,8 +378,8 @@ class EntityMappingSASCatalog2OMRSTest extends Specification {
         detail.getType().getTypeDefName() == relColumnTypeTypeDef.getName()
         detail.createdBy == instance.getInstanceProperty("createdBy")
         detail.updatedBy == instance.getInstanceProperty("modifiedBy")
-        detail.createTime.dateTimeString.contains("9/14/20")
-        detail.updateTime.dateTimeString.contains("9/15/20")
+        detail.createTime == isoToDate("2020-09-14T18:40:02.788574Z")
+        detail.updateTime == isoToDate("2020-09-15T18:40:02.788574Z")
         getDetailPropAsString(detail, "qualifiedName") == instance.getInstanceProperty("name")
         getDetailPropAsString(detail, "displayName") == instance.getInstanceProperty("label")
         getDetailPropAsString(detail, "author") == instance.getInstanceProperty("createdBy")
@@ -407,8 +417,8 @@ class EntityMappingSASCatalog2OMRSTest extends Specification {
         detail.getType().getTypeDefName() == dataStoreTypeDef.getName()
         detail.createdBy == instance.getInstanceProperty("createdBy")
         detail.updatedBy == instance.getInstanceProperty("modifiedBy")
-        detail.createTime.dateTimeString.contains("9/28/20")
-        detail.updateTime.dateTimeString.contains("9/29/20")
+        detail.createTime == isoToDate("2020-09-28T18:40:02.788574Z")
+        detail.updateTime == isoToDate("2020-09-29T18:40:02.788574Z")
         getDetailPropAsString(detail, "qualifiedName") == instance.getInstanceProperty("name")
         getDetailPropAsString(detail, "description") == instance.getInstanceProperty("description")
         getAdditionalProperty(detail, "sasLabel") == instance.getInstanceProperty("label")
@@ -446,8 +456,8 @@ class EntityMappingSASCatalog2OMRSTest extends Specification {
         detail.getType().getTypeDefName() == dataStoreTypeDef.getName()
         detail.createdBy == instance.getInstanceProperty("createdBy")
         detail.updatedBy == instance.getInstanceProperty("modifiedBy")
-        detail.createTime.dateTimeString.contains("9/28/20")
-        detail.updateTime.dateTimeString.contains("9/29/20")
+        detail.createTime == isoToDate("2020-09-28T18:40:02.788574Z")
+        detail.updateTime == isoToDate("2020-09-29T18:40:02.788574Z")
         getDetailPropAsString(detail, "qualifiedName") == instance.getInstanceProperty("name")
         getDetailPropAsString(detail, "description") == instance.getInstanceProperty("description")
         getAdditionalProperty(detail, "sasLabel") == instance.getInstanceProperty("label")
@@ -485,8 +495,8 @@ class EntityMappingSASCatalog2OMRSTest extends Specification {
         detail.getType().getTypeDefName() == designModelTypeDef.getName()
         detail.createdBy == instance.getInstanceProperty("createdBy")
         detail.updatedBy == instance.getInstanceProperty("modifiedBy")
-        detail.createTime.dateTimeString.contains("9/28/20")
-        detail.updateTime.dateTimeString.contains("9/29/20")
+        detail.createTime == isoToDate("2020-09-28T18:40:02.788574Z")
+        detail.updateTime == isoToDate("2020-09-29T18:40:02.788574Z")
 
         getDetailPropAsString(detail, "qualifiedName") == instance.getInstanceProperty("name")
         getDetailPropAsString(detail, "description") == instance.getInstanceProperty("description")
@@ -524,8 +534,8 @@ class EntityMappingSASCatalog2OMRSTest extends Specification {
         detail.getType().getTypeDefName() == conceptModelElemTypeDef.getName()
         detail.createdBy == instance.getInstanceProperty("createdBy")
         detail.updatedBy == instance.getInstanceProperty("modifiedBy")
-        detail.createTime.dateTimeString.contains("9/28/20")
-        detail.updateTime.dateTimeString.contains("9/29/20")
+        detail.createTime == isoToDate("2020-09-28T18:40:02.788574Z")
+        detail.updateTime == isoToDate("2020-09-29T18:40:02.788574Z")
 
         getDetailPropAsString(detail, "qualifiedName") == instance.getInstanceProperty("name")
         getDetailPropAsString(detail, "description") == instance.getInstanceProperty("description")

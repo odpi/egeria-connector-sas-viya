@@ -27,6 +27,9 @@ import org.slf4j.LoggerFactory;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
@@ -390,24 +393,24 @@ public class EntityMappingSASCatalog2OMRS {
         Number version = (Number)sasEntity.get("instance.version");
         omrsObj.setVersion(version.longValue());
 
-
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'");
-        try {
-            Object creationTimeStampObj = sasEntity.get("instance.creationTimeStamp");
-            Object modifiedTimeStampObj = sasEntity.get("instance.modifiedTimeStamp");
-            if (creationTimeStampObj instanceof Date) {
-                omrsObj.setCreateTime((Date)creationTimeStampObj);
-            } else {
-                omrsObj.setCreateTime(format.parse(creationTimeStampObj.toString()));
-            }
-            if (modifiedTimeStampObj instanceof Date) {
-                omrsObj.setUpdateTime((Date)modifiedTimeStampObj);
-            } else {
-                omrsObj.setUpdateTime(format.parse(modifiedTimeStampObj.toString()));
-            }
-        } catch (ParseException e) {
-            log.error("Could not parse instance timestamp");
+        Object creationTimeStampObj = sasEntity.get("instance.creationTimeStamp");
+        Object modifiedTimeStampObj = sasEntity.get("instance.modifiedTimeStamp");
+        if (creationTimeStampObj instanceof Date) {
+            omrsObj.setCreateTime((Date)creationTimeStampObj);
+        } else {
+            omrsObj.setCreateTime(getDateFromISO8601String(creationTimeStampObj.toString()));
         }
+        if (modifiedTimeStampObj instanceof Date) {
+            omrsObj.setUpdateTime((Date)modifiedTimeStampObj);
+        } else {
+            omrsObj.setUpdateTime(getDateFromISO8601String(modifiedTimeStampObj.toString()));
+        }
+    }
+
+    public Date getDateFromISO8601String(String isoDate){
+        TemporalAccessor ta = DateTimeFormatter.ISO_INSTANT.parse(isoDate);
+        Instant i = Instant.from(ta);
+        return Date.from(i);
     }
 
     /**
