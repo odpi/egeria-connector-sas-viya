@@ -2,7 +2,18 @@ apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'idea'
 apply plugin: 'maven-publish'
-apply plugin: 'signing'
+
+// Only apply the signing plugin if we're running in the build environment
+if (System.getenv("CI"))  {
+    apply plugin: 'signing'
+    // Artifacts need signing for maven central - supplied by GitHub secrets
+    signing {
+        sign publishing.publications.mavenJava
+        def signingKey = System.getenv("OSSRH_GPG_PRIVATE_KEY")
+        def signingPassword = System.getenv("OSSRH_GPG_PASSPHRASE")
+        useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
+    }
+}
 
 // Required for maven publishing
 group = 'org.odpi.egeria'
@@ -101,10 +112,7 @@ publishing {
 // Include specific java version notes
 sourceCompatibility = 11
 targetCompatibility = 11
-// Artifacts need signing for maven central
-signing {
-    sign publishing.publications.mavenJava
-}
+
 
 // For later java versions this is recommended
 javadoc {
