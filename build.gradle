@@ -1,6 +1,12 @@
 apply plugin: 'java'
 apply plugin: 'groovy'
 apply plugin: 'idea'
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+// Required for maven publishing
+group = 'org.odpi.egeria'
+version = '0.1-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -37,4 +43,72 @@ jar {
     }
 
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
+}
+
+// Maven Central requires we distribute source and javadoc
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+// We only have a single artifact for now - this additional metadata is
+// required for publishing to maven central
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            pom {
+                name = Project.getName()
+                description = 'SAS Viya Connector for Egeria'
+                url = 'http://egeria.odpi.org'
+                // No additional properties for now
+                //properties = [
+                //        propname: "propvalue"
+                //]
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                    license {
+                        name = 'Creative Commons Attribution 4.0 International (CC BY 4.0)'
+                        url = 'https://creativecommons.org/licenses/by/4.0'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'planetf1'
+                        name = 'Nigel Jones'
+                        email = 'nigel.l.jones+git@gmail.com'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git://github.com/odpi/egeria-connector-sas-viya.git'
+                    developerConnection = 'scm:git:ssh://github.com/odpi/egeria/egeria-connector-sas-viya.git'
+                    url = 'http://github.com/odpi/egeria-connector-sas-viya/'
+                }
+                // Release versions get pushed to staging area on maven central, snapshots to snapshot repo
+                repositories {
+                    maven {
+                        def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2'
+                        def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots'
+                        url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Include specific java version notes
+sourceCompatibility = 11
+targetCompatibility = 11
+// Artifacts need signing for maven central
+signing {
+    sign publishing.publications.mavenJava
+}
+
+// For later java versions this is recommended
+javadoc {
+    if(JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
+    }
 }
