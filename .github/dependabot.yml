@@ -9,12 +9,13 @@ updates:
     interval: weekly
   open-pull-requests-limit: 100
   reviewers:
+  - CDaRip2U
   - planetf1
-  - wbittles
 - package-ecosystem: "github-actions"
   directory: "/"
   schedule:
     interval: weekly
   open-pull-requests-limit: 25
   reviewers:
+  - CDaRip2U
   - planetf1
