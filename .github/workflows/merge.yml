@@ -33,7 +33,7 @@ jobs:
       - name: Build (Publish snapshots to maven central)
         if: ${{ github.repository == 'odpi/egeria-connector-sas-viya' && github.ref == 'refs/heads/main'}}
         # TODO: Need to extend build to make use of snapshot repo for publishing
-        run: ./gradlew build
+        run: ./gradlew publish
       # In other cases just build but don't publish
       - name: Build (no snapshots)
         if: ${{ github.repository != 'odpi/egeria-connector-sas-viya' || github.ref != 'refs/heads/main'}}

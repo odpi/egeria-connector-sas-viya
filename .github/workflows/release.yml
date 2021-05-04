@@ -34,7 +34,7 @@ jobs:
       #    restore-keys: ${{ runner.os }}-gradle
       - name: Build with Gradle & Release artifacts
         # TODO: Need to extend build to make use of release repo for publishing
-        run: ./gradlew build
+        run: ./gradlew publish
       # Upload the library so that build results can be viewed
       - name: Upload Connector
         uses: actions/upload-artifact@v2
