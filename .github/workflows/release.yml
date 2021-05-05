@@ -35,6 +35,13 @@ jobs:
       - name: Build with Gradle & Release artifacts
         # TODO: Need to extend build to make use of release repo for publishing
         run: ./gradlew publish
+        # Import secrets needed for code signing and distribution
+        env:
+          - OSSRH_GPG_KEYID: ${{ secrets.OSSRH_GPG_KEYID }}
+          - OSSRH_GPG_PASSPHRASE: ${{ secrets.OSSRH_GPG_PASSPHRASE }}
+          - OSSRH_GPG_PRIVATE_KEY: ${{ secrets.OSSRH_GPG_PRIVATE_KEY }}
+          - OSSRH_GOSSRH_TOKENPG_KEYID: ${{ secrets.OSSRH_TOKEN }}
+          - OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
       # Upload the library so that build results can be viewed
       - name: Upload Connector
         uses: actions/upload-artifact@v2
