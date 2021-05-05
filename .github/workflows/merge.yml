@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # Copyright Contributors to the ODPi Egeria project.
 ---
-name: "Merge (Java8, Maven)"
+name: "Merge"
 
 # Trigger after code is merged. only on main repo
 # - does not run on modification (may be just text)
@@ -38,11 +38,11 @@ jobs:
         run: ./gradlew publish
         # Import secrets needed for code signing and distribution
         env:
-          - OSSRH_GPG_KEYID: ${{ secrets.OSSRH_GPG_KEYID }}
-          - OSSRH_GPG_PASSPHRASE: ${{ secrets.OSSRH_GPG_PASSPHRASE }}
-          - OSSRH_GPG_PRIVATE_KEY: ${{ secrets.OSSRH_GPG_PRIVATE_KEY }}
-          - OSSRH_GOSSRH_TOKENPG_KEYID: ${{ secrets.OSSRH_TOKEN }}
-          - OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
+          OSSRH_GPG_KEYID: ${{ secrets.OSSRH_GPG_KEYID }}
+          OSSRH_GPG_PASSPHRASE: ${{ secrets.OSSRH_GPG_PASSPHRASE }}
+          OSSRH_GPG_PRIVATE_KEY: ${{ secrets.OSSRH_GPG_PRIVATE_KEY }}
+          OSSRH_GOSSRH_TOKENPG_KEYID: ${{ secrets.OSSRH_TOKEN }}
+          OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
       # In other cases just build but don't publish
       - name: Build (no snapshots)
         if: ${{ github.repository != 'odpi/egeria-connector-sas-viya' || github.ref != 'refs/heads/main'}}
