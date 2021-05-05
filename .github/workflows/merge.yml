@@ -9,6 +9,8 @@ name: "Merge (Java8, Maven)"
 on:
   push:
     branches: [main, release-*, feature-*]
+  # Also allow for manual invocation for testing
+  workflow_dispatch:
 
 jobs:
   build:

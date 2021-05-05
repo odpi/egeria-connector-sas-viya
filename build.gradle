@@ -3,24 +3,20 @@ apply plugin: 'groovy'
 apply plugin: 'idea'
 apply plugin: 'maven-publish'
 
-// Only apply the signing plugin if we're running in the build environment
+// Only apply the signing plugin if we're running in the build environment since
+// this is dependent on having access to sonatype, and suitable GPG keys
 if (System.getenv("CI"))  {
     apply plugin: 'signing'
     // Artifacts need signing for maven central - supplied by GitHub secrets
-    signing {
-        sign publishing.publications.mavenJava
-        def signingKey = System.getenv("OSSRH_GPG_PRIVATE_KEY")
-        def signingPassword = System.getenv("OSSRH_GPG_PASSPHRASE")
-        useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
-    }
 }
 
-// Required for maven publishing
+// Published artifact info, equired for maven publishing - this is the version of our artifact
 group = 'org.odpi.egeria'
-version = '0.1-SNAPSHOT'
+version = '2.10-SNAPSHOT'
 
 repositories {
     mavenCentral()
+    // Needed if we want to build with egeria snapshots (ie for testing, fixing bugs)
     maven {
         url "https://oss.sonatype.org/content/repositories/snapshots"
     }
@@ -33,10 +29,14 @@ configurations {
     implementation.extendsFrom bundledLibs
 }
 
+ext {
+    // The version of Egeria to use
+    egeriaVersion = "2.10-SNAPSHOT"
+}
 dependencies {
-    implementation 'org.odpi.egeria:open-connector-framework:2.+'
-    implementation 'org.odpi.egeria:repository-services-connectors:2.+'
-    implementation 'org.odpi.egeria:server-chassis-spring:2.+'
+    implementation "org.odpi.egeria:open-connector-framework:${egeriaVersion}"
+    implementation "org.odpi.egeria:repository-services-connectors:${egeriaVersion}"
+    implementation "org.odpi.egeria:server-chassis-spring:${egeriaVersion}"
 
     bundledLibs 'org.slf4j:slf4j-api'
     bundledLibs 'org.apache.httpcomponents:httpclient:4.5.12'
@@ -48,6 +48,14 @@ dependencies {
     testImplementation 'org.spockframework:spock-core:1.3-groovy-2.5'
 }
 
+// Maven Central (technically sonatype oss) requires we distribute source and javadoc
+java {
+    sourceCompatibility = "VERSION_11"
+    targetCompatibility = "VERSION_11"
+    withJavadocJar()
+    withSourcesJar()
+}
+
 jar {
     from {
         configurations.bundledLibs.collect { it.isDirectory() ? it : zipTree(it) }
@@ -56,72 +64,86 @@ jar {
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
 
-// Maven Central requires we distribute source and javadoc
-java {
-    withJavadocJar()
-    withSourcesJar()
-}
-// We only have a single artifact for now - this additional metadata is
-// required for publishing to maven central
-publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            pom {
-                name = Project.getName()
-                description = 'SAS Viya Connector for Egeria'
-                url = 'http://egeria.odpi.org'
-                // No additional properties for now
-                //properties = [
-                //        propname: "propvalue"
-                //]
-                licenses {
-                    license {
-                        name = 'The Apache License, Version 2.0'
-                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                    license {
-                        name = 'Creative Commons Attribution 4.0 International (CC BY 4.0)'
-                        url = 'https://creativecommons.org/licenses/by/4.0'
-                    }
-                }
-                developers {
-                    developer {
-                        id = 'planetf1'
-                        name = 'Nigel Jones'
-                        email = 'nigel.l.jones+git@gmail.com'
-                    }
-                }
-                scm {
-                    connection = 'scm:git:git://github.com/odpi/egeria-connector-sas-viya.git'
-                    developerConnection = 'scm:git:ssh://github.com/odpi/egeria/egeria-connector-sas-viya.git'
-                    url = 'http://github.com/odpi/egeria-connector-sas-viya/'
-                }
-                // Release versions get pushed to staging area on maven central, snapshots to snapshot repo
-                repositories {
-                    maven {
-                        name = 'OSSRH'
-                        def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2'
-                        def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots'
-                        url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
-                        credentials {
-                            username = System.getenv("OSSRH_TOKEN")
-                            password = System.getenv("OSSRH_USERNAME")
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-// Include specific java version notes
-sourceCompatibility = 11
-targetCompatibility = 11
-
-
-// For later java versions this is recommended
+// For later java versions this is recommended - keep conditional in case we want to build on 8
 javadoc {
     if(JavaVersion.current().isJava9Compatible()) {
         options.addBooleanOption('html5', true)
     }
 }
+
+
+// We only have a single artifact for now - this additional metadata is
+// required for publishing to maven central. As above, only if we're running in a build pipeline
+// Environment variables are sourced from GitHub secrets in the CI pipeline
+if (System.getenv("CI")) {
+    publishing {
+        publications {
+            // definining a publication called 'connector'
+            connector(MavenPublication) {
+                // Pick up the standard java artifacts
+                from components.java
+                // by default, gradle's groupId, artifactId, version are used for the maven coordinates
+                // but we need additional metadata to align with Egeria (more may need to be added)
+                pom {
+                    description = 'SAS Viya Connector for Egeria'
+                    url = 'http://egeria.odpi.org'
+                    // No additional properties for now
+                    //properties = [
+                    //        propname: "propvalue"
+                    //]
+                    licenses {
+                        // Code
+                        license {
+                            name = 'The Apache License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                        // Docs
+                        license {
+                            name = 'Creative Commons Attribution 4.0 International (CC BY 4.0)'
+                            url = 'https://creativecommons.org/licenses/by/4.0'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'planetf1'
+                            name = 'Nigel Jones'
+                            email = 'nigel.l.jones+git@gmail.com'
+                        }
+                    }
+                    scm {
+                        connection = 'scm:git:git://github.com/odpi/egeria-connector-sas-viya.git'
+                        developerConnection = 'scm:git:ssh://github.com/odpi/egeria/egeria-connector-sas-viya.git'
+                        url = 'http://github.com/odpi/egeria-connector-sas-viya/'
+                    }
+
+                }
+            }
+
+        }
+        // Release versions get pushed to staging area on maven central, snapshots to snapshot repo
+        // Secrets for credentials
+        repositories {
+            maven {
+                name = 'OSSRH'
+                def releasesRepoUrl = 'https://oss.sonatype.org/service/local/staging/deploy/maven2'
+                def snapshotsRepoUrl = 'https://oss.sonatype.org/content/repositories/snapshots'
+                url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+                credentials {
+                    username = System.getenv("OSSRH_TOKEN")
+                    password = System.getenv("OSSRH_USERNAME")
+                }
+            }
+        }
+    }
+
+    // To publish to ossrh we need to sign the artifacts
+    signing {
+        // This is the publication to sign
+        sign publishing.publications.connector
+        def signingKey = System.getenv("OSSRH_GPG_PRIVATE_KEY")
+        def signingPassword = System.getenv("OSSRH_GPG_PASSPHRASE")
+        def signingKeyId = System.getenv("OSSRH_GPG_KEYID")
+        useInMemoryPgpKeys(signingKeyId,signingKey, signingPassword)
+    }
+}
+
