@@ -39,7 +39,7 @@ dependencies {
     implementation "org.odpi.egeria:server-chassis-spring:${egeriaVersion}"
 
     bundledLibs 'org.slf4j:slf4j-api'
-    bundledLibs 'org.apache.httpcomponents:httpclient:4.5.12'
+    bundledLibs 'org.apache.httpcomponents:httpclient:4.5.13'
     bundledLibs 'com.google.code.gson:gson:2.8.6'
     bundledLibs 'com.rabbitmq:amqp-client:5.9.0'
 
