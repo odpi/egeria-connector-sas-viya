@@ -71,7 +71,7 @@ jobs:
         with:
           push:  ${{ github.event_name == 'push' && github.repository == 'odpi/egeria-connector-sas-viya' }} 
           tags: odpi/egeria-connector-sas-viya:${{env.RELEASE_VERSION}}
-          build_args: version=${{ env.RELEASE_VERSION }}
+          build-args: version=${{ env.RELEASE_VERSION }}
           context: .
           file: ./Dockerfile
       # For main code stream
@@ -82,7 +82,7 @@ jobs:
         with:
           push:  ${{ github.event_name == 'push' && github.repository == 'odpi/egeria-connector-sas-viya' }} 
           tags: odpi/egeria-connector-sas-viya:${{ env.RELEASE_VERSION}}, odpi/egeria-connector-sas-viya:latest
-          build_args: version=${{ env.RELEASE_VERSION }}
+          build-args: version=${{ env.RELEASE_VERSION }}
           context: .
           file: ./Dockerfile
       - name: Image digest (release)
