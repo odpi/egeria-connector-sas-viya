@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     name: "Merge"
     env:
-      RELEASE_VERSION: 2.10-SNAPSHOT
+      RELEASE_VERSION: 2.11-SNAPSHOT
     steps:
       - uses: actions/checkout@v2
         name: Checkout source
