@@ -45,7 +45,7 @@ dependencies {
 
     testImplementation 'org.codehaus.groovy:groovy:3.0.8'
     testImplementation 'org.codehaus.groovy:groovy-dateutil:3.0.8'
-    testImplementation 'org.spockframework:spock-core:2.0-M5-groovy-3.0'
+    testImplementation 'org.spockframework:spock-core:2.1-groovy-3.0-SNAPSHOT'
 }
 
 // Maven Central (technically sonatype oss) requires we distribute source and javadoc
