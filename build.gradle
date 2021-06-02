@@ -31,7 +31,7 @@ configurations {
 
 ext {
     // The version of Egeria to use
-    egeriaVersion = "2.10-SNAPSHOT"
+    egeriaVersion = "2.11-SNAPSHOT"
 }
 dependencies {
     implementation "org.odpi.egeria:open-connector-framework:${egeriaVersion}"
