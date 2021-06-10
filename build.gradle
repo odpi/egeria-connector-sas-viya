@@ -12,7 +12,7 @@ if (System.getenv("CI"))  {
 
 // Published artifact info, equired for maven publishing - this is the version of our artifact
 group = 'org.odpi.egeria'
-version = '2.10-SNAPSHOT'
+version = '2.11-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -31,7 +31,7 @@ configurations {
 
 ext {
     // The version of Egeria to use
-    egeriaVersion = "2.10-SNAPSHOT"
+    egeriaVersion = "2.11-SNAPSHOT"
 }
 dependencies {
     implementation "org.odpi.egeria:open-connector-framework:${egeriaVersion}"
@@ -40,12 +40,12 @@ dependencies {
 
     bundledLibs 'org.slf4j:slf4j-api'
     bundledLibs 'org.apache.httpcomponents:httpclient:4.5.13'
-    bundledLibs 'com.google.code.gson:gson:2.8.6'
-    bundledLibs 'com.rabbitmq:amqp-client:5.9.0'
+    bundledLibs 'com.google.code.gson:gson:2.8.7'
+    bundledLibs 'com.rabbitmq:amqp-client:5.12.0'
 
-    testImplementation 'org.codehaus.groovy:groovy:2.5.14'
-    testImplementation 'org.codehaus.groovy:groovy-dateutil:2.5.14'
-    testImplementation 'org.spockframework:spock-core:1.3-groovy-2.5'
+    testImplementation 'org.codehaus.groovy:groovy:3.0.8'
+    testImplementation 'org.codehaus.groovy:groovy-dateutil:3.0.8'
+    testImplementation 'org.spockframework:spock-core:2.1-groovy-3.0-SNAPSHOT'
 }
 
 // Maven Central (technically sonatype oss) requires we distribute source and javadoc
