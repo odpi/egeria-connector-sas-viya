@@ -1,0 +1,103 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright Contributors to the Egeria project.
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/name: egeria-connector
+  name: egeria-connector-service
+spec:
+  type: NodePort
+  ports:
+    - port: 9443
+      name: egeria
+      targetPort: 9443
+      nodePort: 30000
+      protocol: TCP
+    - name: debug
+      port: 5005
+      targetPort: 5005
+      nodePort: 30001
+  selector:
+    app.kubernetes.io/name: egeria-connector
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  annotations:
+    sas.com/certificate-file-format: jks
+  creationTimestamp: null
+  name: egeria-connector-ss
+  labels:
+    app.kubernetes.io/name: egeria-connectors
+spec:
+  replicas: 1
+  serviceName: egeria-connector-service
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: egeria-connector
+  template:
+    metadata:
+      annotations:
+        sas.com/certificate-file-format: jks
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/name: egeria-connector
+    spec:
+      imagePullSecrets: []
+      containers:
+      - name: egeria
+        image: odpi/egeria-connector-sas-viya
+        env:
+        - name: JAVA_DEBUG
+          value:  "true"
+        - name: RABBITMQ_USER
+          valueFrom:
+            secretKeyRef:
+              name: sas-rabbitmq-server-secret
+              key: RABBITMQ_DEFAULT_USER
+        - name: RABBITMQ_PASS
+          valueFrom:
+            secretKeyRef:
+              name: sas-rabbitmq-server-secret
+              key: RABBITMQ_DEFAULT_PASS
+        envFrom:
+        - configMapRef:
+            name: sas-certframe-config
+        ports:
+        - containerPort: 9443
+        - containerPort: 5005
+        # No other checks until this passes
+        startupProbe:
+          tcpSocket:
+            port: 9443
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          failureThreshold: 25
+        # Is pod ready to service network requests - it will pause (for replicas, others will take the load)
+        readinessProbe:
+          httpGet:
+            path: /open-metadata/platform-services/users/garygeeke/server-platform/origin
+            port: 9443
+            scheme: HTTPS
+          periodSeconds: 10
+          failureThreshold: 6
+        # Is pod doing useful work - if not we will restart it
+        livenessProbe:
+          httpGet:
+            path: /open-metadata/platform-services/users/garygeekes/server-platform/origin
+            port: 9443
+            scheme: HTTPS
+          periodSeconds: 10
+          failureThreshold: 6
+        resources: {}
+        volumeMounts:
+        - mountPath: /tmp
+          name: tmp
+      restartPolicy: Always
+      volumes:
+      - emptyDir: { }
+        name: security
+      - emptyDir: { }
+        name: tmp
