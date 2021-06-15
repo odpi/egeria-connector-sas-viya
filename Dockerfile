@@ -26,3 +26,6 @@ LABEL org.opencontainers.image.description = "Egeria with SAS Viya connector" \
 
 WORKDIR .
 COPY build/libs/egeria-connector-viya-4-${version}*.jar /deployments/server/lib
+
+# Mount security/trustedcerts.jks at runtime
+ENV JAVA_OPTS_APPEND -XX:MaxMetaspaceSize=1g -Djavax.net.ssl.trustStore=/security/trustedcerts.jks -Dsas.egeria.repositoryconnector.ssl.trustAll=false
