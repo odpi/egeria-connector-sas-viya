@@ -50,8 +50,6 @@ spec:
         - name: egeria
           image: odpi/egeria-connector-sas-viya
           env:
-            - name: JAVA_DEBUG
-              value:  "true"
             - name: RABBITMQ_USER
               valueFrom:
                 secretKeyRef:
