@@ -75,8 +75,8 @@ public class RepositoryConnector extends OMRSRepositoryConnector
                 raiseConnectorCheckedException(ErrorCode.REST_CLIENT_FAILURE, methodName, null, "null");
             } else {
                 this.url = endpointProperties.getProtocol() + "://" + endpointProperties.getAddress();
-                this.sasCatalogClient = new SASCatalogRestClient(this.url, this.connectionProperties.getUserId(),
-                        this.connectionProperties.getClearPassword());
+                this.sasCatalogClient = new SASCatalogRestClient(this.url, this.securedProperties.get("userId"),
+                        this.securedProperties.get("password"));
             }
         }
         metadataCollection = new MetadataCollection(this,
