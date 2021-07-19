@@ -41,7 +41,7 @@ dependencies {
     bundledLibs 'org.slf4j:slf4j-api'
     bundledLibs 'org.apache.httpcomponents:httpclient:4.5.13'
     bundledLibs 'com.google.code.gson:gson:2.8.7'
-    bundledLibs 'com.rabbitmq:amqp-client:5.12.0'
+    bundledLibs 'com.rabbitmq:amqp-client:5.13.0'
 
     testImplementation 'org.codehaus.groovy:groovy:3.0.8'
     testImplementation 'org.codehaus.groovy:groovy-dateutil:3.0.8'
