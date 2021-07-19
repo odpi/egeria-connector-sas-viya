@@ -30,8 +30,10 @@ curl --location --request POST -k "https://${CLUSTER_IP}:30000/open-metadata/adm
     \"address\": \"${CATALOG_IP}\",
     \"protocol\": \"https\"
   },
-  \"userId\": \"${CATALOG_USER}\",
-  \"clearPassword\": \"${CATALOG_PASS}\"
+  \"securedProperties\": {
+    \"userId\": \"${CATALOG_USER}\",
+    \"password\": \"${CATALOG_PASS}\"
+  }
 }"
 
 # Configure RabbitMQ connection
@@ -45,7 +47,7 @@ curl --location --request POST -k "https://${CLUSTER_IP}:30000/open-metadata/adm
     \"bootstrap.servers\":\"kafkahost:9092\"
   }
 }"
-curl --location --request POST -k "https://${CLUSTER_IP}:30000/open-metadata/admin-services/users/${EGERIA_USER}/servers/${EGERIA_SERVER}/local-repository/event-mapper-details?connectorProvider=org.odpi.openmetadata.connector.sas.event.mapper.RepositoryEventMapperProvider&eventSource=dev.ingress-nginx.tw-dev-m1.dmmdev.sashq-d.openstack.sas.com:5672" \
+curl --location --request POST -k "https://${CLUSTER_IP}:30000/open-metadata/admin-services/users/${EGERIA_USER}/servers/${EGERIA_SERVER}/local-repository/event-mapper-details?connectorProvider=org.odpi.openmetadata.connector.sas.event.mapper.RepositoryEventMapperProvider&eventSource=sas-rabbitmq-server:5672" \
 --header "Content-Type: application/json" \
 --data-raw "{\"username\":\"$(kubectl get secret sas-rabbitmq-server-secret -o go-template='{{(index .data.RABBITMQ_DEFAULT_USER)}}' | base64 -d)\",
 \"password\":\"$(kubectl get secret sas-rabbitmq-server-secret -o go-template='{{(index .data.RABBITMQ_DEFAULT_PASS)}}' | base64 -d)\"}"
