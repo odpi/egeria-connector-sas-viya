@@ -96,6 +96,7 @@ public class RepositoryEventMapper extends OMRSRepositoryEventMapperBase
         try {
             log.debug("Set up connection factory for RabbitMQ");
             ConnectionFactory connectionFactory = new ConnectionFactory();
+            connectionFactory.useSslProtocol();
             ConnectionProperties connProperties = this.connectionProperties;
             if (connProperties != null) {
                 EndpointProperties connEndpoint = connProperties.getEndpoint();
@@ -155,11 +156,11 @@ public class RepositoryEventMapper extends OMRSRepositoryEventMapperBase
             log.debug("Declare RabbitMQ queue");
             queueName = channel.queueDeclare().getQueue();
             log.debug("Bind RabbitMQ queue: {}", queueName);
-            channel.queueBind(queueName, EXCHANGE_NAME,"application.resource.notification.*.success");
+            channel.queueBind(queueName, EXCHANGE_NAME,"application.integration.catalog.change.*.success");
             log.debug("Finished establishment of RabbitMQ connection");
         }
         catch (Exception e) {
-            log.error("Failed to initialize RabbitMQ connection", e);
+            log.error("Failed to initialize RabbitMQ connection " + e.getMessage());
         }
         auditLog.logMessage(methodName, AuditCode.EVENT_MAPPER_INITIALIZED.getMessageDefinition(repositoryConnector.getServerName()));
     }
@@ -234,7 +235,7 @@ public class RepositoryEventMapper extends OMRSRepositoryEventMapperBase
             log.warn("Could not parse event payload", e);
             return;
         }
-        log.info("Received resource event type: {}", eventPayload.getAction());
+        log.info("Received integration event for Catalog operation: {}", eventPayload.getOperation());
 
         // Convert event payload into SASCatalogObject that rest of application uses
         SASCatalogObject catalogObject = new SASCatalogObject();
@@ -259,20 +260,20 @@ public class RepositoryEventMapper extends OMRSRepositoryEventMapperBase
             return;
         }
 
-        if(eventPayload.getAction().startsWith(CREATE) && type.equals(CatalogType.ENTITY)) {
+        if(eventPayload.getOperation().startsWith(CREATE) && type.equals(CatalogType.ENTITY)) {
             processNewEntity(catalogObject);
-        } else if(eventPayload.getAction().startsWith(UPDATE) && type.equals(CatalogType.ENTITY)) {
+        } else if(eventPayload.getOperation().startsWith(UPDATE) && type.equals(CatalogType.ENTITY)) {
             processUpdatedEntity(catalogObject);
-        } else if(eventPayload.getAction().startsWith(DELETE) && type.equals(CatalogType.ENTITY)) {
+        } else if(eventPayload.getOperation().startsWith(DELETE) && type.equals(CatalogType.ENTITY)) {
             processRemovedEntity(catalogObject);
-        } else if(eventPayload.getAction().startsWith(CREATE) && type.equals(CatalogType.RELATIONSHIP)) {
+        } else if(eventPayload.getOperation().startsWith(CREATE) && type.equals(CatalogType.RELATIONSHIP)) {
             processNewRelationship(catalogObject);
-        } else if(eventPayload.getAction().startsWith(UPDATE) && type.equals(CatalogType.RELATIONSHIP)) {
+        } else if(eventPayload.getOperation().startsWith(UPDATE) && type.equals(CatalogType.RELATIONSHIP)) {
             processUpdatedRelationship(catalogObject);
-        } else if(eventPayload.getAction().startsWith(DELETE) && type.equals(CatalogType.RELATIONSHIP)) {
+        } else if(eventPayload.getOperation().startsWith(DELETE) && type.equals(CatalogType.RELATIONSHIP)) {
             processRemovedRelationship(catalogObject);
         } else {
-            log.info("Event processing does not support action, {}, for type, {}", eventPayload.getAction(), type);
+            log.info("Event processing does not support operation, {}, for type, {}", eventPayload.getOperation(), type);
         }
 
     }

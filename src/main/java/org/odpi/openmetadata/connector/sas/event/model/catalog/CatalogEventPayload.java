@@ -9,7 +9,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.odpi.openmetadata.connector.sas.event.model.TypedPayload;
 import org.odpi.openmetadata.connector.sas.event.model.catalog.definition.Definition;
 import org.odpi.openmetadata.connector.sas.event.model.catalog.instance.Instance;
-//import com.sas.event.model.TypedPayload;
 
 public class CatalogEventPayload implements TypedPayload {
     public static final String PAYLOAD_TYPE = "application/vnd.sas.catalog.event";
@@ -17,6 +16,7 @@ public class CatalogEventPayload implements TypedPayload {
     private String action;
     private String actionState;
     private String objectType;
+    private String operation;
     private Instance instance;
     private Definition definition;
 
@@ -78,4 +78,13 @@ public class CatalogEventPayload implements TypedPayload {
     public void setDefinition(Definition definition) {
         this.definition = definition;
     }
+
+    public String getOperation() {
+        return operation;
+    }
+
+    public void setOperation(String operation) {
+        this.operation = operation;
+    }
+
 }
