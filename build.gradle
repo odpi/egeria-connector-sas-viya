@@ -12,7 +12,7 @@ if (System.getenv("CI")) {
 
 // Published artifact info, equired for maven publishing - this is the version of our artifact
 group = 'org.odpi.egeria'
-version = '3.1-SNAPSHOT'
+version = '3.2-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -31,7 +31,7 @@ configurations {
 
 ext {
     // The version of Egeria to use
-    egeriaVersion = "3.1-SNAPSHOT"
+    egeriaVersion = "3.2-SNAPSHOT"
 }
 dependencies {
     implementation "org.odpi.egeria:open-connector-framework:${egeriaVersion}"
@@ -43,10 +43,10 @@ dependencies {
     bundledLibs 'com.google.code.gson:gson:2.8.8'
     bundledLibs 'com.rabbitmq:amqp-client:5.13.1'
 
-    testImplementation 'org.codehaus.groovy:groovy:3.0.8'
-    testImplementation 'org.codehaus.groovy:groovy-dateutil:3.0.8'
+    testImplementation 'org.codehaus.groovy:groovy:3.0.9'
+    testImplementation 'org.codehaus.groovy:groovy-dateutil:3.0.9'
     testImplementation 'org.spockframework:spock-core:2.1-groovy-3.0-SNAPSHOT'
-    testImplementation 'org.junit.platform:junit-platform-engine:1.7.2'
+    testImplementation 'org.junit.platform:junit-platform-engine:1.8.0'
     testImplementation "org.odpi.egeria:repository-services-implementation:${egeriaVersion}"
 }
 
