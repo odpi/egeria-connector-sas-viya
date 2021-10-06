@@ -8,6 +8,7 @@ package org.odpi.openmetadata.connector.sas.repository.connector;
 import org.odpi.openmetadata.connector.sas.auditlog.ErrorCode;
 import org.odpi.openmetadata.connector.sas.client.SASCatalogClient;
 import org.odpi.openmetadata.connector.sas.client.SASCatalogRestClient;
+import org.odpi.openmetadata.connector.sas.event.model.catalog.instance.Instance;
 import org.odpi.openmetadata.connector.sas.repository.connector.mapping.SASCatalogObject;
 import org.odpi.openmetadata.frameworks.connectors.ffdc.ConnectorCheckedException;
 import org.odpi.openmetadata.frameworks.connectors.properties.ConnectionProperties;
@@ -20,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
+import java.util.Map;
 
 public class RepositoryConnector extends OMRSRepositoryConnector
 {
@@ -108,6 +110,16 @@ public class RepositoryConnector extends OMRSRepositoryConnector
             return sasCatalogClient.getInstanceByGuid(guid, "entity");
         } catch (Exception e) {
             log.error("Could not fetch entity with guid: " + guid);
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public List<Instance> getInstancesWithParams(Map<String, String> queryParams, Map<String, String> attributeFilter) {
+        try {
+            return sasCatalogClient.getInstancesWithParams(queryParams, attributeFilter);
+        } catch (Exception e) {
+            log.error("Could not get instances with filter string: " + queryParams.toString());
             e.printStackTrace();
         }
         return null;

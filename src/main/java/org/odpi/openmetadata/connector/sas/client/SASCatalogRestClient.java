@@ -6,6 +6,7 @@
 package org.odpi.openmetadata.connector.sas.client;
 
 import com.google.gson.Gson;
+import org.odpi.openmetadata.connector.sas.event.model.catalog.instance.Instance;
 import org.odpi.openmetadata.connector.sas.repository.connector.mapping.SASCatalogObject;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
@@ -133,10 +134,72 @@ public class SASCatalogRestClient implements SASCatalogClient {
             InputStreamReader reader = new InputStreamReader(entity.getContent(), StandardCharsets.UTF_8);
             Map instance = new Gson().fromJson(reader, Map.class);
 
-            instanceInfo = instanceMapToSASCatalogInstance(instance, guid, type);
+            instanceInfo = instanceMapToInstance(instance, guid, type);
         }
 
         return instanceInfo;
+    }
+
+    @Override
+    public List<Instance> getInstancesWithParams(Map<String, String> params) throws Exception {
+        return getInstancesWithFilter(params, null, 0);
+    }
+
+    @Override
+    public List<Instance> getInstancesWithParams(Map<String, String> params, Map<String, String> attributeFilter) throws Exception {
+        return getInstancesWithFilter(params, attributeFilter, 0);
+    }
+
+    private List<Instance> getInstancesWithFilter(Map<String, String> params, Map<String, String> attributeFilter, int retries) throws Exception {
+
+        if(retries > MAX_RETRIES) {
+            throw new RuntimeException("Could not complete request after " + retries + " retries.");
+        }
+
+        List<Instance> instances = new ArrayList<>();
+
+        URIBuilder builder = new URIBuilder(this.baseURL + "/catalog/instances");
+        for(Map.Entry<String, String> param : params.entrySet()) {
+            log.info("Param: " + param.getKey() + " : " + param.getValue());
+            builder.addParameter(param.getKey(), param.getValue());
+        }
+        HttpGet httpGet = new HttpGet(builder.build());
+        addAuthHeader(httpGet);
+//        httpGet.addHeader("Accept", String.format("application/vnd.sas.metadata.instance.%s+json", type));
+        try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
+            log.info("Get Instances with filter (" + params.toString() + "): " + response.getStatusLine());
+
+            if(response.getStatusLine().getStatusCode() == 401) {
+                response.close();
+                setAuthToken(username, password);
+                return getInstancesWithFilter(params, attributeFilter, retries+1);
+            }
+
+            HttpEntity entity = response.getEntity();
+            InputStreamReader reader = new InputStreamReader(entity.getContent(), StandardCharsets.UTF_8);
+            Map results = new Gson().fromJson(reader, Map.class);
+            List<Map<String, Object>> items = (List<Map<String, Object>>) results.get("items");
+            for(Map<String, Object> instance : items) {
+                Map<String, String> attributes = (Map<String, String>) instance.get("attributes");
+                // Not currently possible to filter on attributes in Catalog, have to do it after the fact
+                if(attributeFilter == null || matchesAttributes(attributes, attributeFilter)) {
+                    Instance inst = new Instance();
+                    inst.setId((String) instance.get("id"));
+                    instances.add(inst);
+                }
+            }
+        }
+
+        return instances;
+    }
+
+    private boolean matchesAttributes(Map<String, String> attributes, Map<String, String> attributeFilter) {
+        for(Map.Entry<String, String> attribute : attributeFilter.entrySet()) {
+            if(!(attributes.containsKey(attribute.getKey()) && attributes.get(attribute.getKey()).equals(attribute.getValue()))) {
+                return false;
+            }
+        }
+        return true;
     }
 
     private void addDefinitionInfo(SASCatalogObject instanceInfo, String definitionId, String type) throws Exception {
@@ -250,14 +313,14 @@ public class SASCatalogRestClient implements SASCatalogClient {
 
             for(Object rel : relMaps) {
                 Map relMap = (Map) rel;
-                relationships.add(instanceMapToSASCatalogInstance(relMap, guid, "relationship"));
+                relationships.add(instanceMapToInstance(relMap, guid, "relationship"));
             }
 
             return relationships;
         }
     }
 
-    private SASCatalogObject instanceMapToSASCatalogInstance(Map instance, String guid, String type) throws Exception {
+    private SASCatalogObject instanceMapToInstance(Map instance, String guid, String type) throws Exception {
         SASCatalogObject instanceInfo = new SASCatalogObject();
 
         String definitionId = (String) instance.get("definitionId");
