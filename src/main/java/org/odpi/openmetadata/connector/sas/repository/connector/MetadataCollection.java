@@ -470,6 +470,17 @@ public class MetadataCollection extends OMRSMetadataCollectionBase {
     }
 
     @Override
+    public boolean verifyAttributeTypeDef(String userId, AttributeTypeDef attributeTypeDef) throws InvalidParameterException, RepositoryErrorException, TypeDefNotSupportedException, TypeDefConflictException, InvalidTypeDefException, UserNotAuthorizedException {
+        // Method stub to prevent exceptions
+        return false;
+    }
+
+    @Override
+    public Relationship isRelationshipKnown(String userId, String guid) throws InvalidParameterException, RepositoryErrorException, UserNotAuthorizedException {
+        // Method stub to prevent exceptions
+        return null;
+    }
+
     public  List<EntityDetail> findEntitiesByProperty(String                    userId,
                                                       String                    entityTypeGUID,
                                                       InstanceProperties matchProperties,
