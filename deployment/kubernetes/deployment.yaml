@@ -93,9 +93,67 @@ spec:
           volumeMounts:
             - mountPath: /tmp
               name: tmp
+            - mountPath: /security
+              name: security
+            - mountPath: /opt/sas/viya/config/etc/SASSecurityCertificateFramework/cacerts
+              name: security
+              subPath: cacerts
+            - mountPath: /opt/sas/viya/config/etc/SASSecurityCertificateFramework/private
+              name: security
+              subPath: private
+      initContainers:
+        - env:
+            - name: KUBE_POD_NAME
+              valueFrom:
+                fieldRef:
+                  apiVersion: v1
+                  fieldPath: metadata.name
+            - name: SAS_CERTFRAME_TOKEN_DIR
+              value: /certframe-token
+            - name: SAS_ADDITIONAL_CA_CERTIFICATES_DIR
+              value: /customer-provided-ca-certificates
+          envFrom:
+            - configMapRef:
+                name: sas-certframe-java-config
+            - configMapRef:
+                name: sas-certframe-ingress-certificate-config
+            - configMapRef:
+                name: sas-certframe-user-config
+          image: sas-certframe
+          imagePullPolicy: IfNotPresent
+          name: sas-certframe
+          resources:
+            limits:
+              cpu: 500m
+              memory: 500Mi
+            requests:
+              cpu: 50m
+              memory: 50Mi
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            privileged: false
+            readOnlyRootFilesystem: true
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+            - mountPath: /certframe-token
+              name: certframe-token
+            - mountPath: /security
+              name: security
+            - mountPath: /customer-provided-ca-certificates
+              name: customer-provided-ca-certificates
       restartPolicy: Always
       volumes:
         - emptyDir: { }
           name: security
+        - name: certframe-token
+          secret:
+            defaultMode: 420
+            secretName: sas-certframe-token
+        - emptyDir: { }
+          name: customer-provided-ca-certificates
         - emptyDir: { }
           name: tmp
