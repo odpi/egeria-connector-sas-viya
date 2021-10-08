@@ -156,7 +156,6 @@ public class TypeDefStore {
                 }
 
             }
-
         } catch (IOException e) {
             log.error("Unable to load mapping file TypeDefMappings.json from jar file -- no mappings will exist.");
         }
@@ -180,6 +179,16 @@ public class TypeDefStore {
      */
     public boolean isReserved(String omrsName) {
         return unmappedTypes.contains(omrsName);
+    }
+
+    /**
+     * Retrieves a map of all OMRS property name to catalogName definitions,
+     * or null if there are no mappings (or no properties).
+     *
+     * @return {@code Map<String, String>}
+     */
+    public Map<String, Map<String, String>> getAllOmrsNameToCatalogNameMappings() {
+        return omrsNameToCatalogNamesByPrefix;
     }
 
     /**
@@ -253,7 +262,9 @@ public class TypeDefStore {
      */
     public Map<String, String> getAllMappedCatalogTypeDefNames(String omrsName) {
         if (isTypeDefMapped(omrsName)) {
-            return omrsNameToCatalogNamesByPrefix.get(omrsName);
+            Map<String, String> returnedMap = new HashMap<>();
+            returnedMap = omrsNameToCatalogNamesByPrefix.get(omrsName);
+            return returnedMap;
         } else if (omrsNameToGuid.containsKey(omrsName)) {
             Map<String, String> map = new HashMap<>();
             map.put(null, omrsName);
