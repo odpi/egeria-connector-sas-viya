@@ -449,6 +449,18 @@ public class MetadataCollection extends OMRSMetadataCollectionBase {
 
     }
 
+    @Override
+    public boolean verifyAttributeTypeDef(String userId, AttributeTypeDef attributeTypeDef) throws InvalidParameterException, RepositoryErrorException, TypeDefNotSupportedException, TypeDefConflictException, InvalidTypeDefException, UserNotAuthorizedException {
+        // Method stub to prevent exceptions
+        return false;
+    }
+
+    @Override
+    public Relationship isRelationshipKnown(String userId, String guid) throws InvalidParameterException, RepositoryErrorException, UserNotAuthorizedException {
+        // Method stub to prevent exceptions
+        return null;
+    }
+
     /**
      * Try to retrieve an Catalog entity using the provided GUID, and if not found throw an EntityNotKnownException.
      * @param guid the GUID for the entity to retrieve
