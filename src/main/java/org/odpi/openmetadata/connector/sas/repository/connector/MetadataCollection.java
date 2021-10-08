@@ -479,6 +479,7 @@ public class MetadataCollection extends OMRSMetadataCollectionBase {
     public Relationship isRelationshipKnown(String userId, String guid) throws InvalidParameterException, RepositoryErrorException, UserNotAuthorizedException {
         // Method stub to prevent exceptions
         return null;
+    }
 
     public  List<EntityDetail> findEntitiesByProperty(String                    userId,
                                                       String                    entityTypeGUID,
