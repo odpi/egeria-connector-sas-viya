@@ -949,30 +949,14 @@ public class MetadataCollection extends OMRSMetadataCollectionBase {
             UserNotAuthorizedException {
 
         List<EntityDetail> entityDetails = new ArrayList<>();
-
-        // If requested type is for a generated type, we need to retrieve it differently -- i.e. prefix the GUID
-        // ... so we should determine what prefixes to use based on the requested entity type GUID
-        List<String> prefixes = new ArrayList<String>();
-        Map<String, Map<String, String>> mappings = getMappingsToSearch(entityTypeGUID, userId);
-        for (Map.Entry<String, Map<String, String>> mapping : mappings.entrySet()) {
-            Map<String, String> catalogTypeNamesByPrefix = mapping.getValue();
-            for (Map.Entry<String, String> entry : catalogTypeNamesByPrefix.entrySet()) {
-                prefixes.add(entry.getKey());
-            }
-        }
-
         if (instances != null) {
             for (Instance instance : instances) {
-                for (String prefix : prefixes) {
-                    try {
-                        SASCatalogGuid guid = new SASCatalogGuid(instance.getId(), prefix);
-                        // TODO: See if we can do this without making another REST request
-                        EntityDetail detail = getEntityDetail(userId, guid.toString());
-                        // Depending on prefix, this could come back with results that should not be included
-                        // (ie. for generated types or non-generated types, depending on requested entityTypeGUID),
-                        // so only include those that were requested
-                        if (detail != null) {
+                try {
+                    // TODO: See if we can do this without making another REST request
+                    EntityDetail detail = getEntityDetail(userId, instance.getId());
+                    if (detail != null) {
                             String typeName = detail.getType().getTypeDefName();
+                            log.debug("getEntityDetailsFromCatalogResults: typeName {}", typeName);
                             try {
                                 TypeDef typeDef = repositoryHelper.getTypeDef(repositoryName, "entityTypeGUID", entityTypeGUID, "getEntityDetailsFromAtlasResults");
                                 if (repositoryHelper.isTypeOf(repositoryName, typeName, typeDef.getName())) {
@@ -984,9 +968,8 @@ public class MetadataCollection extends OMRSMetadataCollectionBase {
                         } else {
                             log.error("Entity with GUID {} not known -- excluding from results.", instance.getId());
                         }
-                    } catch (EntityNotKnownException e) {
+                } catch (EntityNotKnownException e) {
                         log.error("Entity with GUID {} not known -- excluding from results.", instance.getId());
-                    }
                 }
             }
         }
