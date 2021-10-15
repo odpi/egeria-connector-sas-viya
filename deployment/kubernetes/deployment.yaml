@@ -8,26 +8,26 @@ metadata:
     app.kubernetes.io/name: egeria-connector
   name: egeria-connector-service
 spec:
-  type: NodePort
   ports:
-    - port: 9443
-      name: egeria
-      targetPort: 9443
-      nodePort: 30000
-      protocol: TCP
-    - name: debug
-      port: 5005
-      targetPort: 5005
-      nodePort: 30001
+  - name: egeria
+    port: 9443
+    protocol: TCP
+    targetPort: egeria-port
+  - name: debug
+    port: 5005
+    protocol: TCP
+    targetPort: debug-port
   selector:
     app.kubernetes.io/name: egeria-connector
+    sas.com/deployment: sas-viya
+  sessionAffinity: None
+  type: ClusterIP
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   annotations:
     sas.com/certificate-file-format: jks
-  creationTimestamp: null
   name: egeria-connector-ss
   labels:
     app.kubernetes.io/name: egeria-connectors
@@ -41,7 +41,6 @@ spec:
     metadata:
       annotations:
         sas.com/certificate-file-format: jks
-      creationTimestamp: null
       labels:
         app.kubernetes.io/name: egeria-connector
     spec:
@@ -60,100 +59,117 @@ spec:
                 secretKeyRef:
                   name: sas-rabbitmq-server-secret
                   key: RABBITMQ_DEFAULT_PASS
-          envFrom:
-            - configMapRef:
-                name: sas-certframe-config
           ports:
-            - containerPort: 9443
-            - containerPort: 5005
+            - name: egeria-port
+              containerPort: 9443
+            - name: debug-port
+              containerPort: 5005
           # No other checks until this passes
           startupProbe:
             tcpSocket:
-              port: 9443
+              port: egeria-port
             initialDelaySeconds: 30
             periodSeconds: 10
             failureThreshold: 25
           # Is pod ready to service network requests - it will pause (for replicas, others will take the load)
           readinessProbe:
-            httpGet:
-              path: /open-metadata/platform-services/users/garygeeke/server-platform/origin
-              port: 9443
-              scheme: HTTPS
+            tcpSocket:
+              port: egeria-port
             periodSeconds: 10
-            failureThreshold: 6
+            failureThreshold: 3
           # Is pod doing useful work - if not we will restart it
           livenessProbe:
-            httpGet:
-              path: /open-metadata/platform-services/users/garygeekes/server-platform/origin
-              port: 9443
-              scheme: HTTPS
+            tcpSocket:
+              port: egeria-port
             periodSeconds: 10
             failureThreshold: 6
           resources: {}
           volumeMounts:
             - mountPath: /tmp
               name: tmp
-            - mountPath: /security
-              name: security
-            - mountPath: /opt/sas/viya/config/etc/SASSecurityCertificateFramework/cacerts
-              name: security
-              subPath: cacerts
-            - mountPath: /opt/sas/viya/config/etc/SASSecurityCertificateFramework/private
-              name: security
-              subPath: private
-      initContainers:
-        - env:
-            - name: KUBE_POD_NAME
-              valueFrom:
-                fieldRef:
-                  apiVersion: v1
-                  fieldPath: metadata.name
-            - name: SAS_CERTFRAME_TOKEN_DIR
-              value: /certframe-token
-            - name: SAS_ADDITIONAL_CA_CERTIFICATES_DIR
-              value: /customer-provided-ca-certificates
-          envFrom:
-            - configMapRef:
-                name: sas-certframe-java-config
-            - configMapRef:
-                name: sas-certframe-ingress-certificate-config
-            - configMapRef:
-                name: sas-certframe-user-config
-          image: sas-certframe
-          imagePullPolicy: IfNotPresent
-          name: sas-certframe
-          resources:
-            limits:
-              cpu: 500m
-              memory: 500Mi
-            requests:
-              cpu: 50m
-              memory: 50Mi
-          securityContext:
-            allowPrivilegeEscalation: false
-            capabilities:
-              drop:
-                - ALL
-            privileged: false
-            readOnlyRootFilesystem: true
-          terminationMessagePath: /dev/termination-log
-          terminationMessagePolicy: File
-          volumeMounts:
-            - mountPath: /certframe-token
-              name: certframe-token
-            - mountPath: /security
-              name: security
-            - mountPath: /customer-provided-ca-certificates
-              name: customer-provided-ca-certificates
       restartPolicy: Always
       volumes:
-        - emptyDir: { }
-          name: security
-        - name: certframe-token
-          secret:
-            defaultMode: 420
-            secretName: sas-certframe-token
-        - emptyDir: { }
-          name: customer-provided-ca-certificates
-        - emptyDir: { }
+        - emptyDir: {}
           name: tmp
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/affinity: cookie
+    nginx.ingress.kubernetes.io/affinity-mode: persistent
+    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+    nginx.ingress.kubernetes.io/proxy-body-size: 2048m
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+    nginx.ingress.kubernetes.io/rewrite-target: /open-metadata/$2
+    nginx.ingress.kubernetes.io/session-cookie-name: sas-ingress-nginx
+    nginx.ingress.kubernetes.io/session-cookie-path: /open-metadata/
+    nginx.ingress.kubernetes.io/session-cookie-samesite: Lax
+    sas.com/kustomize-base: base
+  labels:
+    app.kubernetes.io/name: egeria-connector-ingress-open-metadata
+    sas.com/admin: namespace
+  name: egeria-connector-ingress-open-metadata
+spec:
+  rules:
+  - host: $(INGRESS_HOST)
+    http:
+      paths:
+      - backend:
+          service:
+            name: egeria-connector-service
+            port:
+              number: 9443
+        path: /open-metadata(/|$)(.*)
+        pathType: ImplementationSpecific
+  - host: '*.$(INGRESS_HOST)'
+    http:
+      paths:
+      - backend:
+          service:
+            name: egeria-connector-service
+            port:
+              number: 9443
+        path: /open-metadata(/|$)(.*)
+        pathType: ImplementationSpecific
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    nginx.ingress.kubernetes.io/affinity: cookie
+    nginx.ingress.kubernetes.io/affinity-mode: persistent
+    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+    nginx.ingress.kubernetes.io/proxy-body-size: 2048m
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+    nginx.ingress.kubernetes.io/rewrite-target: /servers/$2
+    nginx.ingress.kubernetes.io/session-cookie-name: sas-ingress-nginx
+    nginx.ingress.kubernetes.io/session-cookie-path: /servers/
+    nginx.ingress.kubernetes.io/session-cookie-samesite: Lax
+    sas.com/kustomize-base: base
+  labels:
+    app.kubernetes.io/name: egeria-connector-ingress-servers
+    sas.com/admin: namespace
+  name: egeria-connector-ingress-servers
+spec:
+  rules:
+  - host: $(INGRESS_HOST)
+    http:
+      paths:
+      - backend:
+          service:
+            name: egeria-connector-service
+            port:
+              number: 9443
+        path: /servers(/|$)(.*)
+        pathType: ImplementationSpecific
+  - host: '*.$(INGRESS_HOST)'
+    http:
+      paths:
+      - backend:
+          service:
+            name: egeria-connector-service
+            port:
+              number: 9443
+        path: /servers(/|$)(.*)
+        pathType: ImplementationSpecific
