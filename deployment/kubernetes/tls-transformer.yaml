@@ -1,0 +1,131 @@
+# SPDX-License-Identifier: Apache-2.0
+# Copyright Contributors to the Egeria project.
+
+# Include when using full-stack or frontdoor TLS
+---
+apiVersion: builtin
+kind: PatchTransformer
+metadata:
+  name: egeria-connector-statefulset-tls-transformer
+patch: |-
+  - op: add
+    path: /spec/template/spec/containers/0/envFrom
+    value:
+    - configMapRef:
+        name: sas-certframe-config
+  - op: add
+    path: /spec/template/spec/containers/0/volumeMounts/-
+    value:
+      mountPath: /security
+      name: security
+  - op: add
+    path: /spec/template/spec/containers/0/volumeMounts/-
+    value:
+      mountPath: /opt/sas/viya/config/etc/SASSecurityCertificateFramework/cacerts
+      name: security
+      subPath: cacerts
+  - op: add
+    path: /spec/template/spec/containers/0/volumeMounts/-
+    value:    
+      mountPath: /opt/sas/viya/config/etc/SASSecurityCertificateFramework/private
+      name: security
+      subPath: private
+  - op: add
+    path: /spec/template/spec/initContainers
+    value: 
+    - env:
+      - name: KUBE_POD_NAME
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: metadata.name
+      - name: SAS_CERTFRAME_TOKEN_DIR
+        value: /certframe-token
+      - name: SAS_ADDITIONAL_CA_CERTIFICATES_DIR
+        value: /customer-provided-ca-certificates
+      envFrom:
+      - configMapRef:
+          name: sas-certframe-java-config
+      - configMapRef:
+          name: sas-certframe-ingress-certificate-config
+      - configMapRef:
+          name: sas-certframe-user-config
+      image: sas-certframe
+      imagePullPolicy: IfNotPresent
+      name: sas-certframe
+      resources:
+        limits:
+          cpu: 500m
+          memory: 500Mi
+        requests:
+          cpu: 50m
+          memory: 50Mi
+      securityContext:
+        allowPrivilegeEscalation: false
+        capabilities:
+          drop:
+            - ALL
+        privileged: false
+        readOnlyRootFilesystem: true
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+        - mountPath: /certframe-token
+          name: certframe-token
+        - mountPath: /security
+          name: security
+        - mountPath: /customer-provided-ca-certificates
+          name: customer-provided-ca-certificates
+  - op: add
+    path: /spec/template/spec/volumes/-
+    value:
+      emptyDir: {}
+      name: security
+  - op: add
+    path: /spec/template/spec/volumes/-
+    value:
+      name: certframe-token
+      secret:
+        defaultMode: 420
+        secretName: sas-certframe-token
+  - op: add
+    path: /spec/template/spec/volumes/-
+    value:
+      name: customer-provided-ca-certificates
+      configMap:
+        name: sas-customer-provided-ca-certificates
+target:
+  kind: StatefulSet
+  name: egeria-connector-ss
+---
+apiVersion: builtin
+kind: PatchTransformer
+metadata:
+  name: egeria-connector-ingress-open-metadata-tls-transformer
+patch: |-
+  - op: add
+    path: /spec/tls
+    value:
+    - hosts:
+      - $(INGRESS_HOST)
+      - '*.$(INGRESS_HOST)'
+      secretName: sas-ingress-certificate
+target:
+  kind: Ingress
+  name: egeria-connector-ingress-open-metadata
+---
+apiVersion: builtin
+kind: PatchTransformer
+metadata:
+  name: egeria-connector-ingress-servers-tls-transformer
+patch: |-
+  - op: add
+    path: /spec/tls
+    value:
+    - hosts:
+      - $(INGRESS_HOST)
+      - '*.$(INGRESS_HOST)'
+      secretName: sas-ingress-certificate
+target:
+  kind: Ingress
+  name: egeria-connector-ingress-servers
