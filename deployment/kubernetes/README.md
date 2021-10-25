@@ -1,10 +1,14 @@
 # Deploy to a Viya Kubernetes Cluster
-1. Create a new directory named `egeria-connector` in `<your kubernetes deployment root directory>/sas-bases/overlays` and then copy deployment.yaml to the new directory.
-   
-2. Create a new file in the `egeria-connector` directory named `kustomization.yaml` with the contents:
+1. Create a new directory named `egeria-connector` in `<your kubernetes deployment root directory>/sas-bases/overlays` and then copy the following files to this new directory:
+    * deployment.yaml
+    * kustomization.yaml
+    * tls-transformer.yaml
+
+2. If your Viya deployment uses full-stack (default) or frontdoor TLS modes, you can skip this step.
+If your deployment uses the truststores-only mode, comment out the following lines in kustomization.yaml:
 ```yaml
-resources:
-  - deployment.yaml
+# transformers:
+# - tls-transformer.yaml
 ```
 
 3. Navigate back to the Kubernetes install root directory, and add the following line to `kustomization.yaml` under the `resources` section
