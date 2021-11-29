@@ -81,6 +81,7 @@ jobs:
           build-args: version=${{ env.RELEASE_VERSION }}
           context: .
           file: ./Dockerfile
+          platforms: linux/amd64,linux/arm64
       # For main code stream
       - name: Build and push (main merge)
         if: github.ref == 'refs/heads/main'
@@ -92,6 +93,7 @@ jobs:
           build-args: version=${{ env.RELEASE_VERSION }}
           context: .
           file: ./Dockerfile
+          platforms: linux/amd64,linux/arm64
       - name: Image digest (release)
         if: github.ref != 'refs/heads/main'
         run: echo ${{ steps.docker_build_release.outputs.digest }}
