@@ -1,5 +1,91 @@
 [
   {
+    "sasCat": "reference.report",
+    "omrs": "DeployedReport",
+    "propertyMappings": [
+      {
+        "sasCat": "instance.name",
+        "omrs": "qualifiedName"
+      },
+      {
+        "sasCat": "instance.id",
+        "omrs": "id"
+      },
+      {
+        "sasCat": "attribute.creator",
+        "omrs": "author"
+      },
+      {
+        "sasCat": "attribute.dateCreated",
+        "omrs": "createdTime"
+      },
+      {
+        "sasCat": "attribute.dateModified",
+        "omrs": "lastModifiedTime"
+      },
+      {
+        "sasCat": "attribute.editor",
+        "omrs": "modifier"
+      }
+    ]
+  },
+  {
+    "sasCat": "report",
+    "omrs": "DeployedReport",
+    "propertyMappings": [
+      {
+        "sasCat": "instance.name",
+        "omrs": "qualifiedName"
+      },
+      {
+        "sasCat": "instance.id",
+        "omrs": "id"
+      },
+      {
+        "sasCat": "attribute.creator",
+        "omrs": "author"
+      },
+      {
+        "sasCat": "attribute.dateCreated",
+        "omrs": "createdTime"
+      },
+      {
+        "sasCat": "attribute.dateModified",
+        "omrs": "lastModifiedTime"
+      },
+      {
+        "sasCat": "attribute.editor",
+        "omrs": "modifier"
+      }
+    ]
+  },
+  {
+    "sasCat": "reference.casTable",
+    "omrs": "RelationalTable",
+    "propertyMappings": [
+      {
+        "sasCat": "instance.name",
+        "omrs": "qualifiedName"
+      },
+      {
+        "sasCat": "instance.name",
+        "omrs": "displayName"
+      },
+      {
+        "sasCat": "constant.CAS Table Reference",
+        "omrs": "description"
+      },
+      {
+        "sasCat": "constant.CAS Table",
+        "omrs": "comment"
+      },
+      {
+        "sasCat": "constant.Table",
+        "omrs": "nativeClass"
+      }
+    ]
+  },
+  {
     "sasCat": "casTable",
     "omrs": "RelationalTable",
     "prefix": "CASTRT",
@@ -102,6 +188,18 @@
       {
         "omrs": "type",
         "prefix": "SASCRCT"
+      }
+    ]
+  },
+  {
+    "sasCat": "relatedObjects",
+    "omrs": "ResourceList",
+    "endpointMappings": [
+      {
+        "omrs": "resourceListAnchors"
+      },
+      {
+        "omrs": "supportingReferences"
       }
     ]
   },

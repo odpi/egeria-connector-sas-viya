@@ -40,7 +40,11 @@ public class SASCatalogObject {
     }
 
     public String getTypeName() {
-        return (String) definitionProperties.get("name");
+        String typeName = (String) definitionProperties.get("name");
+        if(typeName.equalsIgnoreCase("reference")) {
+            typeName = "reference." + getAttribute("referencedType");
+        }
+        return typeName;
     }
 
     public Map<String, Object> getAttributes() {

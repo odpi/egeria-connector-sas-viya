@@ -317,7 +317,9 @@ public class MetadataCollection extends OMRSMetadataCollectionBase {
         SASCatalogGuid sasCatalogGuid = SASCatalogGuid.fromGuid(guid);
         String prefix = sasCatalogGuid.getGeneratedPrefix();
         SASCatalogObject entity = getSASCatalogEntitySafe(sasCatalogGuid.getSASCatalogGuid(), methodName);
-        Map<String, String> mappedOMRSTypeDefs = typeDefStore.getMappedOMRSTypeDefNameWithPrefixes(entity.getTypeName());
+        String defName = entity.getTypeName();
+
+        Map<String, String> mappedOMRSTypeDefs = typeDefStore.getMappedOMRSTypeDefNameWithPrefixes(defName);
         for (Map.Entry<String, String> entry : mappedOMRSTypeDefs.entrySet())
         {
             prefix = entry.getKey();
@@ -788,14 +790,23 @@ public class MetadataCollection extends OMRSMetadataCollectionBase {
                     }
                 }
 
+                String typeFilterStr = String.format("eq(type,\"%s\")", catalogTypeName);
+                // Handle reference types differently since they all have a type of "reference"
+                if(catalogTypeName.startsWith("reference.")) {
+                    // Extract reference name after "reference."
+                    String refName = catalogTypeName.substring(catalogTypeName.indexOf(".") + 1);
+                    typeFilterStr = String.format("eq(type,\"reference\")", catalogTypeName);
+                    attributeFilter.put("referencedType", refName);
+                }
+
                 if (typeFilter.isEmpty() && propertyFilter.isEmpty()) {
-                    typeFilter = String.format("eq(type,\"%s\")", catalogTypeName);
+                    typeFilter = typeFilterStr;
                 } else if (typeFilter.isEmpty() && !propertyFilter.isEmpty()) {
-                    typeFilter = String.format("and(eq(type, \"%s\"),%s)", catalogTypeName, propertyFilter);
+                    typeFilter = String.format("and(%s,%s)", typeFilterStr, propertyFilter);
                 } else if (!typeFilter.isEmpty() && propertyFilter.isEmpty()) {
-                    typeFilter = String.format("and(eq(type, \"%s\"),%s)", catalogTypeName, typeFilter);
+                    typeFilter = String.format("and(%s,%s)", typeFilter, typeFilter);
                 } else {
-                    typeFilter = String.format("or(and(eq(type, \"%s\"),%s), %s)", catalogTypeName, propertyFilter, typeFilter);
+                    typeFilter = String.format("or(and(%s,%s), %s)", typeFilterStr, propertyFilter, typeFilter);
                 }
 
                 // If searching by property value across all entity types, we'll only need property filter
