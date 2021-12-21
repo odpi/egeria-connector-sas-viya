@@ -795,7 +795,7 @@ public class MetadataCollection extends OMRSMetadataCollectionBase {
                 if(catalogTypeName.startsWith("reference.")) {
                     // Extract reference name after "reference."
                     String refName = catalogTypeName.substring(catalogTypeName.indexOf(".") + 1);
-                    typeFilterStr = String.format("eq(type,\"reference\")", catalogTypeName);
+                    typeFilterStr = "eq(type,\"reference\")";
                     attributeFilter.put("referencedType", refName);
                 }
 
