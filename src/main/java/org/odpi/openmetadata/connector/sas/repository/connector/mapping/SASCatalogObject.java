@@ -44,6 +44,9 @@ public class SASCatalogObject {
         if(typeName.equalsIgnoreCase("reference")) {
             typeName = "reference." + getAttribute("referencedType");
         }
+        if(typeName.equalsIgnoreCase("relatedObjects")) {
+            typeName = (String) instanceProperties.get("type");
+        }
         return typeName;
     }
 
