@@ -25,8 +25,6 @@ import org.odpi.openmetadata.repositoryservices.ffdc.exception.TypeErrorExceptio
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAccessor;
@@ -40,7 +38,8 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Class that generically handles converting an sas EntityInstance object into an OMRS EntityDetail object.
+ * Class that generically handles converting an sas EntityInstance object into
+ * an OMRS EntityDetail object.
  */
 public class EntityMappingSASCatalog2OMRS {
 
@@ -50,8 +49,8 @@ public class EntityMappingSASCatalog2OMRS {
     private static final String OMRSPROPERTY_ADDITIONALPROPERTIES_PREFIX = "additionalProperties.";
     private RepositoryConnector sasRepositoryConnector;
     private TypeDefStore typeDefStore;
-    //    private AttributeTypeDefStore attributeDefStore;
-//    private SASCatalogObject.CatalogEntityWithExtInfo sasEntityWithExtInfo;
+    // private AttributeTypeDefStore attributeDefStore;
+    // private SASCatalogObject.CatalogEntityWithExtInfo sasEntityWithExtInfo;
     private SASCatalogObject sasEntity;
     private String prefix;
     private String userId;
@@ -60,28 +59,32 @@ public class EntityMappingSASCatalog2OMRS {
      * Mapping itself must be initialized with various objects.
      *
      * @param sasRepositoryConnector connectivity to an sas repository
-     * @param typeDefStore           the store of mapped TypeDefs for the Sas repository
-     * @param attributeDefStore      the store of mapped AttributeTypeDefs for the Sas repository
+     * @param typeDefStore           the store of mapped TypeDefs for the Sas
+     *                               repository
+     * @param attributeDefStore      the store of mapped AttributeTypeDefs for the
+     *                               Sas repository
      * @param instance               the Sas entity to be mapped
-     * @param prefix                 the prefix indicating a generated type (and GUID), or null if not generated
+     * @param prefix                 the prefix indicating a generated type (and
+     *                               GUID), or null if not generated
      * @param userId                 the user through which to do the mapping
      */
     public EntityMappingSASCatalog2OMRS(RepositoryConnector sasRepositoryConnector,
-                                        TypeDefStore typeDefStore,
-                                        Object attributeDefStore,
-                                        SASCatalogObject instance,
-                                        String prefix,
-                                        String userId) {
+            TypeDefStore typeDefStore,
+            Object attributeDefStore,
+            SASCatalogObject instance,
+            String prefix,
+            String userId) {
         this.sasRepositoryConnector = sasRepositoryConnector;
         this.typeDefStore = typeDefStore;
-//        this.attributeDefStore = attributeDefStore;
+        // this.attributeDefStore = attributeDefStore;
         this.sasEntity = instance;
         this.prefix = prefix;
         this.userId = userId;
     }
 
     /**
-     * Retrieve the mapped OMRS EntitySummary from the sas EntityInstance used to construct this mapping object.
+     * Retrieve the mapped OMRS EntitySummary from the sas EntityInstance used to
+     * construct this mapping object.
      *
      * @return EntitySummary
      * @throws RepositoryErrorException when unable to retrieve the EntitySummary
@@ -107,7 +110,8 @@ public class EntityMappingSASCatalog2OMRS {
     }
 
     /**
-     * Retrieve the mapped OMRS EntityDetail from the sas EntityInstance used to construct this mapping object.
+     * Retrieve the mapped OMRS EntityDetail from the sas EntityInstance used to
+     * construct this mapping object.
      *
      * @return EntityDetail
      * @throws RepositoryErrorException when unable to retrieve the EntityDetail
@@ -133,10 +137,13 @@ public class EntityMappingSASCatalog2OMRS {
                 OMRSRepositoryHelper omrsRepositoryHelper = sasRepositoryConnector.getRepositoryHelper();
                 String repositoryName = sasRepositoryConnector.getRepositoryName();
 
-                Map<String, TypeDefAttribute> omrsAttributeMap = typeDefStore.getAllTypeDefAttributesForName(omrsTypeDefName);
+                Map<String, TypeDefAttribute> omrsAttributeMap = typeDefStore
+                        .getAllTypeDefAttributesForName(omrsTypeDefName);
 
-                // Iterate through the provided mappings to set an OMRS instance property for each one
-                Map<String, String> sasToOmrsProperties = typeDefStore.getPropertyMappingsForCatalogTypeDef(sasTypeDefName, prefix);
+                // Iterate through the provided mappings to set an OMRS instance property for
+                // each one
+                Map<String, String> sasToOmrsProperties = typeDefStore
+                        .getPropertyMappingsForCatalogTypeDef(sasTypeDefName, prefix);
 
                 if (sasEntity != null) {
                     Set<String> alreadyMapped = new HashSet<>();
@@ -144,12 +151,15 @@ public class EntityMappingSASCatalog2OMRS {
                         String sasProperty = property.getKey();
                         String omrsProperty = property.getValue();
 
-                        // If omrsProperty is of the form "additionalProperties.xxxxx" then extract "xxxxx" as the
-                        // name of the property to add under additionalProperties (and extract value and actually
+                        // If omrsProperty is of the form "additionalProperties.xxxxx" then extract
+                        // "xxxxx" as the
+                        // name of the property to add under additionalProperties (and extract value and
+                        // actually
                         // add the entry in the following IF block
                         String additionalPropertyName = "";
                         if (omrsProperty.startsWith(OMRSPROPERTY_ADDITIONALPROPERTIES_PREFIX)) {
-                            additionalPropertyName = omrsProperty.substring(OMRSPROPERTY_ADDITIONALPROPERTIES_PREFIX.length());
+                            additionalPropertyName = omrsProperty
+                                    .substring(OMRSPROPERTY_ADDITIONALPROPERTIES_PREFIX.length());
                         }
 
                         if (sasProperty.startsWith(SASPROPERTY_CONSTANT_PREFIX)) {
@@ -158,10 +168,10 @@ public class EntityMappingSASCatalog2OMRS {
                             if (StringUtils.isNotEmpty(additionalPropertyName)) {
                                 additionalProperties.put(additionalPropertyName, constantVal);
                             } else {
-                            instanceProperties = omrsRepositoryHelper.addStringPropertyToInstance(repositoryName,
-                                    instanceProperties, omrsProperty, constantVal, methodName);
+                                instanceProperties = omrsRepositoryHelper.addStringPropertyToInstance(repositoryName,
+                                        instanceProperties, omrsProperty, constantVal, methodName);
                             }
-                        } else if (StringUtils.isNotEmpty(additionalPropertyName))  {
+                        } else if (StringUtils.isNotEmpty(additionalPropertyName)) {
                             log.info("Mapping {} to additionalProperties '{}'", sasProperty, omrsProperty);
                             Object propertyValue = sasEntity.get(sasProperty);
                             if (propertyValue != null) {
@@ -179,25 +189,29 @@ public class EntityMappingSASCatalog2OMRS {
                                     sasEntity.get(sasProperty),
                                     methodName);
                             if (instanceProperties.getPropertyValue(omrsProperty) != null) {
-                                if(sasProperty.startsWith(attribute)){
+                                if (sasProperty.startsWith(attribute)) {
                                     sasProperty = sasProperty.substring(attribute.length());
                                 }
                                 alreadyMapped.add(sasProperty);
                             }
                         } else {
-                            log.warn("No OMRS attribute {} defined for asset type {} -- skipping mapping.", omrsProperty, omrsTypeDefName);
+                            log.warn("No OMRS attribute {} defined for asset type {} -- skipping mapping.",
+                                    omrsProperty, omrsTypeDefName);
                         }
                     }
 
-                    // And map any other simple (non-relationship) properties that are not otherwise mapped into 'additionalProperties'
+                    // And map any other simple (non-relationship) properties that are not otherwise
+                    // mapped into 'additionalProperties'
 
                     Set<String> nonRelationshipSet = sasEntity.getAttributes().keySet();
 
-                    // Remove all of the already-mapped properties from our list of non-relationship properties
+                    // Remove all of the already-mapped properties from our list of non-relationship
+                    // properties
                     nonRelationshipSet.removeAll(alreadyMapped);
 
                     // Iterate through the remaining property names, and add them to a map
-                    // Note that because 'additionalProperties' is a string-to-string map, we will just convert everything
+                    // Note that because 'additionalProperties' is a string-to-string map, we will
+                    // just convert everything
                     // to strings (even arrays of values, we'll concatenate into a single string)
                     for (String propertyName : nonRelationshipSet) {
                         Object propertyValue = sasEntity.getAttributes().get(propertyName);
@@ -212,8 +226,7 @@ public class EntityMappingSASCatalog2OMRS {
                             instanceProperties,
                             "additionalProperties",
                             additionalProperties,
-                            methodName
-                    );
+                            methodName);
                 }
 
                 detail.setProperties(instanceProperties);
@@ -233,32 +246,39 @@ public class EntityMappingSASCatalog2OMRS {
     /**
      * Retrieves relationships for this entity based on the provided criteria.
      *
-     * @param relationships           the Catalog objects for which we wish to return relationships
-     * @param relationshipTypeGUID    the OMRS GUID of the relationship TypeDef to which to limit the results
-     * @param fromRelationshipElement the starting element for multiple pages of relationships
-     * @param sequencingProperty      the property by which to order results (or null)
-     * @param sequencingOrder         the ordering sequence to use for ordering results
+     * @param relationships           the Catalog objects for which we wish to
+     *                                return relationships
+     * @param relationshipTypeGUID    the OMRS GUID of the relationship TypeDef to
+     *                                which to limit the results
+     * @param fromRelationshipElement the starting element for multiple pages of
+     *                                relationships
+     * @param sequencingProperty      the property by which to order results (or
+     *                                null)
+     * @param sequencingOrder         the ordering sequence to use for ordering
+     *                                results
      * @param pageSize                the number of results to include per page
      * @return {@code List<Relationship>}
-     * @throws RepositoryErrorException when unable to retrieve the mapped Relationships
+     * @throws RepositoryErrorException when unable to retrieve the mapped
+     *                                  Relationships
      */
     @SuppressWarnings("unchecked")
     public List<Relationship> getRelationships(List<SASCatalogObject> relationships,
-                                               String relationshipTypeGUID,
-                                               int fromRelationshipElement,
-                                               String sequencingProperty,
-                                               SequencingOrder sequencingOrder,
-                                               int pageSize) throws RepositoryErrorException {
+            String relationshipTypeGUID,
+            int fromRelationshipElement,
+            String sequencingProperty,
+            SequencingOrder sequencingOrder,
+            int pageSize) throws RepositoryErrorException {
 
         final String methodName = "getRelationships";
         List<Relationship> omrsRelationships = new ArrayList<>();
         String repositoryName = sasRepositoryConnector.getRepositoryName();
 
-        for(SASCatalogObject relationship : relationships) {
+        for (SASCatalogObject relationship : relationships) {
             String catalogRelationshipType = relationship.getTypeName();
             String relationshipGuid = relationship.getGuid();
 
-            Map<String, String> omrsPrefixToType = typeDefStore.getMappedOMRSTypeDefNameWithPrefixes(catalogRelationshipType);
+            Map<String, String> omrsPrefixToType = typeDefStore
+                    .getMappedOMRSTypeDefNameWithPrefixes(catalogRelationshipType);
 
             for (Map.Entry<String, String> entry : omrsPrefixToType.entrySet()) {
 
@@ -268,49 +288,60 @@ public class EntityMappingSASCatalog2OMRS {
                 TypeDef omrsTypeDef = typeDefStore.getTypeDefByName(omrsRelationshipType);
                 String omrsTypeDefGuid = omrsTypeDef.getGUID();
 
-                // Only include the relationship if we are including all or those that match this type GUID
+                // Only include the relationship if we are including all or those that match
+                // this type GUID
                 if (relationshipTypeGUID == null || omrsTypeDefGuid.equals(relationshipTypeGUID)) {
+                    log.debug("EntityMappingSASCatalog2OMRS:create relationship mapping");
+                    RelationshipMapping mapping = new RelationshipMapping(
+                            sasRepositoryConnector,
+                            typeDefStore,
+                            null,
+                            new SASCatalogGuid(relationshipGuid, relationshipPrefix),
+                            relationship,
+                            userId);
 
+                    log.debug("EntityMappingSASCatalog2OMRS:get relationship from mapping");
                     try {
-                        RelationshipMapping mapping = new RelationshipMapping(
-                                sasRepositoryConnector,
-                                typeDefStore,
-                                null,
-                                new SASCatalogGuid(relationshipGuid, relationshipPrefix),
-                                relationship,
-                                userId);
-
                         Relationship omrsRelationship = mapping.getRelationship();
                         if (omrsRelationship != null) {
                             omrsRelationships.add(omrsRelationship);
                         }
                     } catch (Exception e) {
-                        raiseRepositoryErrorException(ErrorCode.RELATIONSHIP_NOT_KNOWN, methodName, e, relationshipGuid, methodName, repositoryName);
+                        log.error("Unable to find relationship with guid {} and prefix {}", relationshipGuid,
+                                relationshipPrefix);
+                        log.error("Exception Message: {}", e.getMessage());
                     }
 
                 }
             }
         }
 
-        // Now sort the results, if requested
-        Comparator<Relationship> comparator = SequencingUtils.getRelationshipComparator(sequencingOrder, sequencingProperty);
-        if (comparator != null) {
-            omrsRelationships.sort(comparator);
-        }
+        if (omrsRelationships != null) {
+            // Now sort the results, if requested
+            Comparator<Relationship> comparator = SequencingUtils.getRelationshipComparator(sequencingOrder,
+                    sequencingProperty);
+            if (comparator != null) {
+                omrsRelationships.sort(comparator);
+            }
 
-        // And finally limit the results, if requested
-        int endOfPageMarker = Math.min(fromRelationshipElement + pageSize, omrsRelationships.size());
-        if (fromRelationshipElement != 0 || endOfPageMarker < omrsRelationships.size()) {
-            omrsRelationships = omrsRelationships.subList(fromRelationshipElement, endOfPageMarker);
+            // And finally limit the results, if requested
+            int endOfPageMarker = Math.min(fromRelationshipElement + pageSize, omrsRelationships.size());
+            if (pageSize != 0 ) { //treating 0 as unlimited for now
+                if (fromRelationshipElement != 0 || endOfPageMarker < omrsRelationships.size()) {
+                omrsRelationships = omrsRelationships.subList(fromRelationshipElement, endOfPageMarker);
+                }
+            }
         }
 
         return (omrsRelationships.isEmpty() ? null : omrsRelationships);
     }
 
     /**
-     * Create the base skeleton of an EntitySummary, irrespective of the specific sas object.
+     * Create the base skeleton of an EntitySummary, irrespective of the specific
+     * sas object.
      *
-     * @param omrsTypeDefName the name of the OMRS TypeDef for which to create a skeleton EntitySummary
+     * @param omrsTypeDefName the name of the OMRS TypeDef for which to create a
+     *                        skeleton EntitySummary
      * @param prefix          the prefix for a generated entity (if any)
      * @return EntitySummary
      */
@@ -323,8 +354,7 @@ public class EntityMappingSASCatalog2OMRS {
                     sasRepositoryConnector.getMetadataCollectionId(),
                     InstanceProvenanceType.LOCAL_COHORT,
                     userId,
-                    omrsTypeDefName
-            );
+                    omrsTypeDefName);
             String guid = sasEntity.getGuid();
             SASCatalogGuid sasCatalogGuid = new SASCatalogGuid(guid, prefix);
             summary.setGUID(sasCatalogGuid.toString());
@@ -339,9 +369,11 @@ public class EntityMappingSASCatalog2OMRS {
     }
 
     /**
-     * Create the base skeleton of an EntityDetail, irrespective of the specific sas object.
+     * Create the base skeleton of an EntityDetail, irrespective of the specific sas
+     * object.
      *
-     * @param omrsTypeDefName the name of the OMRS TypeDef for which to create a skeleton EntityDetail
+     * @param omrsTypeDefName the name of the OMRS TypeDef for which to create a
+     *                        skeleton EntityDetail
      * @param prefix          the prefix for a generated entity (if any)
      * @return EntityDetail
      */
@@ -354,8 +386,7 @@ public class EntityMappingSASCatalog2OMRS {
                     sasRepositoryConnector.getMetadataCollectionId(),
                     InstanceProvenanceType.LOCAL_COHORT,
                     userId,
-                    omrsTypeDefName
-            );
+                    omrsTypeDefName);
             String guid = sasEntity.getGuid();
             SASCatalogGuid sasCatalogGuid = new SASCatalogGuid(guid, prefix);
             detail.setGUID(sasCatalogGuid.toString());
@@ -387,53 +418,58 @@ public class EntityMappingSASCatalog2OMRS {
      */
     private void setModAndVersionDetails(EntitySummary omrsObj) {
 
-
         omrsObj.setCreatedBy((String) sasEntity.get("instance.createdBy"));
         omrsObj.setUpdatedBy((String) sasEntity.get("instance.modifiedBy"));
-        Number version = (Number)sasEntity.get("instance.version");
+        Number version = (Number) sasEntity.get("instance.version");
         omrsObj.setVersion(version.longValue());
 
         Object creationTimeStampObj = sasEntity.get("instance.creationTimeStamp");
         Object modifiedTimeStampObj = sasEntity.get("instance.modifiedTimeStamp");
         if (creationTimeStampObj instanceof Date) {
-            omrsObj.setCreateTime((Date)creationTimeStampObj);
+            omrsObj.setCreateTime((Date) creationTimeStampObj);
         } else {
             omrsObj.setCreateTime(getDateFromISO8601String(creationTimeStampObj.toString()));
         }
         if (modifiedTimeStampObj instanceof Date) {
-            omrsObj.setUpdateTime((Date)modifiedTimeStampObj);
+            omrsObj.setUpdateTime((Date) modifiedTimeStampObj);
         } else {
             omrsObj.setUpdateTime(getDateFromISO8601String(modifiedTimeStampObj.toString()));
         }
     }
 
-    public Date getDateFromISO8601String(String isoDate){
+    public Date getDateFromISO8601String(String isoDate) {
         TemporalAccessor ta = DateTimeFormatter.ISO_INSTANT.parse(isoDate);
         Instant i = Instant.from(ta);
         return Date.from(i);
     }
 
     /**
-     * Add any classifications: since Sas does not come with any pre-defined Classifications we will assume
-     * that any that exist are OMRS-created and therefore are one-to-one mappings to OMRS classifications
-     * (but we will check that the classification is a known OMRS classification before proceeding)
+     * Add any classifications: since Sas does not come with any pre-defined
+     * Classifications we will assume
+     * that any that exist are OMRS-created and therefore are one-to-one mappings to
+     * OMRS classifications
+     * (but we will check that the classification is a known OMRS classification
+     * before proceeding)
      *
      * @param omrsObj the OMRS object (EntitySummary or EntityDetail)
      * @throws RepositoryErrorException when unable to add the classifications
      */
     private void addClassifications(EntitySummary omrsObj) throws RepositoryErrorException {
-        //TODO: Add mapping of classifications
+        // TODO: Add mapping of classifications
     }
 
     /**
      * Throw a RepositoryErrorException using the provided parameters.
-     * @param errorCode the error code for the exception
+     * 
+     * @param errorCode  the error code for the exception
      * @param methodName the method throwing the exception
-     * @param cause the underlying cause of the exception (if any, otherwise null)
-     * @param params any parameters for formatting the error message
+     * @param cause      the underlying cause of the exception (if any, otherwise
+     *                   null)
+     * @param params     any parameters for formatting the error message
      * @throws RepositoryErrorException always
      */
-    private void raiseRepositoryErrorException(ErrorCode errorCode, String methodName, Throwable cause, String ...params) throws RepositoryErrorException {
+    private void raiseRepositoryErrorException(ErrorCode errorCode, String methodName, Throwable cause,
+            String... params) throws RepositoryErrorException {
         if (cause == null) {
             throw new RepositoryErrorException(errorCode.getMessageDefinition(params),
                     this.getClass().getName(),

@@ -157,8 +157,15 @@ public class TypeDefStore {
 
             }
         } catch (IOException e) {
-            log.error("Unable to load mapping file TypeDefMappings.json from jar file -- no mappings will exist.");
+            log.error("Unable to load mapping file TypeDefMappings.json from jar file -- no mappings will exist. Error: {}", e);
         }
+        log.debug("omrsNameToCatalogNamesByPrefix: {}", omrsNameToCatalogNamesByPrefix);
+        log.debug("catalogNameToOmrsNamesByPrefix: {}", catalogNameToOmrsNamesByPrefix);
+        log.debug("prefixToOmrsTypeName: {}", prefixToOmrsTypeName);
+        log.debug("catalogNameToAttributeMapByPrefix: {}", catalogNameToAttributeMapByPrefix);
+        log.debug("omrsNameToAttributeMapByPrefix: {}", omrsNameToAttributeMapByPrefix);
+        log.debug("omrsNameToEndpointMapByPrefix: {}", omrsNameToEndpointMapByPrefix);
+        log.debug("catalogNameToEndpointMapByPrefix: {}", catalogNameToEndpointMapByPrefix);
     }
 
     /**

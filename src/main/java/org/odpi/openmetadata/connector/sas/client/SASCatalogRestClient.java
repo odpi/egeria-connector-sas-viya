@@ -128,6 +128,8 @@ public class SASCatalogRestClient implements SASCatalogClient {
                 response.close();
                 setAuthToken(username, password);
                 return getInstanceByGuid(guid, type, retries+1);
+            } else if (response.getStatusLine().getStatusCode() != 200) {
+                return null;
             }
 
             HttpEntity entity = response.getEntity();
@@ -295,8 +297,11 @@ public class SASCatalogRestClient implements SASCatalogClient {
             throw new RuntimeException("Could not complete request after " + retries + " retries.");
         }
 
+        List<SASCatalogObject> relationships = new ArrayList<>();
+
         URIBuilder builder = new URIBuilder(this.baseURL + "/catalog/instances");
-        builder.addParameter("filter", String.format("or(eq(endpoint1Id,'%s'),eq(endpoint2Id,'%s'))", guid, guid));
+        String filter = String.format("or(eq(endpoint1Id,'%s'),eq(endpoint2Id,'%s'))", guid, guid);
+        builder.addParameter("filter", filter);
         HttpGet httpGet = new HttpGet(builder.build());
         httpGet.addHeader("Accept-Item", "application/vnd.sas.metadata.instance.relationship+json");
         addAuthHeader(httpGet);
@@ -312,7 +317,7 @@ public class SASCatalogRestClient implements SASCatalogClient {
             HttpEntity entity = response.getEntity();
             InputStreamReader reader = new InputStreamReader(entity.getContent(), StandardCharsets.UTF_8);
             Map map = new Gson().fromJson(reader, Map.class);
-            List<SASCatalogObject> relationships = new ArrayList<>();
+ 
 
             List relMaps = (List) map.get("items");
 
@@ -321,8 +326,32 @@ public class SASCatalogRestClient implements SASCatalogClient {
                 relationships.add(instanceMapToInstance(relMap, guid, "relationship"));
             }
 
-            return relationships;
+            if (((double)map.get("count")) > ((double)map.get("limit"))) {
+                String limit = String.format("%,.0f", (double)map.get("count"));
+                String start = String.format("%,.0f", (double)map.get("limit"));
+                builder.addParameter("limit", limit);
+                builder.addParameter("start", start);
+                httpGet = new HttpGet(builder.build());
+                httpGet.addHeader("Accept-Item", "application/vnd.sas.metadata.instance.relationship+json");
+                addAuthHeader(httpGet);
+                try (CloseableHttpResponse responsePaged = httpClient.execute(httpGet)) {
+                    log.info("Get relationship for entity (" + guid + "): " + response.getStatusLine());
+
+                    entity = responsePaged.getEntity();
+                    reader = new InputStreamReader(entity.getContent(), StandardCharsets.UTF_8);
+                    map = new Gson().fromJson(reader, Map.class);
+
+                    relMaps = (List) map.get("items");
+
+                    for(Object rel : relMaps) {
+                        Map relMap = (Map) rel;
+                        relationships.add(instanceMapToInstance(relMap, guid, "relationship"));
+                    }
+            }
         }
+        }
+
+        return relationships;
     }
 
     private SASCatalogObject instanceMapToInstance(Map instance, String guid, String type) throws Exception {
@@ -332,7 +361,7 @@ public class SASCatalogRestClient implements SASCatalogClient {
 
         Map<String, Object> attributes = (Map<String, Object>) instance.get("attributes");
 
-        instanceInfo.guid = guid;
+        instanceInfo.guid = (String) instance.get("id");
         instanceInfo.addInstanceProperty("instanceType", instance.get("instanceType"));
         instanceInfo.addInstanceProperty("name", instance.get("name"));
         instanceInfo.addInstanceProperty("label", instance.get("label"));
@@ -349,6 +378,10 @@ public class SASCatalogRestClient implements SASCatalogClient {
             instanceInfo.addInstanceProperty("endpoint1Uri", instance.get("endpoint1Uri"));
             instanceInfo.addInstanceProperty("endpoint2Id", instance.get("endpoint2Id"));
             instanceInfo.addInstanceProperty("endpoint2Uri", instance.get("endpoint2Uri"));
+            //adding role to type if 'relatedObjects'
+            if (instance.get("type").equals("relatedObjects")) {
+                instanceInfo.addInstanceProperty("type", String.format("%s.%s", instance.get("type"), attributes.get("relationshipRole")) ); 
+            }
         }
 
         instanceInfo.attributes = attributes;

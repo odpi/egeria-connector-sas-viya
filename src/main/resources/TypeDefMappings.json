@@ -178,29 +178,115 @@
     ]
   },
   {
-    "sasCat": "dataSet-dataField",
+    "sasCat": "reference.report",
+    "omrs": "DeployedReport",
+    "propertyMappings": [
+      {
+        "sasCat": "instance.name",
+        "omrs": "qualifiedName"
+      },
+      {
+        "sasCat": "instance.id",
+        "omrs": "id"
+      },
+      {
+        "sasCat": "attribute.creator",
+        "omrs": "author"
+      },
+      {
+        "sasCat": "attribute.dateCreated",
+        "omrs": "createdTime"
+      },
+      {
+        "sasCat": "attribute.dateModified",
+        "omrs": "lastModifiedTime"
+      },
+      {
+        "sasCat": "attribute.editor",
+        "omrs": "modifier"
+      }
+    ]
+  },
+  {
+    "sasCat": "report",
+    "omrs": "DeployedReport",
+    "propertyMappings": [
+      {
+        "sasCat": "instance.name",
+        "omrs": "qualifiedName"
+      },
+      {
+        "sasCat": "instance.id",
+        "omrs": "id"
+      },
+      {
+        "sasCat": "attribute.creator",
+        "omrs": "author"
+      },
+      {
+        "sasCat": "attribute.dateCreated",
+        "omrs": "createdTime"
+      },
+      {
+        "sasCat": "attribute.dateModified",
+        "omrs": "lastModifiedTime"
+      },
+      {
+        "sasCat": "attribute.editor",
+        "omrs": "modifier"
+      }
+    ]
+  },
+  {
+    "sasCat": "reference.casTable",
+    "omrs": "RelationalTable",
+    "propertyMappings": [
+      {
+        "sasCat": "instance.name",
+        "omrs": "qualifiedName"
+      },
+      {
+        "sasCat": "instance.name",
+        "omrs": "displayName"
+      },
+      {
+        "sasCat": "constant.CAS Table Reference",
+        "omrs": "description"
+      },
+      {
+        "sasCat": "constant.CAS Table",
+        "omrs": "comment"
+      },
+      {
+        "sasCat": "constant.Table",
+        "omrs": "nativeClass"
+      }
+    ]
+  },
+  {
+    "sasCat": "dataSetDataFields",
     "omrs": "SchemaAttributeType",
-    "prefix": "DSDFSAT",
+    "prefix": "DSTDFSAT",
     "endpointMappings": [
       {
         "omrs": "usedInSchemas"
       },
       {
-        "omrs": "type",
-        "prefix": "SASCRCT"
+        "omrs": "type"
       }
     ]
   },
   {
-    "sasCat": "relatedObjects",
-    "omrs": "ResourceList",
+    "sasCat": "dataStoreDataSets",
+    "omrs": "DataContentForDataSet",
+    "prefix": "DSDSDCDS",
     "endpointMappings": [
       {
-        "omrs": "resourceListAnchors"
+        "omrs": "supportedDataSets"
       },
       {
-        "omrs": "supportingReferences"
-      }
+        "omrs": "dataContent"
+       }
     ]
   },
   {
@@ -235,6 +321,18 @@
       {
         "sasCat": "constant.CAS Column",
         "omrs": "additionalProperties.sasColumnSource"
+      }
+    ]
+  },
+  {
+    "sasCat": "relatedObjects.Dependent",
+    "omrs": "ResourceList",
+    "endpointMappings": [
+      {
+        "omrs": "resourceListAnchors"
+      },
+      {
+        "omrs": "supportingReferences"
       }
     ]
   },
