@@ -5,6 +5,7 @@
 
 package org.odpi.openmetadata.connector.sas.repository.connector;
 
+import org.odpi.openmetadata.repositoryservices.connectors.stores.metadatacollectionstore.properties.instances.InstanceGraph;
 import org.odpi.openmetadata.connector.sas.auditlog.ErrorCode;
 import org.odpi.openmetadata.connector.sas.event.mapper.RepositoryEventMapper;
 import org.odpi.openmetadata.connector.sas.event.model.catalog.instance.Instance;
@@ -47,9 +48,10 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 public class MetadataCollection extends OMRSMetadataCollectionBase {
 
@@ -317,7 +319,9 @@ public class MetadataCollection extends OMRSMetadataCollectionBase {
         SASCatalogGuid sasCatalogGuid = SASCatalogGuid.fromGuid(guid);
         String prefix = sasCatalogGuid.getGeneratedPrefix();
         SASCatalogObject entity = getSASCatalogEntitySafe(sasCatalogGuid.getSASCatalogGuid(), methodName);
-        Map<String, String> mappedOMRSTypeDefs = typeDefStore.getMappedOMRSTypeDefNameWithPrefixes(entity.getTypeName());
+
+        String defName = entity.getTypeName();
+        Map<String, String> mappedOMRSTypeDefs = typeDefStore.getMappedOMRSTypeDefNameWithPrefixes(defName);
         for (Map.Entry<String, String> entry : mappedOMRSTypeDefs.entrySet())
         {
             prefix = entry.getKey();
@@ -692,6 +696,101 @@ public class MetadataCollection extends OMRSMetadataCollectionBase {
 
     }
 
+       /**
+     * Return the entities and relationships that radiate out from the supplied entity GUID.
+     * The results are scoped both the instance type guids and the level.
+     *
+     * @param userId unique identifier for requesting user.
+     * @param entityGUID the starting point of the query.
+     * @param entityTypeGUIDs list of entity types to include in the query results.  Null means include
+     *                          all entities found, irrespective of their type.
+     * @param relationshipTypeGUIDs list of relationship types to include in the query results.  Null means include
+     *                                all relationships found, irrespective of their type.
+     * @param limitResultsByStatus By default, relationships in all non-DELETED statuses are returned.  However, it is possible
+     *                             to specify a list of statuses (eg ACTIVE) to restrict the results to.  Null means all
+     *                             status values except DELETED.
+     * @param limitResultsByClassification List of classifications that must be present on all returned entities.
+     * @param asOfTime Requests a historical query of the relationships for the entity.  Null means return the
+     *                 present values.
+     * @param level the number of the relationships out from the starting entity that the query will traverse to
+     *              gather results.
+     * @return InstanceGraph the sub-graph that represents the returned linked entities and their relationships.
+     * @throws InvalidParameterException one of the parameters is invalid or null.
+     * @throws TypeErrorException the type guid passed on the request is not known by the
+     *                              metadata collection.
+     * @throws RepositoryErrorException there is a problem communicating with the metadata repository where
+     *                                  the metadata collection is stored.
+     * @throws EntityNotKnownException the entity identified by the entityGUID is not found in the metadata collection.
+     * @throws PropertyErrorException there is a problem with one of the other parameters.
+     * @throws FunctionNotSupportedException the repository does not support this call.
+     * @throws UserNotAuthorizedException the userId is not permitted to perform this operation.
+     */
+    @Override
+    public  InstanceGraph getEntityNeighborhood(String               userId,
+                                                String               entityGUID,
+                                                List<String>         entityTypeGUIDs,
+                                                List<String>         relationshipTypeGUIDs,
+                                                List<InstanceStatus> limitResultsByStatus,
+                                                List<String>         limitResultsByClassification,
+                                                Date                 asOfTime,
+                                                int                  level) throws InvalidParameterException,
+                                                                                   TypeErrorException,
+                                                                                   RepositoryErrorException,
+                                                                                   EntityNotKnownException,
+                                                                                   PropertyErrorException,
+                                                                                   FunctionNotSupportedException,
+                                                                                   UserNotAuthorizedException
+    {
+        final String methodName  = "getEntityNeighborhood";
+
+        /*
+         * Validate parameters
+         */
+        this.getEntityNeighborhoodParameterValidation(userId,
+                                                      entityGUID,
+                                                      entityTypeGUIDs,
+                                                      relationshipTypeGUIDs,
+                                                      limitResultsByStatus,
+                                                      limitResultsByClassification,
+                                                      asOfTime,
+                                                      level);
+
+        InstanceGraph instanceGraph = new InstanceGraph();
+        try {
+            List<Relationship> relationships = getRelationshipsForEntity(userId, entityGUID, null, 0, limitResultsByStatus, asOfTime, null, null, 0);
+            if (relationships == null) {
+                return instanceGraph;
+            }
+            List<EntityDetail> entityList = new ArrayList<EntityDetail>(1);
+
+            //Getting a unique set of GUIDs to retrieve the entity details
+            Set<String> entitiesToRetrieve = new HashSet<String>();
+            //entitiesToRetrieve.add(entityGUID); //the original entitiy
+            for (Relationship r : relationships) {
+                //Right now getEntityDetail returns a prefix but it is not consistent which one.
+                //This needs to be looked at but for now, I want to make sure we are
+                //only retriving an object one time.
+                SASCatalogGuid sasCatalogGuid = SASCatalogGuid.fromGuid(r.getEntityOneProxy().getGUID());
+                entitiesToRetrieve.add(sasCatalogGuid.getSASCatalogGuid());
+                sasCatalogGuid = SASCatalogGuid.fromGuid(r.getEntityTwoProxy().getGUID());
+                entitiesToRetrieve.add(sasCatalogGuid.getSASCatalogGuid());
+            }
+            for (String entityId : entitiesToRetrieve) {
+                entityList.add(getEntityDetail(userId, entityId));
+            }
+
+            instanceGraph.setEntities(entityList);
+            instanceGraph.setRelationships(relationships);
+
+        } catch (PagingErrorException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return instanceGraph;
+
+    }
+
     /**
      * Build an Atlas domain-specific language (DSL) query based on the provided parameters, and return its results.
      *
@@ -788,14 +887,23 @@ public class MetadataCollection extends OMRSMetadataCollectionBase {
                     }
                 }
 
+                String typeFilterStr = String.format("eq(type,\"%s\")", catalogTypeName);
+                // Handle reference types differently since they all have a type of "reference"
+                if(catalogTypeName.startsWith("reference.")) {
+                    // Extract reference name after "reference."
+                    String refName = catalogTypeName.substring(catalogTypeName.indexOf(".") + 1);
+                    typeFilterStr = String.format("eq(type,\"reference\")");
+                    attributeFilter.put("referencedType", refName);
+                }
+
                 if (typeFilter.isEmpty() && propertyFilter.isEmpty()) {
-                    typeFilter = String.format("eq(type,\"%s\")", catalogTypeName);
+                    typeFilter = typeFilterStr;
                 } else if (typeFilter.isEmpty() && !propertyFilter.isEmpty()) {
-                    typeFilter = String.format("and(eq(type, \"%s\"),%s)", catalogTypeName, propertyFilter);
+                    typeFilter = String.format("and(%s,%s)", typeFilterStr, propertyFilter);
                 } else if (!typeFilter.isEmpty() && propertyFilter.isEmpty()) {
-                    typeFilter = String.format("and(eq(type, \"%s\"),%s)", catalogTypeName, typeFilter);
+                    typeFilter = String.format("and(%s,%s)", typeFilter, typeFilter);
                 } else {
-                    typeFilter = String.format("or(and(eq(type, \"%s\"),%s), %s)", catalogTypeName, propertyFilter, typeFilter);
+                    typeFilter = String.format("or(and(%s,%s), %s)", typeFilterStr, propertyFilter, typeFilter);
                 }
 
                 // If searching by property value across all entity types, we'll only need property filter
