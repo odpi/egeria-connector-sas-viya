@@ -64,6 +64,8 @@ For entities:
 }
 ```
 
+If the Catalog entity is a reference: use "reference.<refName>" as the definition name.
+
 For relationships:
 ```json
 {

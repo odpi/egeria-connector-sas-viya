@@ -260,6 +260,11 @@ public class SASCatalogRestClient implements SASCatalogClient {
             throw new RuntimeException("Could not complete request after " + retries + " retries.");
         }
 
+        // Handle reference definitions
+        if(defName.startsWith("reference.")) {
+            defName = "reference";
+        }
+
         URIBuilder builder = new URIBuilder(this.baseURL + "/catalog/definitions");
         builder.addParameter("filter", String.format("and(eq(name,%s),eq(definitionType,%s))", defName, type));
         HttpGet httpGet = new HttpGet(builder.build());
