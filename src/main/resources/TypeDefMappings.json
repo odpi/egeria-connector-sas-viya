@@ -1,5 +1,57 @@
 [
   {
+    "sasCat": "reference.",
+    "omrs": "Asset",
+    "propertyMappings": [
+      {
+        "sasCat": "instance.name",
+        "omrs": "qualifiedName"
+      },
+      {
+        "sasCat": "attribute.creator",
+        "omrs": "owner"
+      },
+      {
+        "sasCat": "instance.name",
+        "omrs": "name"
+      },
+      {
+        "sasCat": "attribute.resourceId",
+        "omrs": "description"
+      },
+      {
+        "sasCat": "attribute.dateModified",
+        "omrs": "latestChange"
+      }
+    ]
+  },
+  {
+    "sasCat": "reference.modelStudioProject",
+    "omrs": "DesignModel",
+    "propertyMappings": [
+      {
+        "sasCat": "instance.name",
+        "omrs": "qualifiedName"
+      },
+      {
+        "sasCat": "attribute.creator",
+        "omrs": "author"
+      },
+      {
+        "sasCat": "instance.name",
+        "omrs": "displayName"
+      },
+      {
+        "sasCat": "attribute.resourceId",
+        "omrs": "description"
+      },
+      {
+        "sasCat": "attribute.dateModified",
+        "omrs": "latestChange"
+      }
+    ]
+  },
+  {
     "sasCat": "reference.report",
     "omrs": "DeployedReport",
     "propertyMappings": [
@@ -321,6 +373,18 @@
       {
         "sasCat": "constant.CAS Column",
         "omrs": "additionalProperties.sasColumnSource"
+      }
+    ]
+  },
+  {
+    "sasCat": "relatedObjects.Equivalent",
+    "omrs": "LineageMapping",
+    "endpointMappings": [
+      {
+        "omrs": "sourceElement"
+      },
+      {
+        "omrs": "targetElement"
       }
     ]
   },

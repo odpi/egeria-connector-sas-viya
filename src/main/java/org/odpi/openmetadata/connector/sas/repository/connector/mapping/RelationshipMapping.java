@@ -382,8 +382,7 @@ public class RelationshipMapping {
             if (SASObj.get("instance.name") != null) {
                 qualifiedName = (String) SASObj.get("instance.name");
             } else {
-                log.error("No qualifiedName found for object -- cannot create EntityProxy: {}", SASObj);
-                throw new NullPointerException("No qualifiedName found for object -- cannot create EntityProxy.");
+                qualifiedName = "<Missing Name>";
             }
 
             InstanceProperties uniqueProperties = repositoryHelper.addStringPropertyToInstance(
