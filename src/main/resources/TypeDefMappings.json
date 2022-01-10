@@ -52,6 +52,36 @@
     ]
   },
   {
+    "sasCat": "reference.dataPlan",
+    "omrs": "Process",
+    "propertyMappings": [
+      {
+        "sasCat": "instance.name",
+        "omrs": "qualifiedName"
+      },
+      {
+        "sasCat": "instance.id",
+        "omrs": "id"
+      },
+      {
+        "sasCat": "attribute.creator",
+        "omrs": "author"
+      },
+      {
+        "sasCat": "attribute.dateCreated",
+        "omrs": "createdTime"
+      },
+      {
+        "sasCat": "attribute.dateModified",
+        "omrs": "lastModifiedTime"
+      },
+      {
+        "sasCat": "attribute.editor",
+        "omrs": "modifier"
+      }
+    ]
+  },
+  {
     "sasCat": "reference.report",
     "omrs": "DeployedReport",
     "propertyMappings": [
