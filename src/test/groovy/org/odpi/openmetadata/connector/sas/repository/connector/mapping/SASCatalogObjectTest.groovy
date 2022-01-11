@@ -31,6 +31,23 @@ class SASCatalogObjectTest extends Specification {
         then: "getTypeName() returns that value"
         instance.getTypeName() == "test"
 
+        when: "The type is reference"
+        instance = new SASCatalogObject()
+        instance.addDefinitionProperty("name", "reference")
+        Map<String, String> attributes = new HashMap<>()
+        attributes.put("referencedType", "testRef")
+        instance.attributes = attributes
+
+        then: "getTypeName() returns 'reference.<referencedType>'"
+        instance.getTypeName() == "reference.testRef"
+
+        when: "The def. name is relatedObjects"
+        instance = new SASCatalogObject()
+        instance.addDefinitionProperty("name", "relatedObjects")
+        instance.addInstanceProperty("type", "testType")
+
+        then: "getTypeName() returns the type property"
+        instance.getTypeName() == "testType"
     }
 
     def "GetAttributes"() {
