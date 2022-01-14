@@ -182,7 +182,7 @@ class EntityMappingSASCatalog2OMRSTest extends Specification {
         EntityDetail detail
 
         when: "I get entity detail with CASTRT prefix"
-        mapper = new EntityMappingSASCatalog2OMRS(repositoryConnector, typeDefStore, null, instance, "CASTRT", "steven")
+        mapper = new EntityMappingSASCatalog2OMRS(repositoryConnector, typeDefStore, null, instance, null, "steven")
         detail = mapper.getEntityDetail()
         then: "Values should be mapped correctly"
         detail.getType().getTypeDefName() == relTableTypeDef.getName()
@@ -274,7 +274,7 @@ class EntityMappingSASCatalog2OMRSTest extends Specification {
         EntityDetail detail
 
         when: "I get entity detail with SASTRT prefix"
-        mapper = new EntityMappingSASCatalog2OMRS(repositoryConnector, typeDefStore, null, instance, "SASTRT", "steven")
+        mapper = new EntityMappingSASCatalog2OMRS(repositoryConnector, typeDefStore, null, instance, null, "steven")
         detail = mapper.getEntityDetail()
         then: "Values should be mapped correctly"
         detail.getType().getTypeDefName() == relTableTypeDef.getName()
@@ -334,7 +334,7 @@ class EntityMappingSASCatalog2OMRSTest extends Specification {
         EntityDetail detail
 
         when: "I get entity detail with CASCRC prefix"
-        mapper = new EntityMappingSASCatalog2OMRS(repositoryConnector, typeDefStore, null, instance, "CASCRC", "steven")
+        mapper = new EntityMappingSASCatalog2OMRS(repositoryConnector, typeDefStore, null, instance, null, "steven")
         detail = mapper.getEntityDetail()
         then: "Values should be mapped correctly"
         detail.getType().getTypeDefName() == relColumnTypeDef.getName()
@@ -402,7 +402,7 @@ class EntityMappingSASCatalog2OMRSTest extends Specification {
         EntityDetail detail
 
         when: "I get entity detail with SASCRC prefix"
-        mapper = new EntityMappingSASCatalog2OMRS(repositoryConnector, typeDefStore, null, instance, "SASCRC", "steven")
+        mapper = new EntityMappingSASCatalog2OMRS(repositoryConnector, typeDefStore, null, instance, null, "steven")
         detail = mapper.getEntityDetail()
         then: "Values should be mapped correctly"
         detail.getType().getTypeDefName() == relColumnTypeDef.getName()
@@ -460,7 +460,7 @@ class EntityMappingSASCatalog2OMRSTest extends Specification {
         EntityDetail detail
 
         when: "I get entity detail with CASLDS prefix"
-        mapper = new EntityMappingSASCatalog2OMRS(repositoryConnector, typeDefStore, null, instance, "CASLDS", "steven")
+        mapper = new EntityMappingSASCatalog2OMRS(repositoryConnector, typeDefStore, null, instance, null, "steven")
         detail = mapper.getEntityDetail()
         then: "Values should be mapped correctly"
         detail.getType().getTypeDefName() == dataStoreTypeDef.getName()
@@ -499,7 +499,7 @@ class EntityMappingSASCatalog2OMRSTest extends Specification {
         EntityDetail detail
 
         when: "I get entity detail with SASLDS prefix"
-        mapper = new EntityMappingSASCatalog2OMRS(repositoryConnector, typeDefStore, null, instance, "SASLDS", "steven")
+        mapper = new EntityMappingSASCatalog2OMRS(repositoryConnector, typeDefStore, null, instance, null, "steven")
         detail = mapper.getEntityDetail()
         then: "Values should be mapped correctly"
         detail.getType().getTypeDefName() == dataStoreTypeDef.getName()
@@ -538,7 +538,7 @@ class EntityMappingSASCatalog2OMRSTest extends Specification {
         EntityDetail detail
 
         when: "I get entity detail with MMDM prefix"
-        mapper = new EntityMappingSASCatalog2OMRS(repositoryConnector, typeDefStore, null, instance, "MMDM", "steven")
+        mapper = new EntityMappingSASCatalog2OMRS(repositoryConnector, typeDefStore, null, instance, null, "steven")
         detail = mapper.getEntityDetail()
         then: "Values should be mapped correctly"
         detail.getType().getTypeDefName() == designModelTypeDef.getName()
@@ -577,7 +577,7 @@ class EntityMappingSASCatalog2OMRSTest extends Specification {
         EntityDetail detail
 
         when: "I get entity detail with ASCME prefix"
-        mapper = new EntityMappingSASCatalog2OMRS(repositoryConnector, typeDefStore, null, instance, "ASCME", "steven")
+        mapper = new EntityMappingSASCatalog2OMRS(repositoryConnector, typeDefStore, null, instance, null, "steven")
         detail = mapper.getEntityDetail()
         then: "Values should be mapped correctly"
         detail.getType().getTypeDefName() == conceptModelElemTypeDef.getName()
