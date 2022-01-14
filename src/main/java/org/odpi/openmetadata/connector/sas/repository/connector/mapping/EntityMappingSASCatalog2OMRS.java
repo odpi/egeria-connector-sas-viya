@@ -327,8 +327,8 @@ public class EntityMappingSASCatalog2OMRS {
                 // Only generate the generated relationships (normally-mapped should be covered
                 // already above)
                 if (relationshipPrefix != null) {
-                    // TODO: assumes that all generated relationships have the same Atlas entity on
-                    // both ends
+                    // TODO: assumes that all generated relationships have the same Catalog entity on
+                    // both ends ie relationshipTable <--> relationshipTableType
                     SASCatalogGuid sasGuid = new SASCatalogGuid(sasEntity.getGuid(), relationshipPrefix);
                     Relationship omrsRelationship = RelationshipMapping.getSelfReferencingRelationship(
                             sasRepositoryConnector,
