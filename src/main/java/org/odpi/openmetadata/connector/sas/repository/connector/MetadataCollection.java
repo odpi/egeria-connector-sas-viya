@@ -623,7 +623,7 @@ public class MetadataCollection extends OMRSMetadataCollectionBase {
                     for (Map.Entry<String, TypeDefAttribute> attributeEntry : typeDefAttributeMap.entrySet()) {
                         String attributeName = attributeEntry.getKey();
                         // Only supporting search by name value for now
-                        if (attributeName == "qualifiedName") {
+                        if (attributeName.equals("qualifiedName")) {
                             TypeDefAttribute typeDefAttribute = attributeEntry.getValue();
                             // Only need to retain string-based attributes for the full text search
                             AttributeTypeDef attributeTypeDef = typeDefAttribute.getAttributeType();
@@ -907,7 +907,7 @@ public class MetadataCollection extends OMRSMetadataCollectionBase {
                 }
 
                 // If searching by property value across all entity types, we'll only need property filter
-                if (incomingEntityTypeGUID == null && methodName == "findEntitiesByPropertyValue") {
+                if (incomingEntityTypeGUID == null && methodName.equals("findEntitiesByPropertyValue")) {
                     queryParams.put("filter", propertyFilter);
                 } else {
                     queryParams.put("filter", typeFilter);
