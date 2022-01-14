@@ -181,7 +181,7 @@ class EntityMappingSASCatalog2OMRSTest extends Specification {
         EntityMappingSASCatalog2OMRS mapper
         EntityDetail detail
 
-        when: "I get entity detail with CASTRT prefix"
+        when: "I get entity detail with no prefix"
         mapper = new EntityMappingSASCatalog2OMRS(repositoryConnector, typeDefStore, null, instance, null, "steven")
         detail = mapper.getEntityDetail()
         then: "Values should be mapped correctly"
@@ -273,7 +273,7 @@ class EntityMappingSASCatalog2OMRSTest extends Specification {
         EntityMappingSASCatalog2OMRS mapper
         EntityDetail detail
 
-        when: "I get entity detail with SASTRT prefix"
+        when: "I get entity detail with no prefix"
         mapper = new EntityMappingSASCatalog2OMRS(repositoryConnector, typeDefStore, null, instance, null, "steven")
         detail = mapper.getEntityDetail()
         then: "Values should be mapped correctly"
@@ -333,7 +333,7 @@ class EntityMappingSASCatalog2OMRSTest extends Specification {
         EntityMappingSASCatalog2OMRS mapper
         EntityDetail detail
 
-        when: "I get entity detail with CASCRC prefix"
+        when: "I get entity detail with no prefix"
         mapper = new EntityMappingSASCatalog2OMRS(repositoryConnector, typeDefStore, null, instance, null, "steven")
         detail = mapper.getEntityDetail()
         then: "Values should be mapped correctly"
@@ -401,7 +401,7 @@ class EntityMappingSASCatalog2OMRSTest extends Specification {
         EntityMappingSASCatalog2OMRS mapper
         EntityDetail detail
 
-        when: "I get entity detail with SASCRC prefix"
+        when: "I get entity detail with no prefix"
         mapper = new EntityMappingSASCatalog2OMRS(repositoryConnector, typeDefStore, null, instance, null, "steven")
         detail = mapper.getEntityDetail()
         then: "Values should be mapped correctly"
@@ -459,7 +459,7 @@ class EntityMappingSASCatalog2OMRSTest extends Specification {
         EntityMappingSASCatalog2OMRS mapper
         EntityDetail detail
 
-        when: "I get entity detail with CASLDS prefix"
+        when: "I get entity detail with no prefix"
         mapper = new EntityMappingSASCatalog2OMRS(repositoryConnector, typeDefStore, null, instance, null, "steven")
         detail = mapper.getEntityDetail()
         then: "Values should be mapped correctly"
@@ -498,7 +498,7 @@ class EntityMappingSASCatalog2OMRSTest extends Specification {
         EntityMappingSASCatalog2OMRS mapper
         EntityDetail detail
 
-        when: "I get entity detail with SASLDS prefix"
+        when: "I get entity detail with no prefix"
         mapper = new EntityMappingSASCatalog2OMRS(repositoryConnector, typeDefStore, null, instance, null, "steven")
         detail = mapper.getEntityDetail()
         then: "Values should be mapped correctly"
@@ -537,7 +537,7 @@ class EntityMappingSASCatalog2OMRSTest extends Specification {
         EntityMappingSASCatalog2OMRS mapper
         EntityDetail detail
 
-        when: "I get entity detail with MMDM prefix"
+        when: "I get entity detail with no prefix"
         mapper = new EntityMappingSASCatalog2OMRS(repositoryConnector, typeDefStore, null, instance, null, "steven")
         detail = mapper.getEntityDetail()
         then: "Values should be mapped correctly"
@@ -576,7 +576,7 @@ class EntityMappingSASCatalog2OMRSTest extends Specification {
         EntityMappingSASCatalog2OMRS mapper
         EntityDetail detail
 
-        when: "I get entity detail with ASCME prefix"
+        when: "I get entity detail with no prefix"
         mapper = new EntityMappingSASCatalog2OMRS(repositoryConnector, typeDefStore, null, instance, null, "steven")
         detail = mapper.getEntityDetail()
         then: "Values should be mapped correctly"
