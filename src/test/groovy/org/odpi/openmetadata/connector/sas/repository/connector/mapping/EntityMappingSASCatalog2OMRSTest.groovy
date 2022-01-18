@@ -57,8 +57,11 @@ class EntityMappingSASCatalog2OMRSTest extends Specification {
     // DesignModel TypeDef
     @Shared designModelTypeDef = new EntityDef(TypeDefCategory.ENTITY_DEF, "bf17143d-8605-48c2-ba80-64c2ac8f8379", "DesignModel", 1L, "1")
 
-    // DesignModel TypeDef
+    // ConceptModelElement TypeDef
     @Shared conceptModelElemTypeDef = new EntityDef(TypeDefCategory.ENTITY_DEF, "06659195-3111-4c91-8931-a65f655378d9", "ConceptModelElement", 1L, "1")
+
+    // DeployedReport TypeDef
+    @Shared deployedReportTypeDef = new EntityDef(TypeDefCategory.ENTITY_DEF, "06659195-3111-4c91-8931-a65f655378da", "DeployedReport", 1L, "1")
 
     def createStringTypeDefAttr(String name) {
         def attr = new TypeDefAttribute()
@@ -116,6 +119,9 @@ class EntityMappingSASCatalog2OMRSTest extends Specification {
         def positionAttribute         = createIntTypeDefAttr("position")
         def qualifiedNameAttribute    = createStringTypeDefAttr("qualifiedName")
         def usageAttribute            = createStringTypeDefAttr("usage")
+        def ownerAttribute            = createStringTypeDefAttr("owner")
+        def lastModifiedTimeAttribute = createDateTypeDefAttr("lastModifiedTime")
+        def lastModifier              = createStringTypeDefAttr("lastModifier")
 
         relTableTypeDef.setPropertiesDefinition(Arrays.asList(qualifiedNameAttribute, displayNameAttribute, descriptionAttribute, nativeClassAttribute, commentAttribute))
         contentManager.addTypeDef("test", relTableTypeDef)
@@ -138,6 +144,9 @@ class EntityMappingSASCatalog2OMRSTest extends Specification {
         conceptModelElemTypeDef.setPropertiesDefinition(Arrays.asList(qualifiedNameAttribute, descriptionAttribute, displayNameAttribute, authorAttribute))
         contentManager.addTypeDef("test", conceptModelElemTypeDef)
 
+        deployedReportTypeDef.setPropertiesDefinition(Arrays.asList(qualifiedNameAttribute, descriptionAttribute, displayNameAttribute, authorAttribute, createTimeAttribute, modifiedTimeAttribute, lastModifiedTimeAttribute, lastModifier, ownerAttribute))
+        contentManager.addTypeDef("test", deployedReportTypeDef)
+
         repositoryConnector.setRepositoryHelper(new OMRSRepositoryContentHelper(contentManager))
         repositoryConnector.start()
 
@@ -149,6 +158,7 @@ class EntityMappingSASCatalog2OMRSTest extends Specification {
         typeDefStore.addTypeDef(dataStoreTypeDef)
         typeDefStore.addTypeDef(designModelTypeDef)
         typeDefStore.addTypeDef(conceptModelElemTypeDef)
+        typeDefStore.addTypeDef(deployedReportTypeDef)
     }
 
     def "GetEntityDetail - CAS Table"() {
@@ -190,7 +200,7 @@ class EntityMappingSASCatalog2OMRSTest extends Specification {
         detail.instanceURL.contains("/catalog/instances/" + instance.guid)
 
         when: "I get entity detail with a prefix"
-        mapper = new EntityMappingSASCatalog2OMRS(repositoryConnector, typeDefStore, null, instance, "RT", "steven")
+        mapper = new EntityMappingSASCatalog2OMRS(repositoryConnector, typeDefStore, null, instance, "CASTRTT", "steven")
         detail = mapper.getEntityDetail()
         then: "Values should be mapped correctly"
         detail.getType().getTypeDefName() == relTableTypeTypeDef.getName()
@@ -202,6 +212,45 @@ class EntityMappingSASCatalog2OMRSTest extends Specification {
         getDetailPropAsString(detail, "displayName") == instance.getInstanceProperty("label")
         getDetailPropAsString(detail, "author") == instance.getInstanceProperty("createdBy")
         getAdditionalProperty(detail, "isLoaded") == instance.getAttribute("isLoaded")
+        detail.instanceURL.contains("/catalog/instances/" + instance.guid)
+    }
+
+    def "GetEntityDetail - Reference (Report)"() {
+        // Setup test instance
+        SASCatalogObject instance = new SASCatalogObject()
+        instance.addInstanceProperty("name", "Report Object")
+        instance.addInstanceProperty("label", "Report Label")
+        instance.addInstanceProperty("description", "VA Report")
+        instance.addInstanceProperty("createdBy", "steven")
+        instance.addInstanceProperty("modifiedBy", "ben")
+        instance.addInstanceProperty("creationTimeStamp", "2020-07-14T18:40:02.788574Z")
+        instance.addInstanceProperty("modifiedTimeStamp", "2020-07-15T18:40:02.788574Z")
+        instance.addInstanceProperty("version", 1)
+        instance.addDefinitionProperty("name", "reference")
+        Map<String, String> attributes = new HashMap<>()
+        attributes.put("referencedType", "report")
+        attributes.put("source", "SAS")
+        attributes.put("creator", "steven")
+        attributes.put("dateCreated", "2020-07-14T18:40:02.788574Z")
+        attributes.put("dateModified", "2020-07-14T18:40:02.788574Z")
+        instance.attributes = attributes
+        instance.guid = "73a83006-9540-4762-b5e8-f6ee0dd53583"
+
+        EntityMappingSASCatalog2OMRS mapper
+        EntityDetail detail
+
+        when: "I get entity detail for a reference"
+        mapper = new EntityMappingSASCatalog2OMRS(repositoryConnector, typeDefStore, null, instance, null, "steven")
+        detail = mapper.getEntityDetail()
+        then: "Values should be mapped correctly"
+        detail.getType().getTypeDefName() == deployedReportTypeDef.getName()
+        detail.createdBy == instance.getInstanceProperty("createdBy")
+        detail.updatedBy == instance.getInstanceProperty("modifiedBy")
+        detail.createTime == isoToDate("2020-07-14T18:40:02.788574Z")
+        detail.updateTime == isoToDate("2020-07-15T18:40:02.788574Z")
+        getDetailPropAsString(detail, "qualifiedName") == instance.getInstanceProperty("name")
+        getDetailPropAsString(detail, "author") == instance.getAttribute("creator")
+        getDetailPropAsString(detail, "modifier") == instance.getAttribute("editor")
         detail.instanceURL.contains("/catalog/instances/" + instance.guid)
     }
 
@@ -241,8 +290,8 @@ class EntityMappingSASCatalog2OMRSTest extends Specification {
         getDetailPropAsString(detail, "comment") == "SAS Table"
         detail.instanceURL.contains("/catalog/instances/" + instance.guid)
 
-        when: "I get entity detail with a prefix"
-        mapper = new EntityMappingSASCatalog2OMRS(repositoryConnector, typeDefStore, null, instance, "RT", "steven")
+        when: "I get entity detail with SASTRTT prefix"
+        mapper = new EntityMappingSASCatalog2OMRS(repositoryConnector, typeDefStore, null, instance, "SASTRTT", "steven")
         detail = mapper.getEntityDetail()
         then: "Values should be mapped correctly"
         detail.getType().getTypeDefName() == relTableTypeTypeDef.getName()
@@ -303,8 +352,8 @@ class EntityMappingSASCatalog2OMRSTest extends Specification {
         getAdditionalProperty(detail, "bestChartType") == instance.getAttribute("bestChartType")
         detail.instanceURL.contains("/catalog/instances/" + instance.guid)
 
-        when: "I get entity detail with a prefix"
-        mapper = new EntityMappingSASCatalog2OMRS(repositoryConnector, typeDefStore, null, instance, "RT", "steven")
+        when: "I get entity detail with CASCRCT prefix"
+        mapper = new EntityMappingSASCatalog2OMRS(repositoryConnector, typeDefStore, null, instance, "CASCRCT", "steven")
         detail = mapper.getEntityDetail()
         then: "Values should be mapped correctly"
         detail.getType().getTypeDefName() == relColumnTypeTypeDef.getName()
@@ -371,8 +420,8 @@ class EntityMappingSASCatalog2OMRSTest extends Specification {
         getAdditionalProperty(detail, "bestChartType") == instance.getAttribute("bestChartType")
         detail.instanceURL.contains("/catalog/instances/" + instance.guid)
 
-        when: "I get entity detail with a prefix"
-        mapper = new EntityMappingSASCatalog2OMRS(repositoryConnector, typeDefStore, null, instance, "RT", "steven")
+        when: "I get entity detail with SASCRCT prefix"
+        mapper = new EntityMappingSASCatalog2OMRS(repositoryConnector, typeDefStore, null, instance, "SASCRCT", "steven")
         detail = mapper.getEntityDetail()
         then: "Values should be mapped correctly"
         detail.getType().getTypeDefName() == relColumnTypeTypeDef.getName()
