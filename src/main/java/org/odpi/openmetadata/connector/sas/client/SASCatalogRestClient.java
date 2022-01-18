@@ -84,7 +84,7 @@ public class SASCatalogRestClient implements SASCatalogClient {
     }
 
     private void setAuthToken(String username, String password) throws Exception {
-        URIBuilder builder = new URIBuilder(this.baseURL + "/SASLogon/oauth/token");
+        URIBuilder builder = new URIBuilder("https://sas-logon-app/SASLogon/oauth/token");
         builder.addParameter("grant_type", "password");
         builder.addParameter("username", username);
         builder.addParameter("password", password);

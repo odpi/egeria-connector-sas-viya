@@ -1,21 +1,53 @@
-# The IP/Hostname for the Viya deployment
-CLUSTER_HOST=""
+#!/bin/bash
 
-# The scheme used for external traffic to the Viya deployment.  This should be "http" if your
-# deployment has TLS disabled (truststores-only), or "https" otherwise.
-CLUSTER_SCHEME="https"
+if [ "$#" -lt 1 ]; then
+    echo "Usage: configure.sh -i"
+    echo "       configure.sh <SAS Viya cluster root url> <Egeria admin username> <Catalog username> <Catalog password>"
+    exit 1
+fi
 
-# The user to use for Egeria
-EGERIA_USER=""
+if [ "$1" = "-i" ]; then
+    echo "Enter SAS Viya cluster root url (e.g. https://myhost.com): "
+    read CLUSTER_ROOT_URL
+    echo "Enter Egeria admin username"
+    read EGERIA_USER
+    echo "Enter Catalog service username"
+    read CATALOG_USER
+    echo "Enter Catalog service username's password"
+    read CATALOG_PASS
+elif [ "$#" -lt 4 ]; then
+    echo "Usage: configure.sh -i"
+    echo "       configure.sh <SAS Viya cluster root url> <Egeria admin username> <Catalog username> <Catalog password>"
+    exit 1
+else
+    # set variables from command line
+    CLUSTER_ROOT_URL=$1
+    EGERIA_USER=$2
+    CATALOG_USER=$3
+    CATALOG_PASS=$4
+fi
 
-# The name of the Egeria server you're starting
-EGERIA_SERVER=""
+# extract the protocol
+CLUSTER_SCHEME="$(echo $CLUSTER_ROOT_URL | grep :// | sed -e's,^\(.*://\).*,\1,g')"
 
-# Catalog Username/pw credentials
-CATALOG_USER=""
-CATALOG_PASS=""
+# remove the protocol
+url=$(echo $CLUSTER_ROOT_URL | sed -e s,$CLUSTER_SCHEME,,g)
+
+# remove "://" from protocol
+CLUSTER_SCHEME=${CLUSTER_SCHEME%???}
+
+# extract the user (if any)
+user="$(echo $url | grep @ | cut -d@ -f1)"
+
+# extract the host and port
+CLUSTER_HOST=$(echo $url | sed -e s,$user@,,g | cut -d/ -f1)
+
+# The name of the Egeria server (do not change this without also modifying the deployment.yaml to match)
+EGERIA_SERVER="SASRepositoryProxy"
 
 set -e
+
+echo "Configure Catalog connection"
 
 # Configure Catalog connection
 curl --location --request POST -k "${CLUSTER_SCHEME}://${CLUSTER_HOST}/open-metadata/admin-services/users/${EGERIA_USER}/servers/${EGERIA_SERVER}/local-repository/mode/repository-proxy/connection" \
@@ -37,7 +69,8 @@ curl --location --request POST -k "${CLUSTER_SCHEME}://${CLUSTER_HOST}/open-meta
   }
 }"
 
-# Configure RabbitMQ connection
+echo "Configure cohort event bus"
+# Configure cohort event bus
 curl --location --request POST -k "${CLUSTER_SCHEME}://${CLUSTER_HOST}/open-metadata/admin-services/users/${EGERIA_USER}/servers/${EGERIA_SERVER}/event-bus?connectorProvider=org.odpi.openmetadata.adapters.eventbus.topic.kafka.KafkaOpenMetadataTopicProvider&topicURLRoot=OMRSTopic" \
 --header "Content-Type: application/json" \
 --data-raw "{
@@ -48,11 +81,16 @@ curl --location --request POST -k "${CLUSTER_SCHEME}://${CLUSTER_HOST}/open-meta
     \"bootstrap.servers\":\"kafkahost:9092\"
   }
 }"
-curl --location --request POST -k "${CLUSTER_SCHEME}://${CLUSTER_HOST}/open-metadata/admin-services/users/${EGERIA_USER}/servers/${EGERIA_SERVER}/local-repository/event-mapper-details?connectorProvider=org.odpi.openmetadata.connector.sas.event.mapper.RepositoryEventMapperProvider&eventSource=sas-rabbitmq-server:5672" \
---header "Content-Type: application/json" \
---data-raw "{\"username\":\"$(kubectl get secret sas-rabbitmq-server-secret -o go-template='{{(index .data.RABBITMQ_DEFAULT_USER)}}' | base64 -d)\",
-\"password\":\"$(kubectl get secret sas-rabbitmq-server-secret -o go-template='{{(index .data.RABBITMQ_DEFAULT_PASS)}}' | base64 -d)\"}"
 
+echo "Configure event connector (Viya RabbitMQ)"
+# Configure event connector (Viya RabbitMQ)
+curl --location --request POST -k "${CLUSTER_SCHEME}://${CLUSTER_HOST}/open-metadata/admin-services/users/${EGERIA_USER}/servers/${EGERIA_SERVER}/local-repository/event-mapper-details?connectorProvider=org.odpi.openmetadata.connector.sas.event.mapper.RepositoryEventMapperProvider&eventSource=" \
+--header "Content-Type: application/json" \
+--data-raw "{}"
+
+echo "Start Egeria Server"
 # Start Egeria Server
 curl --location --request POST -k "${CLUSTER_SCHEME}://${CLUSTER_HOST}/open-metadata/admin-services/users/${EGERIA_USER}/servers/${EGERIA_SERVER}/instance" \
 --header "Content-Type: application/json"
+
+exit 0
