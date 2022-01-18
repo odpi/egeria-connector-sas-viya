@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env sh
 
 if [ "$#" -lt 1 ]; then
     echo "Usage: configure.sh -i"
