@@ -8,40 +8,6 @@
         "omrs": "qualifiedName"
       },
       {
-        "sasCat": "instance.description",
-        "omrs": "description"
-      },
-      {
-        "sasCat": "attribute.creator",
-        "omrs": "owner"
-      },
-      {
-        "sasCat": "instance.name",
-        "omrs": "name"
-      },
-      {
-        "sasCat": "attribute.resourceId",
-        "omrs": "description"
-      },
-      {
-        "sasCat": "attribute.dateModified",
-        "omrs": "latestChange"
-      }
-    ]
-  },
-  {
-    "sasCat": "reference.decision",
-    "omrs": "Asset",
-    "propertyMappings": [
-      {
-        "sasCat": "instance.name",
-        "omrs": "qualifiedName"
-      },
-      {
-        "sasCat": "instance.description",
-        "omrs": "description"
-      },
-      {
         "sasCat": "attribute.creator",
         "omrs": "owner"
       },
@@ -82,36 +48,6 @@
       {
         "sasCat": "attribute.dateModified",
         "omrs": "latestChange"
-      }
-    ]
-  },
-  {
-    "sasCat": "reference.dataPlan",
-    "omrs": "Process",
-    "propertyMappings": [
-      {
-        "sasCat": "instance.name",
-        "omrs": "qualifiedName"
-      },
-      {
-        "sasCat": "instance.id",
-        "omrs": "id"
-      },
-      {
-        "sasCat": "attribute.creator",
-        "omrs": "author"
-      },
-      {
-        "sasCat": "attribute.dateCreated",
-        "omrs": "createdTime"
-      },
-      {
-        "sasCat": "attribute.dateModified",
-        "omrs": "lastModifiedTime"
-      },
-      {
-        "sasCat": "attribute.editor",
-        "omrs": "modifier"
       }
     ]
   },
