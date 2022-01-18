@@ -1,3 +1,5 @@
+#!/usr/bin/env sh
+
 # The IP/Hostname for the Viya deployment
 CLUSTER_HOST=""
 
