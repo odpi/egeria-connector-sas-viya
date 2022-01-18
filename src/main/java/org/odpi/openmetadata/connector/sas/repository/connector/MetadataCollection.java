@@ -320,22 +320,10 @@ public class MetadataCollection extends OMRSMetadataCollectionBase {
         String prefix = sasCatalogGuid.getGeneratedPrefix();
         SASCatalogObject entity = getSASCatalogEntitySafe(sasCatalogGuid.getSASCatalogGuid(), methodName);
 
-        String defName = entity.getTypeName();
-        Map<String, String> mappedOMRSTypeDefs = typeDefStore.getMappedOMRSTypeDefNameWithPrefixes(defName);
-        for (Map.Entry<String, String> entry : mappedOMRSTypeDefs.entrySet())
-        {
-            prefix = entry.getKey();
-            // TODO: Do we need an attributeTypeDefStore like Atlas?
-            EntityMappingSASCatalog2OMRS mapping = new EntityMappingSASCatalog2OMRS(repositoryConnector, typeDefStore, null /*attributeTypeDefStore */, entity, prefix, userId);
-            EntityDetail entityDetail = mapping.getEntityDetail();
-            if (entityDetail != null) {
-                return entityDetail;
-            }
-        }
         // TODO: Do we need an attributeTypeDefStore like Atlas?
-        //EntityMappingSASCatalog2OMRS mapping = new EntityMappingSASCatalog2OMRS(repositoryConnector, typeDefStore, null /*attributeTypeDefStore */, entity, prefix, userId);
-        //return mapping.getEntityDetail();
-        return null;
+        EntityMappingSASCatalog2OMRS mapping = new EntityMappingSASCatalog2OMRS(repositoryConnector, typeDefStore, null /*attributeTypeDefStore */, entity, prefix, userId);
+        return mapping.getEntityDetail();
+        //return null;
     }
 
     @Override

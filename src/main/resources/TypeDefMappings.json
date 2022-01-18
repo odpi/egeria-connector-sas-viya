@@ -204,7 +204,6 @@
   {
     "sasCat": "casTable",
     "omrs": "RelationalTable",
-    "prefix": "CASTRT",
     "propertyMappings": [
       {
         "sasCat": "instance.name",
@@ -247,10 +246,23 @@
       }
     ]
   },
+    {
+    "sasCat": "casTable",
+    "omrs": "SchemaAttributeType",
+    "prefix": "HTSAT",
+    "endpointMappings": [
+      {
+        "omrs": "usedInSchemas"
+      },
+      {
+        "omrs": "type",
+        "prefix": "CASTRTT"
+      }
+    ]
+  },
   {
     "sasCat": "sasTable",
     "omrs": "RelationalTable",
-    "prefix": "SASTRT",
     "propertyMappings": [
       {
         "sasCat": "instance.name",
@@ -290,6 +302,20 @@
       {
         "sasCat": "instance.createdBy",
         "omrs": "author"
+      }
+    ]
+  },
+  {
+    "sasCat": "sasTable",
+    "omrs": "SchemaAttributeType",
+    "prefix": "HTSAT",
+    "endpointMappings": [
+      {
+        "omrs": "usedInSchemas"
+      },
+      {
+        "omrs": "type",
+        "prefix": "SASTRTT"
       }
     ]
   },
@@ -380,15 +406,48 @@
     ]
   },
   {
-    "sasCat": "dataSetDataFields",
+    "sasCat": "reference.casTable",
+    "omrs": "RelationalTableType",
+    "prefix": "RCTRTT",
+    "propertyMappings": [
+      {
+        "sasCat": "instance.name",
+        "omrs": "qualifiedName"
+      },
+      {
+        "sasCat": "instance.label",
+        "omrs": "displayName"
+      },
+      {
+        "sasCat": "instance.createdBy",
+        "omrs": "author"
+      }
+    ]
+  },
+  {
+    "sasCat": "reference.casTable",
     "omrs": "SchemaAttributeType",
-    "prefix": "DSTDFSAT",
+    "prefix": "RCTSAT",
     "endpointMappings": [
       {
         "omrs": "usedInSchemas"
       },
       {
-        "omrs": "type"
+        "omrs": "type",
+        "prefix": "RCTRTT"
+      }
+    ]
+  },
+  {
+    "sasCat": "dataSetDataFields",
+    "omrs": "NestedSchemaAttribute",
+    "prefix": "SASDSTDF",
+    "endpointMappings": [
+      {
+        "omrs": "parentSchemas"
+      },
+      {
+        "omrs": "attributes"
       }
     ]
   },
@@ -408,7 +467,6 @@
   {
     "sasCat": "casColumn",
     "omrs": "RelationalColumn",
-    "prefix": "CASCRC",
     "propertyMappings": [
       {
         "sasCat": "instance.name",
@@ -496,9 +554,22 @@
     ]
   },
   {
+    "sasCat": "casColumn",
+    "omrs": "SchemaAttributeType",
+    "prefix": "CCSAT",
+    "endpointMappings": [
+      {
+        "omrs": "usedInSchemas"
+      },
+      {
+        "omrs": "type",
+        "prefix": "CASCRCT"
+      }
+    ]
+  },
+  {
     "sasCat": "sasColumn",
     "omrs": "RelationalColumn",
-    "prefix": "SASCRC",
     "propertyMappings": [
       {
         "sasCat": "instance.name",
@@ -562,9 +633,22 @@
   ]
   },
   {
+    "sasCat": "sasColumn",
+    "omrs": "SchemaAttributeType",
+    "prefix": "SCSAT",
+    "endpointMappings": [
+      {
+        "omrs": "usedInSchemas"
+      },
+      {
+        "omrs": "type",
+        "prefix": "SASCRCT"
+      }
+    ]
+  },
+  {
   "sasCat": "casLibrary",
   "omrs": "DataStore",
-  "prefix": "CASLDS",
   "propertyMappings": [
     {
       "sasCat": "instance.name",
@@ -595,7 +679,6 @@
   {
   "sasCat": "sasLibrary",
   "omrs": "DataStore",
-  "prefix": "SASLDS",
   "propertyMappings": [
     {
       "sasCat": "instance.name",
@@ -626,7 +709,6 @@
   {
     "sasCat": "managedModel",
     "omrs": "DesignModel",
-    "prefix": "MMDM",
     "propertyMappings": [
       {
         "sasCat": "instance.name",
@@ -653,7 +735,6 @@
   {
     "sasCat": "analyticStore",
     "omrs": "ConceptModelElement",
-    "prefix": "ASCME",
     "propertyMappings": [
       {
         "sasCat": "instance.name",
