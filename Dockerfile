@@ -28,7 +28,7 @@ WORKDIR .
 COPY build/libs/egeria-connector-viya-4-${version}*.jar /deployments/server/lib
 
 # Mount security/trustedcerts.jks at runtime and set connector to automatically restart
-ENV JAVA_OPTS_APPEND -XX:MaxMetaspaceSize=1g -Djavax.net.ssl.trustStore=/security/trustedcerts.jks -Dsas.egeria.repositoryconnector.ssl.trustAll=false -Dstartup.server.list=\${EGERIA_SERVER_NAME}
+ENV JAVA_OPTS_APPEND -XX:MaxMetaspaceSize=1g -Djavax.net.ssl.trustStore=/security/trustedcerts.jks -Dlogging.level.root=INFO -Dsas.egeria.repositoryconnector.ssl.trustAll=false -Dstartup.server.list=\${EGERIA_SERVER_NAME}
 
 # Uncomment to enable Java remote debugging
 # ENV JAVA_DEBUG 1
