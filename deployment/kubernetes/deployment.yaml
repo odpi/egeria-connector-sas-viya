@@ -59,6 +59,8 @@ spec:
                 secretKeyRef:
                   name: sas-rabbitmq-server-secret
                   key: RABBITMQ_DEFAULT_PASS
+            - name: EGERIA_SERVER_NAME
+              value: SASRepositoryProxy
           ports:
             - name: egeria-port
               containerPort: 9443

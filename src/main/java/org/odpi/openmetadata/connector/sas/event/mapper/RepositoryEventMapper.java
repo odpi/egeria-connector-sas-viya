@@ -114,36 +114,41 @@ public class RepositoryEventMapper extends OMRSRepositoryEventMapperBase
                             host = address;
                         }
                     }
-                    if (StringUtils.isNotEmpty(host)) {
-                        // RabbitMQ host was configured, so set it in ConnectionFactory
-                        log.debug("Setting RabbitMQ host to: " + host);
-                        connectionFactory.setHost(host);
+                    if (StringUtils.isEmpty(host)) {
+                        host = "sas-rabbitmq-server";
                     }
-                    if (StringUtils.isNotEmpty(portAsString)) {
-                        try {
-                            int port = Integer.valueOf(portAsString);
-                            // RabbitMQ port was configured, so set it in ConnectionFactory
-                            log.debug("Setting RabbitMQ port to: " + portAsString);
-                            connectionFactory.setPort(port);
-                        }
-                        catch (NumberFormatException nfe) {
-                            log.error("Could not convert '{}' to a port number.  Default port will be used.", portAsString);
-                        }
+                    // RabbitMQ host was configured, so set it in ConnectionFactory
+                    log.debug("Setting RabbitMQ host to: " + host);
+                    connectionFactory.setHost(host);
+
+                    if (StringUtils.isEmpty(portAsString)) {
+                        portAsString = "5672";
+                    }
+                    try {
+                        int port = Integer.valueOf(portAsString);
+                        // RabbitMQ port was configured, so set it in ConnectionFactory
+                        log.debug("Setting RabbitMQ port to: " + portAsString);
+                        connectionFactory.setPort(port);
+                    }
+                    catch (NumberFormatException nfe) {
+                        log.error("Could not convert '{}' to a port number.  Default port will be used.", portAsString);
                     }
 
+                    String username = System.getenv("RABBITMQ_USER");
+                    String password = System.getenv("RABBITMQ_PASS");
                     if (cfgProperties != null) {
-                        String username = (String)cfgProperties.getOrDefault("username", "");
-                        String password = (String)cfgProperties.getOrDefault("password", "");
-                        if (StringUtils.isNotEmpty(username)) {
-                            // RabbitMQ username was configured, so set it in ConnectionFactory
-                            log.debug("Setting RabbitMQ username");
-                            connectionFactory.setUsername(username);
-                        }
-                        if (StringUtils.isNotEmpty(password)) {
-                            // RabbitMQ password was configured, so set it in ConnectionFactory
-                            log.debug("Setting RabbitMQ password");
-                            connectionFactory.setPassword(password);
-                        }
+                        username = (String)cfgProperties.getOrDefault("username", username);
+                        password = (String)cfgProperties.getOrDefault("password", password);
+                    }
+                    if (StringUtils.isNotEmpty(username)) {
+                        // RabbitMQ username was configured, so set it in ConnectionFactory
+                        log.debug("Setting RabbitMQ username");
+                        connectionFactory.setUsername(username);
+                    }
+                    if (StringUtils.isNotEmpty(password)) {
+                        // RabbitMQ password was configured, so set it in ConnectionFactory
+                        log.debug("Setting RabbitMQ password");
+                        connectionFactory.setPassword(password);
                     }
                 }
             }
