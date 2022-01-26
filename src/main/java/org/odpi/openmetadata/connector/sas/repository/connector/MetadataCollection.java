@@ -225,6 +225,35 @@ public class MetadataCollection extends OMRSMetadataCollectionBase {
      * {@inheritDoc}
      */
     @Override
+    public  void addAttributeTypeDef(String             userId,
+                                     AttributeTypeDef   newAttributeTypeDef) throws InvalidParameterException,
+            RepositoryErrorException,
+            TypeDefNotSupportedException,
+            TypeDefKnownException,
+            TypeDefConflictException,
+            InvalidTypeDefException,
+            FunctionNotSupportedException,
+            UserNotAuthorizedException
+    {
+        final String  methodName           = "addAttributeTypeDef";
+        final String  typeDefParameterName = "newAttributeTypeDef";
+
+        /*
+         * Validate parameters
+         */
+        this.newAttributeTypeDefParameterValidation(userId, newAttributeTypeDef, typeDefParameterName, methodName);
+
+        /*
+         * Perform operation
+         */
+        //reportUnsupportedOptionalFunction(methodName);
+        // TODO: provide implementation
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean verifyTypeDef(String  userId,
                                  TypeDef typeDef) throws InvalidParameterException,
             RepositoryErrorException,
@@ -684,7 +713,7 @@ public class MetadataCollection extends OMRSMetadataCollectionBase {
 
     }
 
-       /**
+    /**
      * Return the entities and relationships that radiate out from the supplied entity GUID.
      * The results are scoped both the instance type guids and the level.
      *
