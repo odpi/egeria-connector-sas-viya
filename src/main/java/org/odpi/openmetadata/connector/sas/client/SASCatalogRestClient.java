@@ -79,9 +79,9 @@ public class SASCatalogRestClient implements SASCatalogClient {
         this.baseURL = baseURL;
         this.username = username;
         this.password = password;
-        URIBuilder builder = new URIBuilder(baseURL);
+        URIBuilder builder = new URIBuilder(this.baseURL);
         this.scheme = builder.getScheme();
-        log.info("Creating catalog client with base URL: " + baseURL + " and username: " + username);
+        log.info("Creating catalog client with base URL: " + this.baseURL + " and username: " + username);
         // Get initial token
         setAuthToken(username, password);
     }
