@@ -316,6 +316,50 @@ public class EntityMappingSASCatalog2OMRS {
             }
         }
 
+        // Then handle any generated relationships (between what is the same entity in
+        // SAS but different entities in OMRS)
+        if (relationshipTypeGUID == null) {
+            Map<String, TypeDefStore.EndpointMapping> mappedRelationships = typeDefStore
+                    .getAllEndpointMappingsFromCatalogName(sasEntity.getTypeName());
+            for (Map.Entry<String, TypeDefStore.EndpointMapping> entry : mappedRelationships.entrySet()) {
+                String relationshipPrefix = entry.getKey();
+                // TypeDefStore.EndpointMapping mapping = entry.getValue();
+                // Only generate the generated relationships (normally-mapped should be covered
+                // already above)
+                if (relationshipPrefix != null) {
+                    // TODO: assumes that all generated relationships have the same Catalog entity on
+                    // both ends ie relationshipTable <--> relationshipTableType
+                    SASCatalogGuid sasGuid = new SASCatalogGuid(sasEntity.getGuid(), relationshipPrefix);
+                    Relationship omrsRelationship = RelationshipMapping.getSelfReferencingRelationship(
+                            sasRepositoryConnector,
+                            typeDefStore,
+                            sasGuid,
+                            sasEntity);
+                    if (omrsRelationship != null) {
+                        omrsRelationships.add(omrsRelationship);
+                    } else {
+                        raiseRepositoryErrorException(ErrorCode.RELATIONSHIP_NOT_KNOWN, methodName, null,
+                                sasGuid.toString(), methodName, repositoryName);
+                    }
+                }
+            }
+        } else {
+            TypeDef typeDef = typeDefStore.getTypeDefByGUID(relationshipTypeGUID);
+            if (typeDef != null) {
+                String omrsTypeDefName = typeDef.getName();
+                Map<String, String> sasTypesByPrefix = typeDefStore.getAllMappedCatalogTypeDefNames(omrsTypeDefName);
+                for (Map.Entry<String, String> entry : sasTypesByPrefix.entrySet()) {
+                    String prefixForType = entry.getKey();
+                    String sasTypeNames = entry.getValue();
+                    // TODO: Only generate the generated relationships (normally-mapped should be
+                    // covered already above)
+                    if (prefixForType != null) {
+                        log.info("Have not yet implemented this relationship: ({}) {}", prefixForType, sasTypeNames);
+                    }
+                }
+            }
+        }
+
         if (omrsRelationships != null) {
             // Now sort the results, if requested
             Comparator<Relationship> comparator = SequencingUtils.getRelationshipComparator(sequencingOrder,

@@ -1,0 +1,11 @@
+- op: add
+  path: /spec/template/spec/volumes/-
+  value:
+    name: sas-egeriaconfig-volume
+    persistentVolumeClaim:
+      claimName: sas-egeriaconfig
+- op: add
+  path: /spec/template/spec/containers/0/volumeMounts/-
+  value:
+    name: sas-egeriaconfig-volume
+    mountPath: /deployments/data
