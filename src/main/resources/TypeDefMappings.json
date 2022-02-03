@@ -567,6 +567,18 @@
     ]
   },
   {
+    "sasCat": "relatedObjects.Associated",
+    "omrs": "LineageMapping",
+    "endpointMappings": [
+      {
+        "omrs": "sourceElement"
+      },
+      {
+        "omrs": "targetElement"
+      }
+    ]
+  },
+  {
     "sasCat": "relatedObjects.Dependent",
     "omrs": "ResourceList",
     "endpointMappings": [

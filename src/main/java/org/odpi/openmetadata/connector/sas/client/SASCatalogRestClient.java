@@ -369,7 +369,13 @@ public class SASCatalogRestClient implements SASCatalogClient {
         instanceInfo.addInstanceProperty("name", instance.get("name"));
         instanceInfo.addInstanceProperty("label", instance.get("label"));
         instanceInfo.addInstanceProperty("description", instance.get("description"));
-        instanceInfo.addInstanceProperty("type", instance.get("type"));
+
+        // Prevent null pointer if type is not present
+        Object instanceType = instance.get("type");
+        if(instanceType == null) {
+            instanceType = "";
+        }
+        instanceInfo.addInstanceProperty("type", instanceType);
         instanceInfo.addInstanceProperty("version", instance.get("version"));
         instanceInfo.addInstanceProperty("createdBy", instance.get("createdBy"));
         instanceInfo.addInstanceProperty("modifiedBy", instance.get("modifiedBy"));
@@ -382,8 +388,8 @@ public class SASCatalogRestClient implements SASCatalogClient {
             instanceInfo.addInstanceProperty("endpoint2Id", instance.get("endpoint2Id"));
             instanceInfo.addInstanceProperty("endpoint2Uri", instance.get("endpoint2Uri"));
             //adding role to type if 'relatedObjects'
-            if (instance.get("type").equals("relatedObjects")) {
-                instanceInfo.addInstanceProperty("type", String.format("%s.%s", instance.get("type"), attributes.get("relationshipRole")) ); 
+            if (instanceType.equals("relatedObjects")) {
+                instanceInfo.addInstanceProperty("type", String.format("%s.%s", instanceType, attributes.get("relationshipRole")) );
             }
         }
 
