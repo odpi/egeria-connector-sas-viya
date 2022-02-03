@@ -225,6 +225,35 @@ public class MetadataCollection extends OMRSMetadataCollectionBase {
      * {@inheritDoc}
      */
     @Override
+    public  void addAttributeTypeDef(String             userId,
+                                     AttributeTypeDef   newAttributeTypeDef) throws InvalidParameterException,
+            RepositoryErrorException,
+            TypeDefNotSupportedException,
+            TypeDefKnownException,
+            TypeDefConflictException,
+            InvalidTypeDefException,
+            FunctionNotSupportedException,
+            UserNotAuthorizedException
+    {
+        final String  methodName           = "addAttributeTypeDef";
+        final String  typeDefParameterName = "newAttributeTypeDef";
+
+        /*
+         * Validate parameters
+         */
+        this.newAttributeTypeDefParameterValidation(userId, newAttributeTypeDef, typeDefParameterName, methodName);
+
+        /*
+         * Perform operation
+         */
+        //reportUnsupportedOptionalFunction(methodName);
+        // TODO: provide implementation
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public boolean verifyTypeDef(String  userId,
                                  TypeDef typeDef) throws InvalidParameterException,
             RepositoryErrorException,
@@ -320,22 +349,10 @@ public class MetadataCollection extends OMRSMetadataCollectionBase {
         String prefix = sasCatalogGuid.getGeneratedPrefix();
         SASCatalogObject entity = getSASCatalogEntitySafe(sasCatalogGuid.getSASCatalogGuid(), methodName);
 
-        String defName = entity.getTypeName();
-        Map<String, String> mappedOMRSTypeDefs = typeDefStore.getMappedOMRSTypeDefNameWithPrefixes(defName);
-        for (Map.Entry<String, String> entry : mappedOMRSTypeDefs.entrySet())
-        {
-            prefix = entry.getKey();
-            // TODO: Do we need an attributeTypeDefStore like Atlas?
-            EntityMappingSASCatalog2OMRS mapping = new EntityMappingSASCatalog2OMRS(repositoryConnector, typeDefStore, null /*attributeTypeDefStore */, entity, prefix, userId);
-            EntityDetail entityDetail = mapping.getEntityDetail();
-            if (entityDetail != null) {
-                return entityDetail;
-            }
-        }
         // TODO: Do we need an attributeTypeDefStore like Atlas?
-        //EntityMappingSASCatalog2OMRS mapping = new EntityMappingSASCatalog2OMRS(repositoryConnector, typeDefStore, null /*attributeTypeDefStore */, entity, prefix, userId);
-        //return mapping.getEntityDetail();
-        return null;
+        EntityMappingSASCatalog2OMRS mapping = new EntityMappingSASCatalog2OMRS(repositoryConnector, typeDefStore, null /*attributeTypeDefStore */, entity, prefix, userId);
+        return mapping.getEntityDetail();
+        //return null;
     }
 
     @Override
@@ -623,7 +640,7 @@ public class MetadataCollection extends OMRSMetadataCollectionBase {
                     for (Map.Entry<String, TypeDefAttribute> attributeEntry : typeDefAttributeMap.entrySet()) {
                         String attributeName = attributeEntry.getKey();
                         // Only supporting search by name value for now
-                        if (attributeName == "qualifiedName") {
+                        if (attributeName.equals("qualifiedName")) {
                             TypeDefAttribute typeDefAttribute = attributeEntry.getValue();
                             // Only need to retain string-based attributes for the full text search
                             AttributeTypeDef attributeTypeDef = typeDefAttribute.getAttributeType();
@@ -696,7 +713,7 @@ public class MetadataCollection extends OMRSMetadataCollectionBase {
 
     }
 
-       /**
+    /**
      * Return the entities and relationships that radiate out from the supplied entity GUID.
      * The results are scoped both the instance type guids and the level.
      *
@@ -907,7 +924,7 @@ public class MetadataCollection extends OMRSMetadataCollectionBase {
                 }
 
                 // If searching by property value across all entity types, we'll only need property filter
-                if (incomingEntityTypeGUID == null && methodName == "findEntitiesByPropertyValue") {
+                if (incomingEntityTypeGUID == null && methodName.equals("findEntitiesByPropertyValue")) {
                     queryParams.put("filter", propertyFilter);
                 } else {
                     queryParams.put("filter", typeFilter);

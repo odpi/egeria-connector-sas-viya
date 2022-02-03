@@ -3,8 +3,14 @@ kind: Kustomization
 
 resources:
 - deployment.yaml
+- pvc.yaml
 
 # The following is required if your Viya deployment uses the full-stack or frontdoor TLS modes.
 # If your Viya deployment uses the truststores-only mode, please comment out the following two lines.
 transformers:
 - tls-transformer.yaml
+
+patches:
+  - target:
+      kind: StatefulSet
+    path: mount-pvc.yaml
