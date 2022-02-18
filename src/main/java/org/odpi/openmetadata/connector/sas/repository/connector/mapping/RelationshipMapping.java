@@ -79,39 +79,33 @@ public class RelationshipMapping {
         String repositoryName = SASRepositoryConnector.getRepositoryName();
 
         String SASRelationshipType = relationship.getTypeName();
+        String relationshipPrefix = sasCatalogGuid.getGeneratedPrefix();
 
-        String ep1Id = (String) relationship.get("instance.endpoint1Id");
-        String ep2Id = (String) relationship.get("instance.endpoint2Id");
+        TypeDefStore.EndpointMapping mapping = typeDefStore.getEndpointMappingFromCatalogName(SASRelationshipType, relationshipPrefix);
+        Relationship omrsRelationship = null;
+        if (mapping != null) {
+            String ep1Id = (String) relationship.get("instance.endpoint1Id");
+            String ep2Id = (String) relationship.get("instance.endpoint2Id");
 
-        SASCatalogObject ep1Object = SASRepositoryConnector.getEntityByGUID(ep1Id);
-        SASCatalogObject ep2Object = SASRepositoryConnector.getEntityByGUID(ep2Id);
-
-        Map<String, String> ep1Prefixes = typeDefStore.getMappedOMRSTypeDefNameWithPrefixes(ep1Object.getTypeName());
-        //My understanding is for Entity types there should be just one mapping
-        String prefix1 = null;
-        for (Map.Entry<String, String> entry : ep1Prefixes.entrySet())
-        {
-            prefix1 = entry.getKey();
-
-        }
-        Map<String, String> ep2Prefixes = typeDefStore.getMappedOMRSTypeDefNameWithPrefixes(ep2Object.getTypeName());
-        String prefix2 = null;
-        for (Map.Entry<String, String> entry : ep2Prefixes.entrySet())
-        {
-            prefix2 = entry.getKey();
-
-        }
+            SASCatalogObject ep1Object = null;
+            SASCatalogObject ep2Object = null;
+    
+            try {
+              ep1Object = SASRepositoryConnector.getEntityByGUID(ep1Id);
+              ep2Object = SASRepositoryConnector.getEntityByGUID(ep2Id);
+            } catch (Exception e) {
+                raiseRepositoryErrorException(ErrorCode.ENTITY_NOT_KNOWN, methodName, e, ep1Id, methodName, repositoryName);
+            }
 
         EntityProxy ep1 = null;
         EntityProxy ep2 = null;
 
-        Relationship omrsRelationship = null;
         try {
             ep1 = RelationshipMapping.getEntityProxyForObject(
                     SASRepositoryConnector,
                     typeDefStore,
                     ep1Object,
-                    prefix1,
+                    mapping.getPrefixOne(),
                     userId
             );
         } catch (Exception e) {
@@ -122,7 +116,7 @@ public class RelationshipMapping {
                     SASRepositoryConnector,
                     typeDefStore,
                     ep2Object,
-                    prefix2,
+                    mapping.getPrefixTwo(),
                     userId
             );
         } catch (Exception e) {
@@ -135,6 +129,7 @@ public class RelationshipMapping {
                     ep1,
                     ep2);
         }
+    }
 
         return omrsRelationship;
 

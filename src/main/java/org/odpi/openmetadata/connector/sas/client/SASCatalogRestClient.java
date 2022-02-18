@@ -41,6 +41,7 @@ public class SASCatalogRestClient implements SASCatalogClient {
     private String baseURL;
     private String username;
     private String password;
+    private String scheme;
     private String token;
 
     private static final Logger log = LoggerFactory.getLogger(SASCatalogRestClient.class);
@@ -78,13 +79,15 @@ public class SASCatalogRestClient implements SASCatalogClient {
         this.baseURL = baseURL;
         this.username = username;
         this.password = password;
-        log.info("Creating catalog client with base URL: " + baseURL + " and username: " + username);
+        URIBuilder builder = new URIBuilder(this.baseURL);
+        this.scheme = builder.getScheme();
+        log.info("Creating catalog client with base URL: " + this.baseURL + " and username: " + username);
         // Get initial token
         setAuthToken(username, password);
     }
 
     private void setAuthToken(String username, String password) throws Exception {
-        URIBuilder builder = new URIBuilder(this.baseURL + "/SASLogon/oauth/token");
+        URIBuilder builder = new URIBuilder(this.scheme + "://sas-logon-app/SASLogon/oauth/token");
         builder.addParameter("grant_type", "password");
         builder.addParameter("username", username);
         builder.addParameter("password", password);
@@ -117,7 +120,7 @@ public class SASCatalogRestClient implements SASCatalogClient {
 
         SASCatalogObject instanceInfo = new SASCatalogObject();
 
-        URIBuilder builder = new URIBuilder(this.baseURL + "/catalog/instances/" + guid);
+        URIBuilder builder = new URIBuilder(this.scheme + "://sas-catalog/catalog/instances/" + guid);
         HttpGet httpGet = new HttpGet(builder.build());
         addAuthHeader(httpGet);
         httpGet.addHeader("Accept", String.format("application/vnd.sas.metadata.instance.%s+json", type));
@@ -160,7 +163,7 @@ public class SASCatalogRestClient implements SASCatalogClient {
 
         List<Instance> instances = new ArrayList<>();
 
-        URIBuilder builder = new URIBuilder(this.baseURL + "/catalog/instances");
+        URIBuilder builder = new URIBuilder(this.scheme + "://sas-catalog/catalog/instances");
         for(Map.Entry<String, String> param : params.entrySet()) {
             log.info("Param: " + param.getKey() + " : " + param.getValue());
             builder.addParameter(param.getKey(), param.getValue());
@@ -214,7 +217,7 @@ public class SASCatalogRestClient implements SASCatalogClient {
             throw new RuntimeException("Could not complete request after " + retries + " retries.");
         }
 
-        URIBuilder builder = new URIBuilder(this.baseURL + "/catalog/definitions/" + definitionId);
+        URIBuilder builder = new URIBuilder(this.scheme + "://sas-catalog/catalog/definitions/" + definitionId);
         HttpGet httpGet = new HttpGet(builder.build());
         httpGet.addHeader("Accept", String.format("application/vnd.sas.metadata.definition.%s+json", type));
         addAuthHeader(httpGet);
@@ -267,7 +270,7 @@ public class SASCatalogRestClient implements SASCatalogClient {
             defName = "reference";
         }
 
-        URIBuilder builder = new URIBuilder(this.baseURL + "/catalog/definitions");
+        URIBuilder builder = new URIBuilder(this.scheme + "://sas-catalog/catalog/definitions");
         builder.addParameter("filter", String.format("and(eq(name,%s),eq(definitionType,%s))", defName, type));
         HttpGet httpGet = new HttpGet(builder.build());
         addAuthHeader(httpGet);
@@ -299,7 +302,7 @@ public class SASCatalogRestClient implements SASCatalogClient {
 
         List<SASCatalogObject> relationships = new ArrayList<>();
 
-        URIBuilder builder = new URIBuilder(this.baseURL + "/catalog/instances");
+        URIBuilder builder = new URIBuilder(this.scheme + "://sas-catalog/catalog/instances");
         String filter = String.format("or(eq(endpoint1Id,'%s'),eq(endpoint2Id,'%s'))", guid, guid);
         builder.addParameter("filter", filter);
         HttpGet httpGet = new HttpGet(builder.build());
@@ -366,7 +369,13 @@ public class SASCatalogRestClient implements SASCatalogClient {
         instanceInfo.addInstanceProperty("name", instance.get("name"));
         instanceInfo.addInstanceProperty("label", instance.get("label"));
         instanceInfo.addInstanceProperty("description", instance.get("description"));
-        instanceInfo.addInstanceProperty("type", instance.get("type"));
+
+        // Prevent null pointer if type is not present
+        Object instanceType = instance.get("type");
+        if(instanceType == null) {
+            instanceType = "";
+        }
+        instanceInfo.addInstanceProperty("type", instanceType);
         instanceInfo.addInstanceProperty("version", instance.get("version"));
         instanceInfo.addInstanceProperty("createdBy", instance.get("createdBy"));
         instanceInfo.addInstanceProperty("modifiedBy", instance.get("modifiedBy"));
@@ -379,8 +388,8 @@ public class SASCatalogRestClient implements SASCatalogClient {
             instanceInfo.addInstanceProperty("endpoint2Id", instance.get("endpoint2Id"));
             instanceInfo.addInstanceProperty("endpoint2Uri", instance.get("endpoint2Uri"));
             //adding role to type if 'relatedObjects'
-            if (instance.get("type").equals("relatedObjects")) {
-                instanceInfo.addInstanceProperty("type", String.format("%s.%s", instance.get("type"), attributes.get("relationshipRole")) ); 
+            if (instanceType.equals("relatedObjects")) {
+                instanceInfo.addInstanceProperty("type", String.format("%s.%s", instanceType, attributes.get("relationshipRole")) );
             }
         }
 

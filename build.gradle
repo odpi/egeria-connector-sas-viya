@@ -5,20 +5,20 @@ apply plugin: 'maven-publish'
 
 // Only apply the signing plugin if we're running in the build environment since
 // this is dependent on having access to sonatype, and suitable GPG keys
-if (System.getenv("CI")) {
+if (System.getenv('CI')) {
     apply plugin: 'signing'
-    // Artifacts need signing for maven central - supplied by GitHub secrets
+// Artifacts need signing for maven central - supplied by GitHub secrets
 }
 
 // Published artifact info, equired for maven publishing - this is the version of our artifact
 group = 'org.odpi.egeria'
-version = '3.5-SNAPSHOT'
+version = '3.6-SNAPSHOT'
 
 repositories {
     mavenCentral()
     // Needed if we want to build with egeria snapshots (ie for testing, fixing bugs)
     maven {
-        url "https://oss.sonatype.org/content/repositories/snapshots"
+        url 'https://oss.sonatype.org/content/repositories/snapshots'
     }
 }
 
@@ -31,17 +31,17 @@ configurations {
 
 ext {
     // The version of Egeria to use
-    egeriaVersion = "3.5-SNAPSHOT"
+    egeriaVersion = '3.6-SNAPSHOT'
 }
 dependencies {
     implementation "org.odpi.egeria:open-connector-framework:${egeriaVersion}"
     implementation "org.odpi.egeria:repository-services-connectors:${egeriaVersion}"
-    implementation("org.apache.commons:commons-lang3:3.12.0")
+    implementation('org.apache.commons:commons-lang3:3.12.0')
 
     bundledLibs 'org.slf4j:slf4j-api'
     bundledLibs 'org.apache.httpcomponents:httpclient:4.5.13'
     bundledLibs 'com.google.code.gson:gson:2.8.9'
-    bundledLibs 'com.rabbitmq:amqp-client:5.14.0'
+    bundledLibs 'com.rabbitmq:amqp-client:5.14.1'
 
     testImplementation 'org.codehaus.groovy:groovy:3.0.9'
     testImplementation 'org.codehaus.groovy:groovy-dateutil:3.0.9'
@@ -72,7 +72,6 @@ javadoc {
         options.addBooleanOption('html5', true)
     }
 }
-
 
 // We only have a single artifact for now - this additional metadata is
 // required for publishing to maven central. As above, only if we're running in a build pipeline
@@ -113,15 +112,12 @@ publishing {
                     developerConnection = 'scm:git:ssh://github.com/odpi/egeria/egeria-connector-sas-viya.git'
                     url = 'http://github.com/odpi/egeria-connector-sas-viya/'
                 }
-
             }
         }
-
     }
     // Release versions get pushed to staging area on maven central, snapshots to snapshot repo
     // Secrets for credentials
-    if (System.getenv("CI")) {
-
+    if (System.getenv('CI')) {
         repositories {
             maven {
                 name = 'OSSRH'
@@ -130,8 +126,8 @@ publishing {
                 url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
                 // User token (under profile) on oss.sonatype.org
                 credentials {
-                    username = System.getenv("OSSRH_USERNAME")
-                    password = System.getenv("OSSRH_TOKEN")
+                    username = System.getenv('OSSRH_USERNAME')
+                    password = System.getenv('OSSRH_TOKEN')
                 }
             }
         }
@@ -139,20 +135,17 @@ publishing {
 }
 
 // To publish to ossrh we need to sign the artifacts
-if (System.getenv("CI")) {
-
+if (System.getenv('CI')) {
     signing {
         // This is the publication to sign
         sign publishing.publications.connector
         // gpg --export-secret-keys myemal@gmail.com | base64
-        def signingKey = System.getenv("OSSRH_GPG_PRIVATE_KEY")
+        def signingKey = System.getenv('OSSRH_GPG_PRIVATE_KEY')
         // Passphrase for key
-        def signingPassword = System.getenv("OSSRH_GPG_PASSPHRASE")
+        def signingPassword = System.getenv('OSSRH_GPG_PASSPHRASE')
         // public key id (last 8 characters only) - note keys also need uploading to all the main registries
-        def signingKeyId = System.getenv("OSSRH_GPG_KEYID")
+        def signingKeyId = System.getenv('OSSRH_GPG_KEYID')
         // We use these values from secrets rather than gradle.properties
         useInMemoryPgpKeys(signingKeyId, signingKey, signingPassword)
     }
 }
-
-
