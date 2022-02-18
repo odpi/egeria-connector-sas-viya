@@ -20,7 +20,33 @@
         "omrs": "name"
       },
       {
-        "sasCat": "attribute.resourceId",
+        "sasCat": "instances.resourceId",
+        "omrs": "description"
+      },
+      {
+        "sasCat": "attribute.dateModified",
+        "omrs": "latestChange"
+      }
+    ]
+  },
+  {
+    "sasCat": "modelStudioProject",
+    "omrs": "DesignModel",
+    "propertyMappings": [
+      {
+        "sasCat": "instance.name",
+        "omrs": "qualifiedName"
+      },
+      {
+        "sasCat": "attribute.creator",
+        "omrs": "author"
+      },
+      {
+        "sasCat": "instance.name",
+        "omrs": "displayName"
+      },
+      {
+        "sasCat": "instance.resourceId",
         "omrs": "description"
       },
       {
@@ -102,7 +128,59 @@
         "omrs": "displayName"
       },
       {
-        "sasCat": "attribute.resourceId",
+        "sasCat": "instance.resourceId",
+        "omrs": "description"
+      },
+      {
+        "sasCat": "attribute.dateModified",
+        "omrs": "latestChange"
+      }
+    ]
+  },
+  {
+    "sasCat": "model",
+    "omrs": "DesignModel",
+    "propertyMappings": [
+      {
+        "sasCat": "instance.name",
+        "omrs": "qualifiedName"
+      },
+      {
+        "sasCat": "attribute.creator",
+        "omrs": "author"
+      },
+      {
+        "sasCat": "instance.name",
+        "omrs": "displayName"
+      },
+      {
+        "sasCat": "instance.resourceId",
+        "omrs": "description"
+      },
+      {
+        "sasCat": "attribute.dateModified",
+        "omrs": "latestChange"
+      }
+    ]
+  },
+  {
+    "sasCat": "reference.model",
+    "omrs": "DesignModel",
+    "propertyMappings": [
+      {
+        "sasCat": "instance.name",
+        "omrs": "qualifiedName"
+      },
+      {
+        "sasCat": "attribute.creator",
+        "omrs": "author"
+      },
+      {
+        "sasCat": "instance.name",
+        "omrs": "displayName"
+      },
+      {
+        "sasCat": "instance.resourceId",
         "omrs": "description"
       },
       {
