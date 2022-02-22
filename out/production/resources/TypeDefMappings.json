@@ -8,6 +8,118 @@
         "omrs": "qualifiedName"
       },
       {
+        "sasCat": "instance.description",
+        "omrs": "description"
+      },
+      {
+        "sasCat": "attribute.creator",
+        "omrs": "owner"
+      },
+      {
+        "sasCat": "instance.name",
+        "omrs": "name"
+      },
+      {
+        "sasCat": "instance.resourceId",
+        "omrs": "description"
+      },
+      {
+        "sasCat": "attribute.dateModified",
+        "omrs": "latestChange"
+      }
+    ]
+  },
+  {
+    "sasCat": "decision",
+    "omrs": "Asset",
+    "propertyMappings": [
+      {
+        "sasCat": "instance.name",
+        "omrs": "qualifiedName"
+      },
+      {
+        "sasCat": "instance.resourceId",
+        "omrs": "description"
+      },
+      {
+        "sasCat": "attribute.creator",
+        "omrs": "owner"
+      },
+      {
+        "sasCat": "instance.name",
+        "omrs": "name"
+      },
+      {
+        "sasCat": "attribute.dateModified",
+        "omrs": "latestChange"
+      }
+    ]
+  },
+  {
+    "sasCat": "reference.decision",
+    "omrs": "Asset",
+    "propertyMappings": [
+      {
+        "sasCat": "instance.name",
+        "omrs": "qualifiedName"
+      },
+      {
+        "sasCat": "instance.description",
+        "omrs": "description"
+      },
+      {
+        "sasCat": "attribute.creator",
+        "omrs": "owner"
+      },
+      {
+        "sasCat": "instance.name",
+        "omrs": "name"
+      },
+      {
+        "sasCat": "instance.resourceId",
+        "omrs": "description"
+      },
+      {
+        "sasCat": "attribute.dateModified",
+        "omrs": "latestChange"
+      }
+    ]
+  },
+  {
+    "sasCat": "referenceDataDomain",
+    "omrs": "Asset",
+    "propertyMappings": [
+      {
+        "sasCat": "instance.name",
+        "omrs": "qualifiedName"
+      },
+      {
+        "sasCat": "attribute.creator",
+        "omrs": "owner"
+      },
+      {
+        "sasCat": "instance.name",
+        "omrs": "name"
+      },
+      {
+        "sasCat": "instance.resourceId",
+        "omrs": "description"
+      },
+      {
+        "sasCat": "attribute.dateModified",
+        "omrs": "latestChange"
+      }
+    ]
+  },
+  {
+    "sasCat": "reference.referenceDataDomain",
+    "omrs": "Asset",
+    "propertyMappings": [
+      {
+        "sasCat": "instance.name",
+        "omrs": "qualifiedName"
+      },
+      {
         "sasCat": "attribute.creator",
         "omrs": "owner"
       },
@@ -17,6 +129,84 @@
       },
       {
         "sasCat": "attribute.resourceId",
+        "omrs": "description"
+      },
+      {
+        "sasCat": "attribute.dateModified",
+        "omrs": "latestChange"
+      }
+    ]
+  },
+  {
+    "sasCat": "ruleSet",
+    "omrs": "Asset",
+    "propertyMappings": [
+      {
+        "sasCat": "instance.name",
+        "omrs": "qualifiedName"
+      },
+      {
+        "sasCat": "attribute.creator",
+        "omrs": "owner"
+      },
+      {
+        "sasCat": "instance.name",
+        "omrs": "name"
+      },
+      {
+        "sasCat": "instance.resourceId",
+        "omrs": "description"
+      },
+      {
+        "sasCat": "attribute.dateModified",
+        "omrs": "latestChange"
+      }
+    ]
+  },
+  {
+    "sasCat": "reference.ruleSet",
+    "omrs": "Asset",
+    "propertyMappings": [
+      {
+        "sasCat": "instance.name",
+        "omrs": "qualifiedName"
+      },
+      {
+        "sasCat": "attribute.creator",
+        "omrs": "owner"
+      },
+      {
+        "sasCat": "instance.name",
+        "omrs": "name"
+      },
+      {
+        "sasCat": "instance.resourceId",
+        "omrs": "description"
+      },
+      {
+        "sasCat": "attribute.dateModified",
+        "omrs": "latestChange"
+      }
+    ]
+  },
+  {
+    "sasCat": "modelStudioProject",
+    "omrs": "DesignModel",
+    "propertyMappings": [
+      {
+        "sasCat": "instance.name",
+        "omrs": "qualifiedName"
+      },
+      {
+        "sasCat": "attribute.creator",
+        "omrs": "author"
+      },
+      {
+        "sasCat": "instance.name",
+        "omrs": "displayName"
+      },
+      {
+        "sasCat": "instance.resourceId",
         "omrs": "description"
       },
       {
@@ -42,7 +232,7 @@
         "omrs": "displayName"
       },
       {
-        "sasCat": "attribute.resourceId",
+        "sasCat": "instance.resourceId",
         "omrs": "description"
       },
       {
@@ -52,95 +242,120 @@
     ]
   },
   {
-    "sasCat": "reference.report",
-    "omrs": "DeployedReport",
+    "sasCat": "model",
+    "omrs": "DesignModel",
     "propertyMappings": [
       {
         "sasCat": "instance.name",
         "omrs": "qualifiedName"
-      },
-      {
-        "sasCat": "instance.id",
-        "omrs": "id"
       },
       {
         "sasCat": "attribute.creator",
         "omrs": "author"
-      },
-      {
-        "sasCat": "attribute.dateCreated",
-        "omrs": "createdTime"
-      },
-      {
-        "sasCat": "attribute.dateModified",
-        "omrs": "lastModifiedTime"
-      },
-      {
-        "sasCat": "attribute.editor",
-        "omrs": "modifier"
-      }
-    ]
-  },
-  {
-    "sasCat": "report",
-    "omrs": "DeployedReport",
-    "propertyMappings": [
-      {
-        "sasCat": "instance.name",
-        "omrs": "qualifiedName"
-      },
-      {
-        "sasCat": "instance.id",
-        "omrs": "id"
-      },
-      {
-        "sasCat": "attribute.creator",
-        "omrs": "author"
-      },
-      {
-        "sasCat": "attribute.dateCreated",
-        "omrs": "createdTime"
-      },
-      {
-        "sasCat": "attribute.dateModified",
-        "omrs": "lastModifiedTime"
-      },
-      {
-        "sasCat": "attribute.editor",
-        "omrs": "modifier"
-      }
-    ]
-  },
-  {
-    "sasCat": "reference.casTable",
-    "omrs": "RelationalTable",
-    "propertyMappings": [
-      {
-        "sasCat": "instance.name",
-        "omrs": "qualifiedName"
       },
       {
         "sasCat": "instance.name",
         "omrs": "displayName"
       },
       {
-        "sasCat": "constant.CAS Table Reference",
+        "sasCat": "instance.resourceId",
         "omrs": "description"
       },
       {
-        "sasCat": "constant.CAS Table",
-        "omrs": "comment"
+        "sasCat": "attribute.dateModified",
+        "omrs": "latestChange"
+      }
+    ]
+  },
+  {
+    "sasCat": "reference.model",
+    "omrs": "DesignModel",
+    "propertyMappings": [
+      {
+        "sasCat": "instance.name",
+        "omrs": "qualifiedName"
       },
       {
-        "sasCat": "constant.Table",
-        "omrs": "nativeClass"
+        "sasCat": "attribute.creator",
+        "omrs": "author"
+      },
+      {
+        "sasCat": "instance.name",
+        "omrs": "displayName"
+      },
+      {
+        "sasCat": "instance.resourceId",
+        "omrs": "description"
+      },
+      {
+        "sasCat": "attribute.dateModified",
+        "omrs": "latestChange"
+      }
+    ]
+  },
+  {
+    "sasCat": "dataPlan",
+    "omrs": "Process",
+    "propertyMappings": [
+      {
+        "sasCat": "instance.name",
+        "omrs": "qualifiedName"
+      },
+      {
+        "sasCat": "instance.id",
+        "omrs": "id"
+      },
+      {
+        "sasCat": "attribute.creator",
+        "omrs": "author"
+      },
+      {
+        "sasCat": "attribute.dateCreated",
+        "omrs": "createdTime"
+      },
+      {
+        "sasCat": "attribute.dateModified",
+        "omrs": "lastModifiedTime"
+      },
+      {
+        "sasCat": "attribute.editor",
+        "omrs": "modifier"
+      }
+    ]
+  },
+  {
+    "sasCat": "reference.dataPlan",
+    "omrs": "Process",
+    "propertyMappings": [
+      {
+        "sasCat": "instance.name",
+        "omrs": "qualifiedName"
+      },
+      {
+        "sasCat": "instance.id",
+        "omrs": "id"
+      },
+      {
+        "sasCat": "attribute.creator",
+        "omrs": "author"
+      },
+      {
+        "sasCat": "attribute.dateCreated",
+        "omrs": "createdTime"
+      },
+      {
+        "sasCat": "attribute.dateModified",
+        "omrs": "lastModifiedTime"
+      },
+      {
+        "sasCat": "attribute.editor",
+        "omrs": "modifier"
       }
     ]
   },
   {
     "sasCat": "casTable",
     "omrs": "RelationalTable",
-    "prefix": "CASTRT",
     "propertyMappings": [
       {
         "sasCat": "instance.name",
@@ -184,9 +399,113 @@
     ]
   },
   {
+    "sasCat": "reference.casTable",
+    "omrs": "RelationalTable",
+    "propertyMappings": [
+      {
+        "sasCat": "instance.name",
+        "omrs": "qualifiedName"
+      },
+      {
+        "sasCat": "instance.name",
+        "omrs": "displayName"
+      },
+      {
+        "sasCat": "constant.CAS Table Reference",
+        "omrs": "description"
+      },
+      {
+        "sasCat": "constant.CAS Table",
+        "omrs": "comment"
+      },
+      {
+        "sasCat": "constant.Table",
+        "omrs": "nativeClass"
+      }
+    ]
+  },
+  {
+    "sasCat": "reference.casTable",
+    "omrs": "RelationalTableType",
+    "prefix": "RCTRTT",
+    "propertyMappings": [
+      {
+        "sasCat": "instance.name",
+        "omrs": "qualifiedName"
+      },
+      {
+        "sasCat": "instance.label",
+        "omrs": "displayName"
+      },
+      {
+        "sasCat": "instance.createdBy",
+        "omrs": "author"
+      }
+    ]
+  },
+  {
+    "sasCat": "report",
+    "omrs": "DeployedReport",
+    "propertyMappings": [
+      {
+        "sasCat": "instance.name",
+        "omrs": "qualifiedName"
+      },
+      {
+        "sasCat": "instance.id",
+        "omrs": "id"
+      },
+      {
+        "sasCat": "attribute.creator",
+        "omrs": "author"
+      },
+      {
+        "sasCat": "attribute.dateCreated",
+        "omrs": "createdTime"
+      },
+      {
+        "sasCat": "attribute.dateModified",
+        "omrs": "lastModifiedTime"
+      },
+      {
+        "sasCat": "attribute.editor",
+        "omrs": "modifier"
+      }
+    ]
+  },
+  {
+    "sasCat": "reference.report",
+    "omrs": "DeployedReport",
+    "propertyMappings": [
+      {
+        "sasCat": "instance.name",
+        "omrs": "qualifiedName"
+      },
+      {
+        "sasCat": "instance.id",
+        "omrs": "id"
+      },
+      {
+        "sasCat": "attribute.creator",
+        "omrs": "author"
+      },
+      {
+        "sasCat": "attribute.dateCreated",
+        "omrs": "createdTime"
+      },
+      {
+        "sasCat": "attribute.dateModified",
+        "omrs": "lastModifiedTime"
+      },
+      {
+        "sasCat": "attribute.editor",
+        "omrs": "modifier"
+      }
+    ]
+  },
+  {
     "sasCat": "sasTable",
     "omrs": "RelationalTable",
-    "prefix": "SASTRT",
     "propertyMappings": [
       {
         "sasCat": "instance.name",
@@ -230,121 +549,8 @@
     ]
   },
   {
-    "sasCat": "reference.report",
-    "omrs": "DeployedReport",
-    "propertyMappings": [
-      {
-        "sasCat": "instance.name",
-        "omrs": "qualifiedName"
-      },
-      {
-        "sasCat": "instance.id",
-        "omrs": "id"
-      },
-      {
-        "sasCat": "attribute.creator",
-        "omrs": "author"
-      },
-      {
-        "sasCat": "attribute.dateCreated",
-        "omrs": "createdTime"
-      },
-      {
-        "sasCat": "attribute.dateModified",
-        "omrs": "lastModifiedTime"
-      },
-      {
-        "sasCat": "attribute.editor",
-        "omrs": "modifier"
-      }
-    ]
-  },
-  {
-    "sasCat": "report",
-    "omrs": "DeployedReport",
-    "propertyMappings": [
-      {
-        "sasCat": "instance.name",
-        "omrs": "qualifiedName"
-      },
-      {
-        "sasCat": "instance.id",
-        "omrs": "id"
-      },
-      {
-        "sasCat": "attribute.creator",
-        "omrs": "author"
-      },
-      {
-        "sasCat": "attribute.dateCreated",
-        "omrs": "createdTime"
-      },
-      {
-        "sasCat": "attribute.dateModified",
-        "omrs": "lastModifiedTime"
-      },
-      {
-        "sasCat": "attribute.editor",
-        "omrs": "modifier"
-      }
-    ]
-  },
-  {
-    "sasCat": "reference.casTable",
-    "omrs": "RelationalTable",
-    "propertyMappings": [
-      {
-        "sasCat": "instance.name",
-        "omrs": "qualifiedName"
-      },
-      {
-        "sasCat": "instance.name",
-        "omrs": "displayName"
-      },
-      {
-        "sasCat": "constant.CAS Table Reference",
-        "omrs": "description"
-      },
-      {
-        "sasCat": "constant.CAS Table",
-        "omrs": "comment"
-      },
-      {
-        "sasCat": "constant.Table",
-        "omrs": "nativeClass"
-      }
-    ]
-  },
-  {
-    "sasCat": "dataSetDataFields",
-    "omrs": "SchemaAttributeType",
-    "prefix": "DSTDFSAT",
-    "endpointMappings": [
-      {
-        "omrs": "usedInSchemas"
-      },
-      {
-        "omrs": "type"
-      }
-    ]
-  },
-  {
-    "sasCat": "dataStoreDataSets",
-    "omrs": "DataContentForDataSet",
-    "prefix": "DSDSDCDS",
-    "endpointMappings": [
-      {
-        "omrs": "supportedDataSets"
-      },
-      {
-        "omrs": "dataContent"
-       }
-    ]
-  },
-  {
     "sasCat": "casColumn",
     "omrs": "RelationalColumn",
-    "prefix": "CASCRC",
     "propertyMappings": [
       {
         "sasCat": "instance.name",
@@ -373,30 +579,6 @@
       {
         "sasCat": "constant.CAS Column",
         "omrs": "additionalProperties.sasColumnSource"
-      }
-    ]
-  },
-  {
-    "sasCat": "relatedObjects.Equivalent",
-    "omrs": "LineageMapping",
-    "endpointMappings": [
-      {
-        "omrs": "sourceElement"
-      },
-      {
-        "omrs": "targetElement"
-      }
-    ]
-  },
-  {
-    "sasCat": "relatedObjects.Dependent",
-    "omrs": "ResourceList",
-    "endpointMappings": [
-      {
-        "omrs": "resourceListAnchors"
-      },
-      {
-        "omrs": "supportingReferences"
       }
     ]
   },
@@ -434,7 +616,6 @@
   {
     "sasCat": "sasColumn",
     "omrs": "RelationalColumn",
-    "prefix": "SASCRC",
     "propertyMappings": [
       {
         "sasCat": "instance.name",
@@ -467,102 +648,99 @@
     ]
   },
   {
-  "sasCat": "sasColumn",
-  "omrs": "RelationalColumnType",
-  "prefix": "SASCRCT",
-  "propertyMappings": [
-    {
-      "sasCat": "instance.name",
-      "omrs": "qualifiedName"
-    },
-    {
-      "sasCat": "instance.label",
-      "omrs": "displayName"
-    },
-    {
-      "sasCat": "instance.createdBy",
-      "omrs": "author"
-    },
-    {
-      "sasCat" : "attribute.sasDataType",
-      "omrs" : "dataType"
-    },
-    {
-      "sasCat" : "attribute.sasInFormat",
-      "omrs" : "encodingStandard"
-    },
-    {
-      "sasCat" : "attribute.sasFormat",
-      "omrs" : "usage"
-    }
-  ]
+    "sasCat": "sasColumn",
+    "omrs": "RelationalColumnType",
+    "prefix": "SASCRCT",
+    "propertyMappings": [
+      {
+        "sasCat": "instance.name",
+        "omrs": "qualifiedName"
+      },
+      {
+        "sasCat": "instance.label",
+        "omrs": "displayName"
+      },
+      {
+        "sasCat": "instance.createdBy",
+        "omrs": "author"
+      },
+      {
+        "sasCat" : "attribute.sasDataType",
+        "omrs" : "dataType"
+      },
+      {
+        "sasCat" : "attribute.sasInFormat",
+        "omrs" : "encodingStandard"
+      },
+      {
+        "sasCat" : "attribute.sasFormat",
+        "omrs" : "usage"
+      }
+    ]
   },
   {
-  "sasCat": "casLibrary",
-  "omrs": "DataStore",
-  "prefix": "CASLDS",
-  "propertyMappings": [
-    {
-      "sasCat": "instance.name",
-      "omrs": "qualifiedName"
-    },
-    {
-      "sasCat": "instance.label",
-      "omrs": "additionalProperties.sasLabel"
-    },
-    {
-      "sasCat": "constant.CAS Library",
-      "omrs": "additionalProperties.sasLibrarySource"
-    },
-    {
-      "sasCat": "instance.description",
-      "omrs": "description"
-    },
-    {
-      "sasCat": "attribute.dateCreated",
-      "omrs": "createTime"
-    },
-    {
-      "sasCat": "attribute.dateModified",
-      "omrs": "modifiedTime"
-    }
-  ]
+    "sasCat": "casLibrary",
+    "omrs": "DataStore",
+    "propertyMappings": [
+      {
+        "sasCat": "instance.name",
+        "omrs": "qualifiedName"
+      },
+      {
+        "sasCat": "instance.label",
+        "omrs": "additionalProperties.sasLabel"
+      },
+      {
+        "sasCat": "constant.CAS Library",
+        "omrs": "additionalProperties.sasLibrarySource"
+      },
+      {
+        "sasCat": "instance.description",
+        "omrs": "description"
+      },
+      {
+        "sasCat": "attribute.dateCreated",
+        "omrs": "createTime"
+      },
+      {
+        "sasCat": "attribute.dateModified",
+        "omrs": "modifiedTime"
+      }
+    ]
   },
   {
-  "sasCat": "sasLibrary",
-  "omrs": "DataStore",
-  "prefix": "SASLDS",
-  "propertyMappings": [
-    {
-      "sasCat": "instance.name",
-      "omrs": "qualifiedName"
-    },
-    {
-      "sasCat": "instance.label",
-      "omrs": "additionalProperties.sasLabel"
-    },
-    {
-      "sasCat": "constant.SAS Library",
-      "omrs": "additionalProperties.sasLibrarySource"
-    },
-    {
-      "sasCat": "instance.description",
-      "omrs": "description"
-    },
-    {
-      "sasCat": "attribute.dateCreated",
-      "omrs": "createTime"
-    },
-    {
-      "sasCat": "attribute.dateModified",
-      "omrs": "modifiedTime"
-    }
-  ]
+    "sasCat": "sasLibrary",
+    "omrs": "DataStore",
+    "propertyMappings": [
+      {
+        "sasCat": "instance.name",
+        "omrs": "qualifiedName"
+      },
+      {
+        "sasCat": "instance.label",
+        "omrs": "additionalProperties.sasLabel"
+      },
+      {
+        "sasCat": "constant.SAS Library",
+        "omrs": "additionalProperties.sasLibrarySource"
+      },
+      {
+        "sasCat": "instance.description",
+        "omrs": "description"
+      },
+      {
+        "sasCat": "attribute.dateCreated",
+        "omrs": "createTime"
+      },
+      {
+        "sasCat": "attribute.dateModified",
+        "omrs": "modifiedTime"
+      }
+    ]
   },
   {
     "sasCat": "managedModel",
     "omrs": "DesignModel",
-    "prefix": "MMDM",
     "propertyMappings": [
       {
         "sasCat": "instance.name",
@@ -589,7 +767,6 @@
   {
     "sasCat": "analyticStore",
     "omrs": "ConceptModelElement",
-    "prefix": "ASCME",
     "propertyMappings": [
       {
         "sasCat": "instance.name",
@@ -610,6 +787,162 @@
       {
         "sasCat": "constant.Analytic Store",
         "omrs": "additionalProperties.sasModelSource"
+      }
+    ]
+  },
+  {
+    "sasCat": "casTable",
+    "omrs": "SchemaAttributeType",
+    "prefix": "HTSAT",
+    "endpointMappings": [
+      {
+        "omrs": "usedInSchemas"
+      },
+      {
+        "omrs": "type",
+        "prefix": "CASTRTT"
+      }
+    ]
+  },
+  {
+    "sasCat": "casColumn",
+    "omrs": "SchemaAttributeType",
+    "prefix": "CCSAT",
+    "endpointMappings": [
+      {
+        "omrs": "usedInSchemas"
+      },
+      {
+        "omrs": "type",
+        "prefix": "CASCRCT"
+      }
+    ]
+  },
+  {
+    "sasCat": "sasTable",
+    "omrs": "SchemaAttributeType",
+    "prefix": "HTSAT",
+    "endpointMappings": [
+      {
+        "omrs": "usedInSchemas"
+      },
+      {
+        "omrs": "type",
+        "prefix": "SASTRTT"
+      }
+    ]
+  },
+  {
+    "sasCat": "reference.casTable",
+    "omrs": "SchemaAttributeType",
+    "prefix": "RCTSAT",
+    "endpointMappings": [
+      {
+        "omrs": "usedInSchemas"
+      },
+      {
+        "omrs": "type",
+        "prefix": "RCTRTT"
+      }
+    ]
+  },
+  {
+    "sasCat": "dataSetDataFields",
+    "omrs": "NestedSchemaAttribute",
+    "prefix": "SASDSTDF",
+    "endpointMappings": [
+      {
+        "omrs": "parentSchemas"
+      },
+      {
+        "omrs": "attributes"
+      }
+    ]
+  },
+  {
+    "sasCat": "decisionRevisionRuleSetRevisions",
+    "omrs": "ResourceList",
+    "endpointMappings": [
+      {
+        "omrs": "resourceListAnchors"
+      },
+      {
+        "omrs": "supportingResources"
+      }
+    ]
+  },
+  {
+    "sasCat": "ruleSetRevisionReferenceDataDomains",
+    "omrs": "ResourceList",
+    "endpointMappings": [
+      {
+        "omrs": "resourceListAnchors"
+      },
+      {
+        "omrs": "supportingResources"
+      }
+    ]
+  },
+  {
+    "sasCat": "dataStoreDataSets",
+    "omrs": "DataContentForDataSet",
+    "prefix": "DSDSDCDS",
+    "endpointMappings": [
+      {
+        "omrs": "supportedDataSets"
+      },
+      {
+        "omrs": "dataContent"
+       }
+    ]
+  },
+  {
+    "sasCat": "relatedObjects.Equivalent",
+    "omrs": "LineageMapping",
+    "endpointMappings": [
+      {
+        "omrs": "sourceElement"
+      },
+      {
+        "omrs": "targetElement"
+      }
+    ]
+  },
+  {
+    "sasCat": "relatedObjects.Associated",
+    "omrs": "LineageMapping",
+    "endpointMappings": [
+      {
+        "omrs": "sourceElement"
+      },
+      {
+        "omrs": "targetElement"
+      }
+    ]
+  },
+  {
+    "sasCat": "relatedObjects.Dependent",
+    "omrs": "ResourceList",
+    "endpointMappings": [
+      {
+        "omrs": "resourceListAnchors"
+      },
+      {
+        "omrs": "supportingReferences"
+      }
+    ]
+  },
+  {
+    "sasCat": "sasColumn",
+    "omrs": "SchemaAttributeType",
+    "prefix": "SCSAT",
+    "endpointMappings": [
+      {
+        "omrs": "usedInSchemas"
+      },
+      {
+        "omrs": "type",
+        "prefix": "SASCRCT"
       }
     ]
   }
