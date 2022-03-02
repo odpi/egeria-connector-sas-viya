@@ -6,6 +6,10 @@
 package org.odpi.openmetadata.connector.sas.client;
 
 import com.google.gson.Gson;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.message.BasicNameValuePair;
 import org.odpi.openmetadata.connector.sas.event.model.catalog.instance.Instance;
 import org.odpi.openmetadata.connector.sas.repository.connector.mapping.SASCatalogObject;
 import org.apache.commons.lang3.StringUtils;
@@ -88,13 +92,17 @@ public class SASCatalogRestClient implements SASCatalogClient {
 
     private void setAuthToken(String username, String password) throws Exception {
         URIBuilder builder = new URIBuilder(this.scheme + "://sas-logon-app/SASLogon/oauth/token");
-        builder.addParameter("grant_type", "password");
-        builder.addParameter("username", username);
-        builder.addParameter("password", password);
 
-        HttpGet httpGet = new HttpGet(builder.build());
-        httpGet.addHeader("Authorization", "Basic c2FzLmVjOg==");
-        try (CloseableHttpResponse response = httpClient.execute(httpGet)) {
+        List<NameValuePair> params = new ArrayList<>();
+        params.add(new BasicNameValuePair("grant_type", "password"));
+        params.add(new BasicNameValuePair("username", username));
+        params.add(new BasicNameValuePair("password", password));
+
+        HttpPost httpPost = new HttpPost(builder.build());
+        httpPost.setEntity(new UrlEncodedFormEntity(params));
+
+        httpPost.addHeader("Authorization", "Basic c2FzLmVjOg==");
+        try (CloseableHttpResponse response = httpClient.execute(httpPost)) {
             log.info("Get Auth Token: " + response.getStatusLine());
             HttpEntity entity = response.getEntity();
             InputStreamReader reader = new InputStreamReader(entity.getContent(), StandardCharsets.UTF_8);
