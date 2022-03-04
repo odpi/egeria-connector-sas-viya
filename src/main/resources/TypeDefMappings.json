@@ -5,7 +5,7 @@
     "propertyMappings": [
       {
         "sasCat": "instance.name",
-        "omrs": "qualifiedName"
+        "omrs": "name"
       },
       {
         "sasCat": "instance.description",
@@ -14,10 +14,6 @@
       {
         "sasCat": "attribute.creator",
         "omrs": "owner"
-      },
-      {
-        "sasCat": "instance.name",
-        "omrs": "name"
       },
       {
         "sasCat": "instance.resourceId",
@@ -35,7 +31,7 @@
     "propertyMappings": [
       {
         "sasCat": "instance.name",
-        "omrs": "qualifiedName"
+        "omrs": "name"
       },
       {
         "sasCat": "instance.resourceId",
@@ -44,10 +40,6 @@
       {
         "sasCat": "attribute.creator",
         "omrs": "owner"
-      },
-      {
-        "sasCat": "instance.name",
-        "omrs": "name"
       },
       {
         "sasCat": "attribute.dateModified",
@@ -59,10 +51,6 @@
     "sasCat": "reference.decision",
     "omrs": "Asset",
     "propertyMappings": [
-      {
-        "sasCat": "instance.name",
-        "omrs": "qualifiedName"
-      },
       {
         "sasCat": "instance.description",
         "omrs": "description"
@@ -91,15 +79,11 @@
     "propertyMappings": [
       {
         "sasCat": "instance.name",
-        "omrs": "qualifiedName"
+        "omrs": "name"
       },
       {
         "sasCat": "attribute.creator",
         "omrs": "owner"
-      },
-      {
-        "sasCat": "instance.name",
-        "omrs": "name"
       },
       {
         "sasCat": "instance.resourceId",
@@ -117,18 +101,14 @@
     "propertyMappings": [
       {
         "sasCat": "instance.name",
-        "omrs": "qualifiedName"
+        "omrs": "name"
       },
       {
         "sasCat": "attribute.creator",
         "omrs": "owner"
       },
       {
-        "sasCat": "instance.name",
-        "omrs": "name"
-      },
-      {
-        "sasCat": "attribute.resourceId",
+        "sasCat": "instance.resourceId",
         "omrs": "description"
       },
       {
@@ -143,15 +123,11 @@
     "propertyMappings": [
       {
         "sasCat": "instance.name",
-        "omrs": "qualifiedName"
+        "omrs": "name"
       },
       {
         "sasCat": "attribute.creator",
         "omrs": "owner"
-      },
-      {
-        "sasCat": "instance.name",
-        "omrs": "name"
       },
       {
         "sasCat": "instance.resourceId",
@@ -169,15 +145,11 @@
     "propertyMappings": [
       {
         "sasCat": "instance.name",
-        "omrs": "qualifiedName"
+        "omrs": "name"
       },
       {
         "sasCat": "attribute.creator",
         "omrs": "owner"
-      },
-      {
-        "sasCat": "instance.name",
-        "omrs": "name"
       },
       {
         "sasCat": "instance.resourceId",
@@ -195,15 +167,11 @@
     "propertyMappings": [
       {
         "sasCat": "instance.name",
-        "omrs": "qualifiedName"
+        "omrs": "name"
       },
       {
         "sasCat": "attribute.creator",
         "omrs": "author"
-      },
-      {
-        "sasCat": "instance.name",
-        "omrs": "displayName"
       },
       {
         "sasCat": "instance.resourceId",
@@ -221,15 +189,11 @@
     "propertyMappings": [
       {
         "sasCat": "instance.name",
-        "omrs": "qualifiedName"
+        "omrs": "name"
       },
       {
         "sasCat": "attribute.creator",
         "omrs": "author"
-      },
-      {
-        "sasCat": "instance.name",
-        "omrs": "displayName"
       },
       {
         "sasCat": "instance.resourceId",
@@ -247,15 +211,11 @@
     "propertyMappings": [
       {
         "sasCat": "instance.name",
-        "omrs": "qualifiedName"
+        "omrs": "name"
       },
       {
         "sasCat": "attribute.creator",
         "omrs": "author"
-      },
-      {
-        "sasCat": "instance.name",
-        "omrs": "displayName"
       },
       {
         "sasCat": "instance.resourceId",
@@ -273,15 +233,11 @@
     "propertyMappings": [
       {
         "sasCat": "instance.name",
-        "omrs": "qualifiedName"
+        "omrs": "name"
       },
       {
         "sasCat": "attribute.creator",
         "omrs": "author"
-      },
-      {
-        "sasCat": "instance.name",
-        "omrs": "displayName"
       },
       {
         "sasCat": "instance.resourceId",
@@ -299,7 +255,7 @@
     "propertyMappings": [
       {
         "sasCat": "instance.name",
-        "omrs": "qualifiedName"
+        "omrs": "name"
       },
       {
         "sasCat": "instance.id",
@@ -329,7 +285,7 @@
     "propertyMappings": [
       {
         "sasCat": "instance.name",
-        "omrs": "qualifiedName"
+        "omrs": "name"
       },
       {
         "sasCat": "instance.id",
@@ -359,7 +315,7 @@
     "propertyMappings": [
       {
         "sasCat": "instance.name",
-        "omrs": "qualifiedName"
+        "omrs": "name"
       },
       {
         "sasCat": "instance.label",
@@ -386,7 +342,7 @@
     "propertyMappings": [
       {
         "sasCat": "instance.name",
-        "omrs": "qualifiedName"
+        "omrs": "name"
       },
       {
         "sasCat": "instance.label",
@@ -404,10 +360,10 @@
     "propertyMappings": [
       {
         "sasCat": "instance.name",
-        "omrs": "qualifiedName"
+        "omrs": "name"
       },
       {
-        "sasCat": "instance.name",
+        "sasCat": "instance.label",
         "omrs": "displayName"
       },
       {
@@ -431,7 +387,7 @@
     "propertyMappings": [
       {
         "sasCat": "instance.name",
-        "omrs": "qualifiedName"
+        "omrs": "name"
       },
       {
         "sasCat": "instance.label",
@@ -449,7 +405,7 @@
     "propertyMappings": [
       {
         "sasCat": "instance.name",
-        "omrs": "qualifiedName"
+        "omrs": "name"
       },
       {
         "sasCat": "instance.id",
@@ -479,7 +435,7 @@
     "propertyMappings": [
       {
         "sasCat": "instance.name",
-        "omrs": "qualifiedName"
+        "omrs": "name"
       },
       {
         "sasCat": "instance.id",
@@ -509,7 +465,7 @@
     "propertyMappings": [
       {
         "sasCat": "instance.name",
-        "omrs": "qualifiedName"
+        "omrs": "name"
       },
       {
         "sasCat": "instance.label",
@@ -536,7 +492,7 @@
     "propertyMappings": [
       {
         "sasCat": "instance.name",
-        "omrs": "qualifiedName"
+        "omrs": "name"
       },
       {
         "sasCat": "instance.label",
@@ -554,7 +510,7 @@
     "propertyMappings": [
       {
         "sasCat": "instance.name",
-        "omrs": "qualifiedName"
+        "omrs": "name"
       },
       {
         "sasCat": "instance.label",
@@ -589,7 +545,7 @@
     "propertyMappings": [
       {
         "sasCat": "instance.name",
-        "omrs": "qualifiedName"
+        "omrs": "name"
       },
       {
         "sasCat": "instance.label",
@@ -619,7 +575,7 @@
     "propertyMappings": [
       {
         "sasCat": "instance.name",
-        "omrs": "qualifiedName"
+        "omrs": "name"
       },
       {
         "sasCat": "instance.label",
@@ -654,7 +610,7 @@
     "propertyMappings": [
       {
         "sasCat": "instance.name",
-        "omrs": "qualifiedName"
+        "omrs": "name"
       },
       {
         "sasCat": "instance.label",
@@ -684,7 +640,7 @@
     "propertyMappings": [
       {
         "sasCat": "instance.name",
-        "omrs": "qualifiedName"
+        "omrs": "name"
       },
       {
         "sasCat": "instance.label",
@@ -714,7 +670,7 @@
     "propertyMappings": [
       {
         "sasCat": "instance.name",
-        "omrs": "qualifiedName"
+        "omrs": "name"
       },
       {
         "sasCat": "instance.label",
@@ -744,7 +700,7 @@
     "propertyMappings": [
       {
         "sasCat": "instance.name",
-        "omrs": "qualifiedName"
+        "omrs": "name"
       },
       {
         "sasCat": "instance.description",
@@ -770,7 +726,7 @@
     "propertyMappings": [
       {
         "sasCat": "instance.name",
-        "omrs": "qualifiedName"
+        "omrs": "name"
       },
       {
         "sasCat": "instance.description",
