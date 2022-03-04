@@ -391,6 +391,8 @@ public class SASCatalogRestClient implements SASCatalogClient {
             if (instanceType.equals("relatedObjects")) {
                 instanceInfo.addInstanceProperty("type", String.format("%s.%s", instanceType, attributes.get("relationshipRole")) );
             }
+        } else if(type.equalsIgnoreCase("entity")) {
+            instanceInfo.addInstanceProperty("resourceId", instance.get("resourceId"));
         }
 
         instanceInfo.attributes = attributes;
