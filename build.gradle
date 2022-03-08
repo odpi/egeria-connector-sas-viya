@@ -43,7 +43,7 @@ dependencies {
     bundledLibs 'com.google.code.gson:gson:2.9.0'
     bundledLibs 'com.rabbitmq:amqp-client:5.14.2'
 
-    testImplementation 'org.codehaus.groovy:groovy:3.0.9'
+    testImplementation 'org.codehaus.groovy:groovy:3.0.10'
     testImplementation 'org.codehaus.groovy:groovy-dateutil:3.0.9'
     testImplementation 'org.spockframework:spock-core:2.1-groovy-3.0-SNAPSHOT'
     testImplementation 'org.junit.platform:junit-platform-engine:1.8.2'
