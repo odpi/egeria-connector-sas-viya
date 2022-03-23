@@ -26,6 +26,40 @@
     ]
   },
   {
+    "sasCat": "dataFlow",
+    "omrs": "Process",
+    "propertyMappings": [
+      {
+        "sasCat": "instance.name",
+        "omrs": "name"
+      },
+      {
+        "sasCat": "instance.resourceId",
+        "omrs": "description"
+      },
+      {
+        "sasCat": "instance.id",
+        "omrs": "id"
+      },
+      {
+        "sasCat": "attribute.creator",
+        "omrs": "author"
+      },
+      {
+        "sasCat": "attribute.dateCreated",
+        "omrs": "createdTime"
+      },
+      {
+        "sasCat": "attribute.dateModified",
+        "omrs": "lastModifiedTime"
+      },
+      {
+        "sasCat": "attribute.editor",
+        "omrs": "modifier"
+      }
+    ]
+  },
+  {
     "sasCat": "decision",
     "omrs": "Asset",
     "propertyMappings": [
@@ -812,6 +846,18 @@
       },
       {
         "omrs": "attributes"
+      }
+    ]
+  },
+  {
+    "sasCat": "processAssets",
+    "omrs": "ResourceList",
+    "endpointMappings": [
+      {
+        "omrs": "resourceListAnchors"
+      },
+      {
+        "omrs": "supportingResources"
       }
     ]
   },
