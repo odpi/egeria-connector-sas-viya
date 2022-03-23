@@ -17,9 +17,9 @@ jobs:
     runs-on: ubuntu-latest
     name: "Merge"
     env:
-      RELEASE_VERSION: 3.6-SNAPSHOT
+      RELEASE_VERSION: 3.7-SNAPSHOT
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         name: Checkout source
         # Only for a merge into this repo - not a fork
       - name: Set up JDK 11
