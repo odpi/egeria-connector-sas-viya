@@ -196,6 +196,28 @@
     ]
   },
   {
+    "sasCat": "modelProject",
+    "omrs": "DesignModel",
+    "propertyMappings": [
+      {
+        "sasCat": "instance.name",
+        "omrs": "qualifiedName"
+      },
+      {
+        "sasCat": "attribute.creator",
+        "omrs": "author"
+      },
+      {
+        "sasCat": "instance.resourceId",
+        "omrs": "description"
+      },
+      {
+        "sasCat": "attribute.dateModified",
+        "omrs": "latestChange"
+      }
+    ]
+  },
+  {
     "sasCat": "modelStudioProject",
     "omrs": "DesignModel",
     "propertyMappings": [
@@ -924,6 +946,18 @@
   },
   {
     "sasCat": "relatedObjects.Dependent",
+    "omrs": "ResourceList",
+    "endpointMappings": [
+      {
+        "omrs": "resourceListAnchors"
+      },
+      {
+        "omrs": "supportingReferences"
+      }
+    ]
+  },
+  {
+    "sasCat": "relatedObjects.Contains",
     "omrs": "ResourceList",
     "endpointMappings": [
       {
