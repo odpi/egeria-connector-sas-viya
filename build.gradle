@@ -12,7 +12,7 @@ if (System.getenv('CI')) {
 
 // Published artifact info, equired for maven publishing - this is the version of our artifact
 group = 'org.odpi.egeria'
-version = '3.7-SNAPSHOT'
+version = '3.7'
 
 repositories {
     mavenCentral()
@@ -31,7 +31,7 @@ configurations {
 
 ext {
     // The version of Egeria to use
-    egeriaVersion = '3.7-SNAPSHOT'
+    egeriaVersion = '3.7'
 }
 dependencies {
     implementation "org.odpi.egeria:open-connector-framework:${egeriaVersion}"
