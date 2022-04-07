@@ -46,14 +46,6 @@
         "omrs": "author"
       },
       {
-        "sasCat": "attribute.dateCreated",
-        "omrs": "createdTime"
-      },
-      {
-        "sasCat": "attribute.dateModified",
-        "omrs": "lastModifiedTime"
-      },
-      {
         "sasCat": "attribute.editor",
         "omrs": "modifier"
       }
