@@ -22,6 +22,9 @@ import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -354,24 +357,25 @@ public abstract class AttributeMapping {
                             );
                             break;
                         case OM_PRIMITIVE_TYPE_DATE:
+                            Date date;
                             if (propertyValue instanceof Date) {
-                                resultingProperties = omrsRepositoryHelper.addDatePropertyToInstance(
-                                        sourceName,
-                                        properties,
-                                        propertyName,
-                                        (Date) propertyValue,
-                                        methodName
-                                );
+                                date = (Date) propertyValue;
+                            } else if(propertyValue instanceof String && ((String)propertyValue).matches("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{2,3}Z")) {
+                                // Timestamp is ISO-8601
+                                // https://stackoverflow.com/a/60214805
+                                TemporalAccessor ta = DateTimeFormatter.ISO_INSTANT.parse((String) propertyValue);
+                                date = Date.from(Instant.from(ta));
                             } else {
-                                // Assume if not a date and not null, it is a numeric epoch timestamp
-                                resultingProperties = omrsRepositoryHelper.addDatePropertyToInstance(
-                                        sourceName,
-                                        properties,
-                                        propertyName,
-                                        new Date((Long)propertyValue),
-                                        methodName
-                                );
+                                date = new Date((Long)propertyValue);
                             }
+
+                            resultingProperties = omrsRepositoryHelper.addDatePropertyToInstance(
+                                    sourceName,
+                                    properties,
+                                    propertyName,
+                                    date,
+                                    methodName
+                            );
                             break;
                         default:
                             log.error("Unhandled primitive type {} for {}", primitiveDef.getPrimitiveDefCategory(), propertyName);
