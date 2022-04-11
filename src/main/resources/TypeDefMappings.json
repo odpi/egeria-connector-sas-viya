@@ -52,6 +52,28 @@
     ]
   },
   {
+    "sasCat": "decisionSQLCodeFile",
+    "omrs": "Asset",
+    "propertyMappings": [
+      {
+        "sasCat": "instance.name",
+        "omrs": "qualifiedName"
+      },
+      {
+        "sasCat": "instance.resourceId",
+        "omrs": "description"
+      },
+      {
+        "sasCat": "attribute.creator",
+        "omrs": "owner"
+      },
+      {
+        "sasCat": "attribute.dateModified",
+        "omrs": "latestChange"
+      }
+    ]
+  },
+  {
     "sasCat": "decision",
     "omrs": "Asset",
     "propertyMappings": [
@@ -370,7 +392,7 @@
         "omrs": "displayName"
       },
       {
-        "sasCat": "instance.description",
+        "sasCat": "instance.resourceId",
         "omrs": "description"
       },
       {
@@ -415,7 +437,7 @@
         "omrs": "displayName"
       },
       {
-        "sasCat": "constant.CAS Table Reference",
+        "sasCat": "instance.resourceId",
         "omrs": "description"
       },
       {
@@ -520,7 +542,7 @@
         "omrs": "displayName"
       },
       {
-        "sasCat": "instance.description",
+        "sasCat": "instance.resourceId",
         "omrs": "description"
       },
       {
@@ -565,7 +587,7 @@
         "omrs": "displayName"
       },
       {
-        "sasCat": "instance.description",
+        "sasCat": "instance.resourceId",
         "omrs": "description"
       },
       {
@@ -630,7 +652,7 @@
         "omrs": "displayName"
       },
       {
-        "sasCat": "instance.description",
+        "sasCat": "instance.resourceId",
         "omrs": "description"
       },
       {
