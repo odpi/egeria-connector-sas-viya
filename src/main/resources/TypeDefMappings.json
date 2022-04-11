@@ -8,10 +8,6 @@
         "omrs": "qualifiedName"
       },
       {
-        "sasCat": "instance.description",
-        "omrs": "description"
-      },
-      {
         "sasCat": "attribute.creator",
         "omrs": "owner"
       },
@@ -26,28 +22,46 @@
     ]
   },
   {
-    "sasCat": "dataFlow",
-    "omrs": "Process",
+    "sasCat": "reference.file",
+    "omrs": "DataFile",
     "propertyMappings": [
       {
         "sasCat": "instance.name",
-        "omrs": "name"
+        "omrs": "qualifiedName"
       },
       {
         "sasCat": "instance.resourceId",
         "omrs": "description"
       },
       {
-        "sasCat": "instance.id",
-        "omrs": "id"
+        "sasCat": "attribute.dateModified",
+        "omrs": "modifiedTime"
+      },
+      {
+        "sasCat": "attribute.dateCreated",
+        "omrs": "createTime"
+      }
+    ]
+  },
+  {
+    "sasCat": "dataFlow",
+    "omrs": "Process",
+    "propertyMappings": [
+      {
+        "sasCat": "instance.name",
+        "omrs": "qualifiedName"
+      },
+      {
+        "sasCat": "instance.resourceId",
+        "omrs": "description"
       },
       {
         "sasCat": "attribute.creator",
-        "omrs": "author"
+        "omrs": "owner"
       },
       {
-        "sasCat": "attribute.editor",
-        "omrs": "modifier"
+        "sasCat": "attribute.dateModified",
+        "omrs": "latestChange"
       }
     ]
   },
@@ -306,24 +320,16 @@
         "omrs": "qualifiedName"
       },
       {
-        "sasCat": "instance.id",
-        "omrs": "id"
+        "sasCat": "instance.resourceId",
+        "omrs": "description"
       },
       {
         "sasCat": "attribute.creator",
-        "omrs": "author"
-      },
-      {
-        "sasCat": "attribute.dateCreated",
-        "omrs": "createdTime"
+        "omrs": "owner"
       },
       {
         "sasCat": "attribute.dateModified",
-        "omrs": "lastModifiedTime"
-      },
-      {
-        "sasCat": "attribute.editor",
-        "omrs": "modifier"
+        "omrs": "latestChange"
       }
     ]
   },
@@ -336,24 +342,16 @@
         "omrs": "qualifiedName"
       },
       {
-        "sasCat": "instance.id",
-        "omrs": "id"
+        "sasCat": "instance.resourceId",
+        "omrs": "description"
       },
       {
         "sasCat": "attribute.creator",
-        "omrs": "author"
-      },
-      {
-        "sasCat": "attribute.dateCreated",
-        "omrs": "createdTime"
+        "omrs": "owner"
       },
       {
         "sasCat": "attribute.dateModified",
-        "omrs": "lastModifiedTime"
-      },
-      {
-        "sasCat": "attribute.editor",
-        "omrs": "modifier"
+        "omrs": "latestChange"
       }
     ]
   },
@@ -460,6 +458,14 @@
         "omrs": "id"
       },
       {
+        "sasCat": "instance.description",
+        "omrs": "description"
+      },
+      {
+        "sasCat": "instance.resourceId",
+        "omrs": "url"
+      },
+      {
         "sasCat": "attribute.creator",
         "omrs": "author"
       },
@@ -473,7 +479,7 @@
       },
       {
         "sasCat": "attribute.editor",
-        "omrs": "modifier"
+        "omrs": "lastModifier"
       }
     ]
   },
@@ -490,6 +496,14 @@
         "omrs": "id"
       },
       {
+        "sasCat": "instance.description",
+        "omrs": "description"
+      },
+      {
+        "sasCat": "instance.resourceId",
+        "omrs": "url"
+      },
+      {
         "sasCat": "attribute.creator",
         "omrs": "author"
       },
@@ -503,7 +517,7 @@
       },
       {
         "sasCat": "attribute.editor",
-        "omrs": "modifier"
+        "omrs": "lastModifier"
       }
     ]
   },
