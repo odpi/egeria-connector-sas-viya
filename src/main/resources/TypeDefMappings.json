@@ -22,6 +22,20 @@
     ]
   },
   {
+    "sasCat": "reference.treatmentGroup",
+    "omrs": "Collection",
+    "propertyMappings": [
+      {
+        "sasCat": "instance.name",
+        "omrs": "qualifiedName"
+      },
+      {
+        "sasCat": "instance.resourceId",
+        "omrs": "description"
+      }
+    ]
+  },
+  {
     "sasCat": "reference.file",
     "omrs": "DataFile",
     "propertyMappings": [
