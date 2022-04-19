@@ -84,6 +84,28 @@
     ]
   },
   {
+    "sasCat": "reference.treatmentDefinition",
+    "omrs": "Asset",
+    "propertyMappings": [
+      {
+        "sasCat": "instance.name",
+        "omrs": "qualifiedName"
+      },
+      {
+        "sasCat": "attribute.creator",
+        "omrs": "owner"
+      },
+      {
+        "sasCat": "instance.resourceId",
+        "omrs": "description"
+      },
+      {
+        "sasCat": "attribute.dateModified",
+        "omrs": "latestChange"
+      }
+    ]
+  },
+  {
     "sasCat": "dataFlow",
     "omrs": "Process",
     "propertyMappings": [
