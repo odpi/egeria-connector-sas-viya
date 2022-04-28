@@ -129,7 +129,7 @@
   },
   {
     "sasCat": "decisionSQLCodeFile",
-    "omrs": "Asset",
+    "omrs": "DataFile",
     "propertyMappings": [
       {
         "sasCat": "instance.name",
@@ -140,12 +140,16 @@
         "omrs": "description"
       },
       {
-        "sasCat": "attribute.creator",
-        "omrs": "owner"
+        "sasCat": "attribute.dateModified",
+        "omrs": "modifiedTime"
       },
       {
-        "sasCat": "attribute.dateModified",
-        "omrs": "latestChange"
+        "sasCat": "attribute.dateCreated",
+        "omrs": "createTime"
+      },
+      {
+        "sasCat": "constant.SQL code file",
+        "omrs": "fileType"
       }
     ]
   },
