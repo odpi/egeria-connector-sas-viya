@@ -44,7 +44,7 @@ dependencies {
     bundledLibs 'com.rabbitmq:amqp-client:5.14.2'
 
     testImplementation 'org.codehaus.groovy:groovy:3.0.10'
-    testImplementation 'org.codehaus.groovy:groovy-dateutil:3.0.10'
+    testImplementation 'org.codehaus.groovy:groovy-dateutil:3.0.11'
     testImplementation 'org.spockframework:spock-core:2.1-groovy-3.0'
     testImplementation 'org.junit.platform:junit-platform-engine:1.8.2'
     testImplementation "org.odpi.egeria:repository-services-implementation:${egeriaVersion}"
