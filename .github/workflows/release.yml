@@ -25,6 +25,7 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '11'
+      - uses: gradle/wrapper-validation-action@v1
       # No cache for release code
       # - name: Cache Gradle packages
       #  uses: actions/cache@v2.1.4
