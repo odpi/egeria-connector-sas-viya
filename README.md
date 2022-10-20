@@ -3,7 +3,7 @@
 ## Overview
 The purpose of this project is to create an Egeria connector for SAS Information Catalog.
 
-Much of this code is based off of the Atlas-Egeria connector, which you can find [here](https://github.com/odpi/egeria-connector-hadoop-ecosystem/tree/master/apache-atlas-adapter).
+Much of this code is based off of the Atlas-Egeria connector, which you can find [here](https://github.com/odpi/egeria-connector-hadoop-ecosystem/tree/main/apache-atlas-adapter).
 
 ## Starting Egeria Server with Connector
 1. Run `gradlew clean build install` in this repository
