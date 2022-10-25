@@ -26,7 +26,7 @@ import java.util.Set;
 
 /**
  * Store of implemented TypeDefs for the repository.
- * Source: https://github.com/odpi/egeria-connector-hadoop-ecosystem/blob/master/apache-atlas-adapter/src/main/java/org/odpi/egeria/connectors/apache/atlas/repositoryconnector/stores/TypeDefStore.java
+ * Source: https://github.com/odpi/egeria-connector-hadoop-ecosystem/blob/main/apache-atlas-adapter/src/main/java/org/odpi/egeria/connectors/apache/atlas/repositoryconnector/stores/TypeDefStore.java
  */
 public class TypeDefStore {
 
