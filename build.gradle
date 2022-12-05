@@ -39,7 +39,7 @@ dependencies {
     implementation('org.apache.commons:commons-lang3:3.12.0')
 
     bundledLibs 'org.slf4j:slf4j-api'
-    bundledLibs 'org.apache.httpcomponents:httpclient:4.5.13'
+    bundledLibs 'org.apache.httpcomponents:httpclient:4.5.14'
     bundledLibs 'com.google.code.gson:gson:2.10'
     bundledLibs 'com.rabbitmq:amqp-client:5.16.0'
 
