@@ -40,7 +40,7 @@ dependencies {
 
     bundledLibs 'org.slf4j:slf4j-api'
     bundledLibs 'org.apache.httpcomponents:httpclient:4.5.14'
-    bundledLibs 'com.google.code.gson:gson:2.10'
+    bundledLibs 'com.google.code.gson:gson:2.10.1'
     bundledLibs 'com.rabbitmq:amqp-client:5.16.0'
 
     testImplementation 'org.apache.groovy:groovy:4.0.6'
