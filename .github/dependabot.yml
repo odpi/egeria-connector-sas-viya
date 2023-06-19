@@ -10,7 +10,6 @@ updates:
   open-pull-requests-limit: 100
   reviewers:
   - CDaRip2U
-  - planetf1
 - package-ecosystem: "github-actions"
   directory: "/"
   schedule:
@@ -18,4 +17,3 @@ updates:
   open-pull-requests-limit: 25
   reviewers:
   - CDaRip2U
-  - planetf1
