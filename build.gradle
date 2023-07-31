@@ -36,7 +36,7 @@ ext {
 dependencies {
     implementation "org.odpi.egeria:open-connector-framework:${egeriaVersion}"
     implementation "org.odpi.egeria:repository-services-connectors:${egeriaVersion}"
-    implementation('org.apache.commons:commons-lang3:3.12.0')
+    implementation('org.apache.commons:commons-lang3:3.13.0')
 
     bundledLibs 'org.slf4j:slf4j-api'
     bundledLibs 'org.apache.httpcomponents:httpclient:4.5.14'
