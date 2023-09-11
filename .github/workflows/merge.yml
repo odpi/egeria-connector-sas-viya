@@ -19,7 +19,7 @@ jobs:
     env:
       RELEASE_VERSION: 3.12-SNAPSHOT
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
         name: Checkout source
         # Only for a merge into this repo - not a fork
       - name: Set up JDK 11
