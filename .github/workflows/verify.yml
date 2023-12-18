@@ -28,7 +28,7 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
       - name: Upload Connector
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: Connector
           path: build/libs/*.jar
